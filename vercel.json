@@ -1,8 +1,8 @@
 {
-  "buildCommand": "cd app && npm run build",
-  "outputDirectory": "app/.next",
-  "installCommand": "cd app && npm install --legacy-peer-deps",
-  "devCommand": "cd app && npm run dev",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "installCommand": "npm install --legacy-peer-deps",
+  "devCommand": "npm run dev",
   "framework": "nextjs",
   "crons": [
     {
