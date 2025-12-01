@@ -3,21 +3,28 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function GET(request: NextRequest) {
   // Verify authorization token
   const authHeader = request.headers.get('authorization')
-  const expectedToken = `Bearer ${process.env.CRON_SECRET}`
-
-  // DEBUG: Log env var status (remove after testing)
-  console.log('[CRON DEBUG] CRON_SECRET exists:', !!process.env.CRON_SECRET)
-  console.log('[CRON DEBUG] Auth header received:', !!authHeader)
-
-  if (!authHeader || authHeader !== expectedToken) {
+  
+  if (!authHeader) {
     return NextResponse.json(
-      { 
-        error: 'Unauthorized',
-        debug: {
-          hasSecret: !!process.env.CRON_SECRET,
-          hasAuth: !!authHeader
-        }
-      },
+      { error: 'Unauthorized', message: 'No authorization header provided' },
+      { status: 401 }
+    )
+  }
+
+  // Extract token from "Bearer <token>" format
+  const token = authHeader.replace('Bearer ', '')
+  const expectedSecret = process.env.CRON_SECRET
+
+  if (!expectedSecret) {
+    return NextResponse.json(
+      { error: 'Server configuration error', message: 'CRON_SECRET not configured' },
+      { status: 500 }
+    )
+  }
+
+  if (token !== expectedSecret) {
+    return NextResponse.json(
+      { error: 'Unauthorized', message: 'Invalid token' },
       { status: 401 }
     )
   }
