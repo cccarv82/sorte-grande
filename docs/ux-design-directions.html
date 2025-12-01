@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorte Grande - Design Direction Mockups</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #050505;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .viewer-header {
+            background: #0a0a0a;
+            border-bottom: 1px solid #1a1a1a;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .viewer-header h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #ccc;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #10b981;
+            color: #000;
+            border-color: #10b981;
+        }
+
+        .nav-btn.active {
+            background: #10b981;
+            color: #000;
+            border-color: #10b981;
+            font-weight: 600;
+        }
+
+        .screen-container {
+            display: none;
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .screen-container.active {
+            display: block;
+        }
+
+        .screen-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .screen-header h2 {
+            font-size: 2rem;
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+
+        .screen-header p {
+            color: #999;
+            font-size: 1.1rem;
+        }
+
+        .mockup-frame {
+            background: #0a0a0a;
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid #1a1a1a;
+            max-width: 480px;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .mockup-frame.desktop {
+            max-width: 1200px;
+        }
+
+        /* === COMPONENTS === */
+
+        /* Header Component */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .user-menu {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #999;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Value Input */
+        .value-input-section {
+            background: #0f0f0f;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 1px solid #1a1a1a;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .value-input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 1.5rem;
+            background: #0a0a0a;
+            border: 2px solid #333;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .value-input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+        }
+
+        .input-hint {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        /* Button Component */
+        .btn {
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: #000;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #10b981;
+            border: 2px solid #10b981;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: #ccc;
+            border: 1px solid #333;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        /* Game Cards */
+        .games-grid {
+            display: grid;
+            gap: 16px;
+            margin: 30px 0;
+        }
+
+        .game-card {
+            background: #0f0f0f;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .game-card:hover {
+            border-color: #10b981;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+        }
+
+        .game-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .game-title {
+            font-size: 0.9rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .game-badge {
+            padding: 4px 10px;
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .numbers-grid {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .number-ball {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        /* Prize Alert */
+        .prize-alert {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(52, 211, 153, 0.1) 100%);
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .prize-icon {
+            font-size: 2.5rem;
+        }
+
+        .prize-content h4 {
+            color: #10b981;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .prize-content p {
+            color: #ccc;
+            font-size: 0.95rem;
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: #0f0f0f;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin: 30px 0;
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+
+        .disclaimer strong {
+            color: #ef4444;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background: #0f0f0f;
+            border: 1px solid #1a1a1a;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .how-it-works h3 {
+            color: #10b981;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .steps {
+            display: grid;
+            gap: 20px;
+        }
+
+        .step {
+            display: flex;
+            gap: 15px;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .step-content p {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #0f0f0f 25%, #1a1a1a 50%, #0f0f0f 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s ease-in-out infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-card {
+            height: 120px;
+            margin: 10px 0;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-state h3 {
+            color: #fff;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        /* Desktop Layout */
+        .desktop-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            min-height: 600px;
+        }
+
+        .sidebar {
+            background: #0f0f0f;
+            border: 1px solid #1a1a1a;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .nav-item {
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item:hover {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .nav-item.active {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .main-content {
+            background: #0f0f0f;
+            border: 1px solid #1a1a1a;
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .desktop-layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="viewer-header">
+        <h1>🎨 Sorte Grande - Design Mockups (Emerald Trust)</h1>
+        <p style="color: #999; font-size: 0.9rem;">Explore as telas principais do app</p>
+        <div class="navigation">
+            <button class="nav-btn active" onclick="showScreen('landing')">Landing Page</button>
+            <button class="nav-btn" onclick="showScreen('generate')">Gerar Sugestão</button>
+            <button class="nav-btn" onclick="showScreen('results')">Resultados</button>
+            <button class="nav-btn" onclick="showScreen('history')">Histórico</button>
+            <button class="nav-btn" onclick="showScreen('prize')">Premiação 🎉</button>
+            <button class="nav-btn" onclick="showScreen('empty')">Estados Vazios</button>
+        </div>
+    </div>
+
+    <!-- SCREEN 1: Landing Page -->
+    <div id="landing" class="screen-container active">
+        <div class="screen-header">
+            <h2>Landing Page</h2>
+            <p>Primeira impressão - Hero section com CTA</p>
+        </div>
+        <div class="mockup-frame">
+            <div class="app-header">
+                <div class="logo">Sorte Grande</div>
+                <button class="btn btn-ghost" style="padding: 8px 16px; font-size: 0.9rem;">Entrar</button>
+            </div>
+
+            <div class="hero">
+                <h1>Apostas inteligentes<br>baseadas em matemática</h1>
+                <p>A primeira plataforma brasileira a usar Wheeling Systems - metodologia cientificamente validada para organizar suas apostas de forma estratégica.</p>
+                <button class="btn btn-primary btn-full">
+                    <span>✨</span>
+                    Começar Grátis
+                </button>
+            </div>
+
+            <div class="how-it-works">
+                <h3>Como funciona</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Informe o valor</h4>
+                            <p>Digite quanto você quer investir</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Receba jogos otimizados</h4>
+                            <p>Sistema aplica Wheeling Systems automaticamente</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Copie e realize</h4>
+                            <p>Cole na Loteria Online da Caixa</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Verificação automática</h4>
+                            <p>Receba notificação se ganhar</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="disclaimer">
+                <strong>⚠️ Honestidade radical:</strong> Wheeling Systems NÃO aumenta chances de jackpot (matematicamente impossível). Organiza apostas de forma inteligente com garantias condicionais (ex: "4 if 4").
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 2: Generate Suggestion -->
+    <div id="generate" class="screen-container">
+        <div class="screen-header">
+            <h2>Gerar Sugestão</h2>
+            <p>Tela principal - Input de valor e ação imediata</p>
+        </div>
+        <div class="mockup-frame">
+            <div class="app-header">
+                <div class="logo">Sorte Grande</div>
+                <div class="user-menu">C</div>
+            </div>
+
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="font-size: 1.8rem; margin-bottom: 10px;">Nova Sugestão</h2>
+                <p style="color: #999;">Informe quanto você quer investir</p>
+            </div>
+
+            <div class="value-input-section">
+                <label class="input-label">Valor disponível</label>
+                <input type="text" class="value-input" placeholder="R$ 100,00" value="R$ 150,00">
+                <p class="input-hint">Mínimo R$ 10 • Máximo R$ 500</p>
+            </div>
+
+            <button class="btn btn-primary btn-full" style="font-size: 1.1rem; padding: 18px;">
+                <span>✨</span>
+                Gerar Jogos Otimizados
+            </button>
+
+            <div style="margin-top: 30px; padding: 20px; background: #0f0f0f; border-radius: 12px; border: 1px solid #1a1a1a;">
+                <h4 style="color: #10b981; margin-bottom: 10px; font-size: 1rem;">💡 O que vai acontecer?</h4>
+                <p style="color: #999; font-size: 0.9rem; line-height: 1.6;">
+                    O sistema vai decidir automaticamente qual loteria usar (Mega Sena ou Lotofácil), quantos números incluir no wheel e gerar combinações otimizadas com garantias matemáticas.
+                </p>
+            </div>
+
+            <div class="stats-grid" style="margin-top: 30px;">
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Sugestões</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">R$ 1.2k</div>
+                    <div class="stat-label">Investido</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Prêmios</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: Results with Games -->
+    <div id="results" class="screen-container">
+        <div class="screen-header">
+            <h2>Jogos Gerados</h2>
+            <p>Visualização dos jogos otimizados prontos para copiar</p>
+        </div>
+        <div class="mockup-frame">
+            <div class="app-header">
+                <div class="logo">Sorte Grande</div>
+                <div class="user-menu">C</div>
+            </div>
+
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h2 style="font-size: 1.5rem; color: #10b981; margin-bottom: 5px;">✨ Jogos prontos!</h2>
+                <p style="color: #999; font-size: 0.95rem;">12 jogos • Mega Sena • Garantia: 4 if 4</p>
+            </div>
+
+            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+                <p style="color: #10b981; font-size: 0.9rem; font-weight: 600;">
+                    💡 Garantia matemática: Se 4 dos seus 10 números saírem, você ganha pelo menos uma quadra!
+                </p>
+            </div>
+
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-card-header">
+                        <span class="game-title">Jogo #1</span>
+                        <span class="game-badge">R$ 12,50</span>
+                    </div>
+                    <div class="numbers-grid">
+                        <div class="number-ball">03</div>
+                        <div class="number-ball">12</div>
+                        <div class="number-ball">18</div>
+                        <div class="number-ball">27</div>
+                        <div class="number-ball">34</div>
+                        <div class="number-ball">45</div>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-card-header">
+                        <span class="game-title">Jogo #2</span>
+                        <span class="game-badge">R$ 12,50</span>
+                    </div>
+                    <div class="numbers-grid">
+                        <div class="number-ball">07</div>
+                        <div class="number-ball">15</div>
+                        <div class="number-ball">23</div>
+                        <div class="number-ball">31</div>
+                        <div class="number-ball">42</div>
+                        <div class="number-ball">58</div>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-card-header">
+                        <span class="game-title">Jogo #3</span>
+                        <span class="game-badge">R$ 12,50</span>
+                    </div>
+                    <div class="numbers-grid">
+                        <div class="number-ball">09</div>
+                        <div class="number-ball">14</div>
+                        <div class="number-ball">26</div>
+                        <div class="number-ball">35</div>
+                        <div class="number-ball">48</div>
+                        <div class="number-ball">52</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; gap: 10px; margin-top: 25px;">
+                <button class="btn btn-primary btn-full">
+                    <span>📋</span>
+                    Copiar Todos os Jogos
+                </button>
+                <button class="btn btn-secondary btn-full">
+                    <span>🔗</span>
+                    Abrir Loteria Online da Caixa
+                </button>
+                <button class="btn btn-ghost btn-full">
+                    <span>✓</span>
+                    Marcar como Realizado
+                </button>
+            </div>
+
+            <p style="text-align: center; color: #666; font-size: 0.85rem; margin-top: 20px;">
+                Total: R$ 150,00 • 12 jogos • Concurso 2750
+            </p>
+        </div>
+    </div>
+
+    <!-- SCREEN 4: History -->
+    <div id="history" class="screen-container">
+        <div class="screen-header">
+            <h2>Histórico</h2>
+            <p>Lista de sugestões anteriores com status</p>
+        </div>
+        <div class="mockup-frame">
+            <div class="app-header">
+                <div class="logo">Sorte Grande</div>
+                <div class="user-menu">C</div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2 style="font-size: 1.5rem;">Histórico</h2>
+                <button class="btn btn-primary" style="padding: 10px 20px; font-size: 0.9rem;">
+                    + Nova Sugestão
+                </button>
+            </div>
+
+            <div class="games-grid">
+                <div class="game-card" style="border-color: #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);">
+                    <div class="game-card-header">
+                        <div>
+                            <span class="game-title">Mega Sena • 12 jogos</span>
+                            <p style="color: #10b981; font-size: 0.85rem; margin-top: 4px; font-weight: 600;">✓ Verificado • Sem prêmio</p>
+                        </div>
+                        <span class="game-badge">R$ 150</span>
+                    </div>
+                    <p style="color: #666; font-size: 0.85rem; margin-top: 10px;">
+                        Concurso 2750 • 28/11/2025
+                    </p>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-card-header">
+                        <div>
+                            <span class="game-title">Lotofácil • 18 jogos</span>
+                            <p style="color: #f59e0b; font-size: 0.85rem; margin-top: 4px; font-weight: 600;">⏳ Aguardando sorteio</p>
+                        </div>
+                        <span class="game-badge">R$ 90</span>
+                    </div>
+                    <p style="color: #666; font-size: 0.85rem; margin-top: 10px;">
+                        Concurso 3152 • Hoje às 20:00
+                    </p>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-card-header">
+                        <div>
+                            <span class="game-title">Mega Sena • 8 jogos</span>
+                            <p style="color: #999; font-size: 0.85rem; margin-top: 4px;">● Não realizado</p>
+                        </div>
+                        <span class="game-badge" style="background: rgba(153, 153, 153, 0.15); color: #999; border-color: rgba(153, 153, 153, 0.3);">R$ 100</span>
+                    </div>
+                    <p style="color: #666; font-size: 0.85rem; margin-top: 10px;">
+                        Criado em 25/11/2025
+                    </p>
+                </div>
+            </div>
+
+            <div class="stats-grid" style="margin-top: 30px;">
+                <div class="stat-card">
+                    <div class="stat-value">15</div>
+                    <div class="stat-label">Sugestões</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">R$ 1.8k</div>
+                    <div class="stat-label">Investido</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">87%</div>
+                    <div class="stat-label">Realizadas</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 5: Prize Alert -->
+    <div id="prize" class="screen-container">
+        <div class="screen-header">
+            <h2>🎉 Premiação Detectada!</h2>
+            <p>Momento mágico - Celebração de vitória</p>
+        </div>
+        <div class="mockup-frame">
+            <div class="app-header">
+                <div class="logo">Sorte Grande</div>
+                <div class="user-menu">C</div>
+            </div>
+
+            <div style="text-align: center; padding: 40px 20px;">
+                <div style="font-size: 5rem; margin-bottom: 20px;">🎉</div>
+                <h1 style="font-size: 2.2rem; color: #10b981; margin-bottom: 15px;">Parabéns!</h1>
+                <p style="font-size: 1.2rem; color: #ccc; margin-bottom: 10px;">Você acertou a Quadra!</p>
+                <p style="font-size: 2.5rem; font-weight: 700; color: #10b981; margin-bottom: 30px;">R$ 1.286,00</p>
+            </div>
+
+            <div class="prize-alert" style="margin-bottom: 25px;">
+                <div class="prize-icon">✨</div>
+                <div class="prize-content">
+                    <h4>Jogo #3 premiado</h4>
+                    <p>Mega Sena • Concurso 2750 • Quadra</p>
+                </div>
+            </div>
+
+            <div class="game-card" style="border-color: #10b981;">
+                <div class="game-card-header">
+                    <span class="game-title">Números sorteados</span>
+                </div>
+                <div class="numbers-grid">
+                    <div class="number-ball" style="background: #10b981; border-color: #10b981;">09</div>
+                    <div class="number-ball" style="background: #10b981; border-color: #10b981;">14</div>
+                    <div class="number-ball" style="background: #10b981; border-color: #10b981;">26</div>
+                    <div class="number-ball" style="background: #10b981; border-color: #10b981;">35</div>
+                    <div class="number-ball">41</div>
+                    <div class="number-ball">53</div>
+                </div>
+                <p style="color: #10b981; font-size: 0.9rem; margin-top: 15px; font-weight: 600;">
+                    ✓ 4 acertos confirmados
+                </p>
+            </div>
+
+            <button class="btn btn-primary btn-full" style="margin-top: 25px;">
+                <span>📊</span>
+                Ver Detalhes Completos
+            </button>
+
+            <p style="text-align: center; color: #666; font-size: 0.85rem; margin-top: 20px;">
+                Wheeling System funcionou! Sua garantia "4 if 4" foi acionada.
+            </p>
+        </div>
+    </div>
+
+    <!-- SCREEN 6: Empty States -->
+    <div id="empty" class="screen-container">
+        <div class="screen-header">
+            <h2>Estados Vazios</h2>
+            <p>Primeiras experiências e telas sem conteúdo</p>
+        </div>
+        <div class="mockup-frame">
+            <div class="app-header">
+                <div class="logo">Sorte Grande</div>
+                <div class="user-menu">C</div>
+            </div>
+
+            <div class="empty-state">
+                <div class="empty-icon">🎯</div>
+                <h3>Nenhuma sugestão ainda</h3>
+                <p>Crie sua primeira sugestão otimizada com Wheeling Systems</p>
+                <button class="btn btn-primary">
+                    <span>✨</span>
+                    Gerar Primeira Sugestão
+                </button>
+            </div>
+
+            <div style="margin-top: 40px; padding-top: 40px; border-top: 1px solid #1a1a1a;">
+                <div class="empty-state">
+                    <div class="empty-icon">🏆</div>
+                    <h3>Sem premiações ainda</h3>
+                    <p>Quando você ganhar, celebraremos aqui!</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding-top: 40px; border-top: 1px solid #1a1a1a;">
+                <h3 style="color: #fff; margin-bottom: 20px; text-align: center;">Loading States</h3>
+                <div class="games-grid">
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.screen-container').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected screen
+            document.getElementById(screenId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>

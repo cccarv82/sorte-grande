@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<storyContext version="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>5</storyId>
+    <storyTitle>Install shadcn/ui Components</storyTitle>
+    <storyFile>docs/sprint-artifacts/1-5-install-shadcn-ui-components.md</storyFile>
+    <generated>2025-01-30</generated>
+    <status>ready-for-dev</status>
+  </metadata>
+
+  <story>
+    <asA>Developer</asA>
+    <iWant>to install shadcn/ui component library with Emerald Trust theme</iWant>
+    <soThat>I have accessible, customizable UI components for building the Sorte Grande interface</soThat>
+    <priority>high</priority>
+    <estimatedEffort>2 hours</estimatedEffort>
+  </story>
+
+  <acceptanceCriteria>
+    <criterion id="AC1">
+      <title>shadcn/ui Initialized Successfully</title>
+      <description>
+        - Run `npx shadcn@latest init` completed without errors
+        - `components.json` file created with configuration
+        - `lib/utils.ts` created with `cn()` helper function
+        - Tailwind config updated with shadcn/ui defaults
+        - TypeScript compiles: `npx tsc --noEmit` (0 errors)
+      </description>
+    </criterion>
+    <criterion id="AC2">
+      <title>Emerald Trust Theme Configured</title>
+      <description>
+        - Primary color set to #10b981 (emerald-500)
+        - Secondary color set to #34d399 (emerald-400)
+        - Background set to #050505 (near black)
+        - Card background set to #0f0f0f (dark gray)
+        - Border color set to #1a1a1a (darker gray)
+        - Dark mode active by default (className strategy)
+        - `globals.css` contains CSS variables for theme colors
+        - Body element has `dark` className in `layout.tsx`
+      </description>
+    </criterion>
+    <criterion id="AC3">
+      <title>Required Components Installed</title>
+      <description>
+        - Button component in `components/ui/button.tsx`
+        - Input component in `components/ui/input.tsx`
+        - Card component in `components/ui/card.tsx`
+        - Badge component in `components/ui/badge.tsx`
+        - Toast component in `components/ui/toast.tsx`
+        - Dialog component in `components/ui/dialog.tsx`
+        - All 6 components importable via `@/components/ui/*`
+      </description>
+    </criterion>
+    <criterion id="AC4">
+      <title>Radix UI Dependencies Installed</title>
+      <description>
+        - @radix-ui/react-slot (Button primitive)
+        - @radix-ui/react-dialog (Dialog primitive)
+        - @radix-ui/react-toast (Toast primitive)
+        - class-variance-authority (variant styling)
+        - clsx (conditional classes)
+        - tailwind-merge (merge Tailwind classes)
+        - lucide-react (icon library)
+        - All dependencies in package.json with correct versions
+      </description>
+    </criterion>
+    <criterion id="AC5">
+      <title>Components Render with Theme</title>
+      <description>
+        - Test page created at `/test-components`
+        - All 6 components visible on test page
+        - Emerald primary color (#10b981) visible on interactive elements
+        - Dark mode background (#050505) applied
+        - Hover states work (secondary emerald #34d399)
+      </description>
+    </criterion>
+    <criterion id="AC6">
+      <title>Accessibility Verified</title>
+      <description>
+        - Keyboard navigation works (Tab, Enter, Space, ESC)
+        - Focus indicators visible with emerald ring
+        - All interactive components keyboard accessible
+        - ARIA labels present on components
+      </description>
+    </criterion>
+    <criterion id="AC7">
+      <title>Responsive Design Tested</title>
+      <description>
+        - Test page responsive on mobile (375px)
+        - Components adapt to tablet (768px)
+        - Desktop layout works (1024px+)
+        - Touch targets 44x44px minimum
+      </description>
+    </criterion>
+    <criterion id="AC8">
+      <title>Documentation Updated</title>
+      <description>
+        - README.md has "Design System" section
+        - Theme colors documented with hex codes
+        - Component usage examples included
+        - Resources section with links (shadcn/ui, Radix, Tailwind)
+      </description>
+    </criterion>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <documentation>
+      <document path="docs/sprint-artifacts/tech-spec-epic-1.md" section="Design System Foundation (Lines 163-300)">
+        <relevance>Technical specification for design system including shadcn/ui configuration, Emerald Trust theme colors, component architecture, and integration with Tailwind CSS</relevance>
+        <keyInsights>
+          - shadcn/ui components are copied to project (not npm package) - allows direct editing
+          - Emerald Trust theme: Primary #10b981, Secondary #34d399, Background #050505
+          - Dark mode strategy: 'className' (not 'media') for manual control
+          - 6 core components needed: Button, Input, Card, Badge, Toast, Dialog
+          - All components must integrate with existing Tailwind CSS 4.0+ setup
+        </keyInsights>
+      </document>
+      <document path="docs/architecture.md" section="Technology Stack Details (Lines 60-100)">
+        <relevance>Architecture decision log for shadcn/ui + Radix UI selection, rationale for component library choice, and integration with Next.js 16 App Router</relevance>
+        <keyInsights>
+          - shadcn/ui selected for: accessibility, customizability, no vendor lock-in
+          - Radix UI primitives provide WCAG 2.1 Level A compliance out-of-box
+          - Components must integrate with Next.js App Router (Server/Client components)
+          - Import alias @/* configured in tsconfig.json for component imports
+        </keyInsights>
+      </document>
+      <document path="docs/ux-design-specification.md" section="Design System Foundation (Lines 30-200)">
+        <relevance>Complete UX design specification including Emerald Trust theme rationale, color psychology, component list, and visual identity for Sorte Grande</relevance>
+        <keyInsights>
+          - Emerald Trust theme chosen for: trust + energy + sophistication
+          - Color psychology: Green = growth, intelligent decisions, reliability
+          - Design inspiration: Fintech confidence (Nubank) + dark elegance
+          - 8 shadcn/ui base components + 5 custom lottery components (future)
+          - Trust-Based Generation UX pattern requires instant visual feedback
+          - Mobile-first responsive (80% mobile users expected)
+        </keyInsights>
+      </document>
+      <document path="docs/epics-detailed.md" section="Epic 1, Story 1.5 (Lines 118-140)">
+        <relevance>Story definition with BDD scenarios, technical requirements, and UX specifications for shadcn/ui installation</relevance>
+        <keyInsights>
+          - BDD scenario: Given Next.js + Tailwind, When execute init, Then components in /components/ui/ with dark mode
+          - Gradient buttons: linear-gradient(135deg, #10b981, #34d399)
+          - Dark mode default: Background #050505
+          - Components must support theme switching via className strategy
+        </keyInsights>
+      </document>
+      <document path="docs/sprint-artifacts/1-4-configure-nextauth-v5-magic-link.md" section="Completion Notes">
+        <relevance>Learnings from previous story including established patterns, existing infrastructure, and conventions to follow</relevance>
+        <keyInsights>
+          - Next.js 16 App Router: Server Components default, Client Components need 'use client'
+          - Tailwind CSS 3.4+ already configured, ready for custom theme tokens
+          - TypeScript strict mode enabled - all components must be typed
+          - Import alias @/ resolves to app/ directory
+          - ESLint + Prettier configured for code quality
+          - Pattern: Environment variables in .env.local (never commit secrets)
+          - Pattern: Comprehensive README sections (setup, examples, resources)
+          - Pattern: JSDoc comments for complex configurations
+        </keyInsights>
+      </document>
+    </documentation>
+
+    <existingCode>
+      <file path="app/package.json">
+        <purpose>Project dependencies - will be updated with Radix UI packages, class-variance-authority, clsx, tailwind-merge, lucide-react</purpose>
+        <currentState>
+          - Next.js 16.0.6 installed
+          - React 19.2.0 installed
+          - Tailwind CSS 4.0+ installed (@tailwindcss/postcss)
+          - TypeScript 5.x installed
+          - No shadcn/ui dependencies yet (to be added)
+        </currentState>
+        <relevantSnippets>
+          "dependencies": {
+            "next": "16.0.6",
+            "react": "19.2.0",
+            "react-dom": "19.2.0"
+          },
+          "devDependencies": {
+            "@tailwindcss/postcss": "^4",
+            "tailwindcss": "^4",
+            "typescript": "^5"
+          }
+        </relevantSnippets>
+      </file>
+      <file path="app/tsconfig.json">
+        <purpose>TypeScript configuration with import alias @/* - used for component imports from components/ui/</purpose>
+        <currentState>
+          - Strict mode enabled
+          - Import alias @/* configured to resolve to app/ directory
+          - JSX set to react-jsx (React 19 compatible)
+          - Module resolution: bundler (Next.js 16 requirement)
+        </currentState>
+        <relevantSnippets>
+          "compilerOptions": {
+            "strict": true,
+            "paths": {
+              "@/*": ["./*"]
+            },
+            "jsx": "react-jsx",
+            "moduleResolution": "bundler"
+          }
+        </relevantSnippets>
+      </file>
+      <file path="app/app/layout.tsx">
+        <purpose>Root layout - will be modified to add dark className to body and Toaster provider</purpose>
+        <currentState>
+          - Currently uses Geist fonts (Geist Sans + Geist Mono)
+          - Body has font variable classes and antialiased
+          - AuthProvider wrapper for NextAuth
+          - NO dark className yet (to be added)
+          - NO Toaster component yet (to be added)
+        </currentState>
+        <relevantSnippets>
+          export default function RootLayout({ children }) {
+            return (
+              &lt;html lang="pt-BR"&gt;
+                &lt;body className={`${geistSans.variable} ${geistMono.variable} antialiased`}&gt;
+                  &lt;AuthProvider&gt;{children}&lt;/AuthProvider&gt;
+                &lt;/body&gt;
+              &lt;/html&gt;
+            )
+          }
+        </relevantSnippets>
+        <requiredChanges>
+          - Add "dark" to body className (before existing classes)
+          - Import and add &lt;Toaster /&gt; component after AuthProvider (inside body)
+        </requiredChanges>
+      </file>
+      <file path="app/app/globals.css">
+        <purpose>Global styles - will be modified to add shadcn/ui CSS variables for Emerald Trust theme</purpose>
+        <currentState>
+          - Tailwind CSS 4.0 import: @import "tailwindcss"
+          - CSS variables for background/foreground colors
+          - @theme inline block for custom tokens
+          - Media query for dark mode (will be overridden by className strategy)
+        </currentState>
+        <relevantSnippets>
+          @import "tailwindcss";
+
+          :root {
+            --background: #ffffff;
+            --foreground: #171717;
+          }
+
+          @theme inline {
+            --color-background: var(--background);
+            --color-foreground: var(--foreground);
+          }
+
+          @media (prefers-color-scheme: dark) {
+            :root {
+              --background: #0a0a0a;
+              --foreground: #ededed;
+            }
+          }
+        </relevantSnippets>
+        <requiredChanges>
+          - Add shadcn/ui CSS variables (--primary, --secondary, --border, --input, --ring, --card, --muted, etc.)
+          - Convert Emerald Trust colors to HSL format (#10b981 → hsl(160, 84%, 39%))
+          - Add .dark class definitions for dark mode theme
+          - Keep existing Tailwind CSS 4.0 import structure
+        </requiredChanges>
+      </file>
+      <file path="app/next.config.ts">
+        <purpose>Next.js configuration - no changes needed, but verify compatibility with shadcn/ui</purpose>
+        <currentState>Next.js 16 configuration (default setup from Story 1.1)</currentState>
+      </file>
+    </existingCode>
+
+    <dependencies>
+      <external>
+        <dependency name="@radix-ui/react-slot" version="latest">
+          <purpose>Button component primitive (slot composition pattern)</purpose>
+          <usage>Auto-installed by shadcn/ui CLI when adding Button component</usage>
+        </dependency>
+        <dependency name="@radix-ui/react-dialog" version="latest">
+          <purpose>Dialog/Modal component primitive with accessibility</purpose>
+          <usage>Auto-installed by shadcn/ui CLI when adding Dialog component</usage>
+        </dependency>
+        <dependency name="@radix-ui/react-toast" version="latest">
+          <purpose>Toast notification primitive with queue management</purpose>
+          <usage>Auto-installed by shadcn/ui CLI when adding Toast component</usage>
+        </dependency>
+        <dependency name="class-variance-authority" version="latest">
+          <purpose>CVA - Utility for creating component variants with TypeScript support</purpose>
+          <usage>Used in all shadcn/ui components for variant prop typing</usage>
+        </dependency>
+        <dependency name="clsx" version="latest">
+          <purpose>Utility for constructing className strings conditionally</purpose>
+          <usage>Part of cn() helper in lib/utils.ts</usage>
+        </dependency>
+        <dependency name="tailwind-merge" version="latest">
+          <purpose>Merge Tailwind CSS classes without style conflicts</purpose>
+          <usage>Part of cn() helper in lib/utils.ts - prevents duplicate utility classes</usage>
+        </dependency>
+        <dependency name="lucide-react" version="latest">
+          <purpose>Icon library - modern, tree-shakeable icons</purpose>
+          <usage>Used in Button (loading spinner), Dialog (close X), Toast (icons)</usage>
+        </dependency>
+      </external>
+      <internal>
+        <dependency path="app/app/globals.css">
+          <relationship>Modified to add shadcn/ui CSS variables and Emerald Trust theme</relationship>
+        </dependency>
+        <dependency path="app/app/layout.tsx">
+          <relationship>Modified to add dark className to body and Toaster provider</relationship>
+        </dependency>
+        <dependency path="app/tsconfig.json">
+          <relationship>Import alias @/* already configured - used for component imports</relationship>
+        </dependency>
+        <dependency path="app/tailwind.config.ts">
+          <relationship>Will be updated by shadcn/ui init with theme configuration</relationship>
+        </dependency>
+      </internal>
+    </dependencies>
+  </artifacts>
+
+  <technicalConstraints>
+    <constraint type="technology">
+      <description>Next.js 16 App Router - Components must specify 'use client' if using React hooks or browser APIs</description>
+      <impact>shadcn/ui components are Client Components by default (use 'use client' directive)</impact>
+    </constraint>
+    <constraint type="technology">
+      <description>Tailwind CSS 4.0+ with new @import syntax - CSS variables must use @theme inline block</description>
+      <impact>shadcn/ui CSS variables must be adapted to Tailwind 4.0 format (not v3 format)</impact>
+    </constraint>
+    <constraint type="styling">
+      <description>Emerald Trust theme colors must be converted to HSL format for CSS variables</description>
+      <impact>Hex colors (#10b981) must be converted to HSL (hsl(160, 84%, 39%)) for theme system</impact>
+    </constraint>
+    <constraint type="styling">
+      <description>Dark mode strategy: 'className' (not 'media') for manual control</description>
+      <impact>Tailwind config must use darkMode: ['class'], body must have 'dark' className</impact>
+    </constraint>
+    <constraint type="accessibility">
+      <description>WCAG 2.1 Level A compliance required - keyboard navigation, focus indicators, ARIA labels</description>
+      <impact>Radix UI primitives provide this out-of-box, but must verify after theming</impact>
+    </constraint>
+    <constraint type="performance">
+      <description>Component rendering must be instant (&lt;500ms) - no loading spinners</description>
+      <impact>Use skeleton screens or immediate render, avoid async component loading</impact>
+    </constraint>
+    <constraint type="compatibility">
+      <description>React 19 compatibility - shadcn/ui must work with React 19.2.0</description>
+      <impact>Verify shadcn/ui CLI generates React 19 compatible code (jsx: 'react-jsx')</impact>
+    </constraint>
+    <constraint type="mobile-first">
+      <description>Components must be responsive (375px mobile, 768px tablet, 1024px+ desktop)</description>
+      <impact>Test all components on test page at different breakpoints</impact>
+    </constraint>
+  </technicalConstraints>
+
+  <interfaces>
+    <componentInterfaces>
+      <interface name="cn() helper function">
+        <location>lib/utils.ts</location>
+        <signature>
+          function cn(...inputs: ClassValue[]): string
+        </signature>
+        <purpose>Merge Tailwind CSS classes using clsx + tailwind-merge - prevents duplicate utilities</purpose>
+        <usage>
+          import { cn } from '@/lib/utils'
+          
+          // Example: Merge default + prop classes
+          &lt;button className={cn('bg-primary text-white', className)} /&gt;
+        </usage>
+      </interface>
+      <interface name="Button component">
+        <location>components/ui/button.tsx</location>
+        <purpose>Primary interactive component with variants (default, outline, ghost, link) and sizes (sm, md, lg)</purpose>
+        <expectedProps>
+          variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
+          size?: 'default' | 'sm' | 'lg' | 'icon'
+          asChild?: boolean (Radix Slot pattern)
+          disabled?: boolean
+          className?: string
+        </expectedProps>
+      </interface>
+      <interface name="Input component">
+        <location>components/ui/input.tsx</location>
+        <purpose>Text input with Emerald focus ring and consistent styling</purpose>
+        <expectedProps>
+          type?: string (default: 'text')
+          disabled?: boolean
+          className?: string
+          // All native input props (value, onChange, placeholder, etc.)
+        </expectedProps>
+      </interface>
+      <interface name="Card component">
+        <location>components/ui/card.tsx</location>
+        <purpose>Container component with Card, CardHeader, CardTitle, CardContent, CardFooter subcomponents</purpose>
+        <subComponents>
+          Card (main container)
+          CardHeader (top section)
+          CardTitle (heading)
+          CardDescription (subtitle)
+          CardContent (main content)
+          CardFooter (bottom section)
+        </subComponents>
+      </interface>
+      <interface name="Badge component">
+        <location>components/ui/badge.tsx</location>
+        <purpose>Small label/tag component with variants (default, secondary, destructive, outline)</purpose>
+        <expectedProps>
+          variant?: 'default' | 'secondary' | 'destructive' | 'outline'
+          className?: string
+        </expectedProps>
+      </interface>
+      <interface name="Toast system">
+        <location>components/ui/toast.tsx + components/ui/toaster.tsx + components/ui/use-toast.ts</location>
+        <purpose>Notification system with useToast() hook for programmatic toasts</purpose>
+        <usage>
+          // In component:
+          import { useToast } from '@/components/ui/use-toast'
+          const { toast } = useToast()
+          
+          toast({
+            title: 'Success',
+            description: 'Operation completed',
+            variant: 'default'
+          })
+          
+          // In layout.tsx:
+          import { Toaster } from '@/components/ui/toaster'
+          &lt;Toaster /&gt;
+        </usage>
+      </interface>
+      <interface name="Dialog component">
+        <location>components/ui/dialog.tsx</location>
+        <purpose>Modal overlay with DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription subcomponents</purpose>
+        <usage>
+          &lt;Dialog&gt;
+            &lt;DialogTrigger asChild&gt;&lt;Button&gt;Open&lt;/Button&gt;&lt;/DialogTrigger&gt;
+            &lt;DialogContent&gt;
+              &lt;DialogHeader&gt;
+                &lt;DialogTitle&gt;Title&lt;/DialogTitle&gt;
+              &lt;/DialogHeader&gt;
+              Content here
+            &lt;/DialogContent&gt;
+          &lt;/Dialog&gt;
+        </usage>
+      </interface>
+    </componentInterfaces>
+    <fileConventions>
+      <convention>
+        <pattern>components/ui/*.tsx</pattern>
+        <description>All shadcn/ui components go in components/ui/ directory (created by CLI)</description>
+      </convention>
+      <convention>
+        <pattern>lib/utils.ts</pattern>
+        <description>Utility functions including cn() helper (created by CLI)</description>
+      </convention>
+      <convention>
+        <pattern>components.json</pattern>
+        <description>shadcn/ui configuration file at project root (created by CLI)</description>
+      </convention>
+      <convention>
+        <pattern>@/ import alias</pattern>
+        <description>All component imports use @/* (resolves to app/ directory via tsconfig.json paths)</description>
+      </convention>
+    </fileConventions>
+  </interfaces>
+
+  <testingGuidance>
+    <testStrategy>
+      <approach>Visual testing + Manual accessibility testing (No automated tests for this story)</approach>
+      <rationale>shadcn/ui components are well-tested upstream (Radix UI test suite). This story focuses on installation and theme configuration verification.</rationale>
+    </testStrategy>
+    <visualTesting>
+      <requirement>Create /test-components page with all 6 components</requirement>
+      <requirement>Test each variant (button: default, outline, ghost, destructive, secondary, link)</requirement>
+      <requirement>Verify Emerald theme colors visible (#10b981 primary on buttons, focus rings)</requirement>
+      <requirement>Test interactions (click buttons, type in inputs, open dialogs, trigger toasts)</requirement>
+      <requirement>Test responsive design (375px mobile, 768px tablet, 1024px+ desktop)</requirement>
+      <requirement>Screenshot test page for documentation</requirement>
+    </visualTesting>
+    <accessibilityTesting>
+      <requirement>Keyboard navigation: Tab (move focus), Enter/Space (activate), ESC (close dialogs)</requirement>
+      <requirement>Focus indicators visible: Emerald ring color (ring-primary) on all interactive elements</requirement>
+      <requirement>Screen reader testing optional but recommended (verify ARIA labels)</requirement>
+    </accessibilityTesting>
+    <acceptanceValidation>
+      <validation id="AC1">Run `npx tsc --noEmit` and verify 0 TypeScript errors</validation>
+      <validation id="AC2">Inspect body element in browser DevTools - verify 'dark' className present</validation>
+      <validation id="AC3">Check components/ui/ directory - verify 6 .tsx files exist (button, input, card, badge, toast, dialog)</validation>
+      <validation id="AC4">Check package.json - verify all Radix UI dependencies installed</validation>
+      <validation id="AC5">Visit /test-components page - verify all components render with Emerald colors</validation>
+      <validation id="AC6">Test keyboard navigation - Tab through all interactive elements, verify focus rings</validation>
+      <validation id="AC7">Test responsive - Resize browser to 375px, 768px, 1024px - verify layout adapts</validation>
+      <validation id="AC8">Check README.md - verify "Design System" section exists with theme colors and examples</validation>
+    </acceptanceValidation>
+  </testingGuidance>
+
+  <implementationNotes>
+    <criticalPath>
+      <step order="1">Initialize shadcn/ui: `npx shadcn@latest init` (select New York style, Zinc base, CSS variables Yes, @/* alias, RSC Yes)</step>
+      <step order="2">Customize Emerald Trust theme in tailwind.config.ts and globals.css (convert hex to HSL)</step>
+      <step order="3">Enable dark mode by default: Add "dark" className to body in layout.tsx</step>
+      <step order="4">Install 6 components: `npx shadcn@latest add button input card badge toast dialog`</step>
+      <step order="5">Add Toaster to root layout (import + place before closing body tag)</step>
+      <step order="6">Create test page at /test-components to verify rendering</step>
+      <step order="7">Test accessibility (keyboard navigation, focus indicators)</step>
+      <step order="8">Update README.md with Design System section</step>
+    </criticalPath>
+    <keyDecisions>
+      <decision>
+        <issue>shadcn/ui init style choice (Default vs New York)</issue>
+        <decision>Select "New York" style - more refined aesthetic aligned with premium positioning</decision>
+        <rationale>New York style has sharper corners and cleaner look, matches Sorte Grande's sophisticated brand</rationale>
+      </decision>
+      <decision>
+        <issue>Base color selection during init (Slate, Gray, Zinc, etc.)</issue>
+        <decision>Select "Zinc" - will be customized to Emerald afterward</decision>
+        <rationale>Zinc is neutral base, easier to override with Emerald Trust palette than starting with wrong color</rationale>
+      </decision>
+      <decision>
+        <issue>Dark mode strategy (media query vs className)</issue>
+        <decision>Use className strategy - darkMode: ['class'] in Tailwind config</decision>
+        <rationale>Allows manual dark mode control (always dark), prevents system preference override</rationale>
+      </decision>
+      <decision>
+        <issue>Color format for CSS variables (Hex vs RGB vs HSL)</issue>
+        <decision>Use HSL format for all CSS variables</decision>
+        <rationale>HSL allows easy manipulation of lightness/saturation, required by shadcn/ui theme system</rationale>
+      </decision>
+    </keyDecisions>
+    <commonPitfalls>
+      <pitfall>
+        <issue>Dark mode not activating</issue>
+        <solution>Verify body has "dark" className AND Tailwind config has darkMode: ['class']</solution>
+      </pitfall>
+      <pitfall>
+        <issue>CSS variables not applied</issue>
+        <solution>Restart dev server after changing globals.css - CSS changes not always hot-reloaded</solution>
+      </pitfall>
+      <pitfall>
+        <issue>Components not importable</issue>
+        <solution>Verify @/ import alias works - check tsconfig.json paths config</solution>
+      </pitfall>
+      <pitfall>
+        <issue>Toaster not showing toasts</issue>
+        <solution>Verify &lt;Toaster /&gt; component added to layout.tsx (before closing body tag)</solution>
+      </pitfall>
+      <pitfall>
+        <issue>TypeScript errors on component imports</issue>
+        <solution>Run `npm install` to ensure Radix UI deps installed, restart TypeScript server in VSCode</solution>
+      </pitfall>
+      <pitfall>
+        <issue>Hex to HSL conversion errors</issue>
+        <solution>Use online converter (hex2hsl.com) - #10b981 = hsl(160, 84%, 39%)</solution>
+      </pitfall>
+    </commonPitfalls>
+    <learningsFromPreviousStories>
+      <learning source="Story 1.4">
+        Next.js 16 App Router: Server Components by default, Client Components need 'use client' directive
+      </learning>
+      <learning source="Story 1.4">
+        Tailwind CSS 3.4+ already configured with Tailwind 4.0 syntax (@import "tailwindcss") - maintain compatibility
+      </learning>
+      <learning source="Story 1.4">
+        TypeScript strict mode enabled - all components must be properly typed (shadcn/ui handles this automatically)
+      </learning>
+      <learning source="Story 1.4">
+        Import alias @/ configured to resolve to app/ directory - use for all component imports
+      </learning>
+      <learning source="Story 1.4">
+        Pattern: Comprehensive README sections (setup, examples, resources) - follow same structure for Design System docs
+      </learning>
+      <learning source="Story 1.4">
+        Pattern: JSDoc comments for complex configurations - add comments explaining theme customization
+      </learning>
+    </learningsFromPreviousStories>
+  </implementationNotes>
+
+  <resources>
+    <documentation>
+      <resource>
+        <title>shadcn/ui Official Documentation</title>
+        <url>https://ui.shadcn.com</url>
+        <relevance>Complete reference for installation, theming, and component usage</relevance>
+      </resource>
+      <resource>
+        <title>shadcn/ui Theming Guide</title>
+        <url>https://ui.shadcn.com/docs/theming</url>
+        <relevance>CSS variables, color system, and dark mode configuration</relevance>
+      </resource>
+      <resource>
+        <title>Radix UI Primitives Documentation</title>
+        <url>https://www.radix-ui.com/primitives</url>
+        <relevance>Understanding accessibility features and component APIs</relevance>
+      </resource>
+      <resource>
+        <title>Tailwind CSS Dark Mode Documentation</title>
+        <url>https://tailwindcss.com/docs/dark-mode</url>
+        <relevance>className strategy configuration and usage</relevance>
+      </resource>
+      <resource>
+        <title>WCAG 2.1 Quick Reference</title>
+        <url>https://www.w3.org/WAI/WCAG21/quickref/</url>
+        <relevance>Accessibility testing guidelines (Level A compliance)</relevance>
+      </resource>
+    </documentation>
+    <relatedStories>
+      <story id="1.1" status="done">
+        <title>Initialize Next.js 16 Project</title>
+        <relationship>Established Next.js + Tailwind foundation that shadcn/ui builds upon</relationship>
+      </story>
+      <story id="1.4" status="done">
+        <title>Configure NextAuth v5 Magic Link</title>
+        <relationship>Previous story - established patterns (README docs, TypeScript conventions, import aliases)</relationship>
+      </story>
+      <story id="1.6" status="backlog">
+        <title>Custom Lottery Components</title>
+        <relationship>Next story - will use shadcn/ui components (Button, Card, Badge) as building blocks</relationship>
+      </story>
+      <story id="1.8" status="backlog">
+        <title>Landing Page</title>
+        <relationship>Will consume shadcn/ui Button and Card components installed in this story</relationship>
+      </story>
+    </relatedStories>
+  </resources>
+
+  <contextGeneration>
+    <generatedBy>SM Agent (BMad Method v6.0.0-alpha.12)</generatedBy>
+    <workflowVersion>story-context v1.0</workflowVersion>
+    <discoveredDocuments>
+      <document>docs/sprint-artifacts/tech-spec-epic-1.md</document>
+      <document>docs/architecture.md</document>
+      <document>docs/ux-design-specification.md</document>
+      <document>docs/epics-detailed.md</document>
+      <document>docs/sprint-artifacts/1-4-configure-nextauth-v5-magic-link.md</document>
+    </discoveredDocuments>
+    <codeAnalysis>
+      <analyzedFiles>
+        <file>app/package.json</file>
+        <file>app/tsconfig.json</file>
+        <file>app/app/layout.tsx</file>
+        <file>app/app/globals.css</file>
+        <file>app/next.config.ts</file>
+      </analyzedFiles>
+      <findings>
+        - Tailwind CSS 4.0+ installed with new @import syntax
+        - Import alias @/* configured and working
+        - React 19.2.0 requires shadcn/ui React 19 compatibility verification
+        - Dark mode not yet configured (needs className strategy)
+        - No shadcn/ui dependencies yet (clean slate for installation)
+        - Existing globals.css has custom CSS variables (must preserve and extend)
+      </findings>
+    </codeAnalysis>
+  </contextGeneration>
+</storyContext>

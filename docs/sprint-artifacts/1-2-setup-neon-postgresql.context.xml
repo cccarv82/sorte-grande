@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<story-context id="bmad/bmm/workflows/4-implementation/story-context" v="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>1.2</storyId>
+    <title>Setup Neon PostgreSQL</title>
+    <status>drafted</status>
+    <generatedAt>2025-11-30</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/sprint-artifacts/1-2-setup-neon-postgresql.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>desenvolvedor</asA>
+    <iWant>banco de dados PostgreSQL serverless (Neon) configurado e conectado</iWant>
+    <soThat>a aplicação possa persistir dados de usuários, sugestões e resultados</soThat>
+    <tasks>
+      <task id="1" effort="10min">
+        <name>Create Neon Account and Project</name>
+        <subtasks>
+          <item>Acessar https://neon.tech e criar conta (GitHub OAuth recomendado)</item>
+          <item>Clicar em "Create Project" → Nome: "sorte-grande"</item>
+          <item>Region: AWS us-east-1 (default)</item>
+          <item>PostgreSQL version: 15 (default - latest stable)</item>
+          <item>Confirmar plano Free Tier (0.5 GB, 3 branches, 100 hours compute/month)</item>
+          <item>Aguardar provisionamento (30-60 segundos)</item>
+        </subtasks>
+        <successCriteria>Dashboard exibe projeto "sorte-grande" com status "Active"</successCriteria>
+      </task>
+      <task id="2" effort="5min">
+        <name>Create Database Branches</name>
+        <subtasks>
+          <item>No dashboard Neon, navegar para aba "Branches"</item>
+          <item>Branch "main" já existe (renomear para "production" se desejar)</item>
+          <item>Clicar "Create Branch" → Nome: "staging", Parent: production</item>
+          <item>Clicar "Create Branch" → Nome: "development", Parent: production</item>
+          <item>Selecionar branch "development"</item>
+          <item>Copiar "Connection String" (formato: postgresql://user:password@host/dbname)</item>
+          <item>Salvar em local seguro (será usado no .env.local)</item>
+        </subtasks>
+        <successCriteria>3 branches visíveis no dashboard (production, staging, development)</successCriteria>
+      </task>
+      <task id="3" effort="3min">
+        <name>Install PostgreSQL Driver</name>
+        <subtasks>
+          <item>cd app</item>
+          <item>npm install pg</item>
+          <item>npm install -D @types/pg</item>
+          <item>npm install dotenv</item>
+          <item>Verificar package.json contém pg ^8.11.0, dotenv ^16.3.0, @types/pg ^8.10.0</item>
+        </subtasks>
+        <successCriteria>npm list pg @types/pg dotenv mostra versões instaladas</successCriteria>
+      </task>
+      <task id="4" effort="5min">
+        <name>Configure Environment Variables</name>
+        <subtasks>
+          <item>cd app</item>
+          <item>Criar .env.local com DATABASE_URL do Neon development branch</item>
+          <item>Criar .env.example com placeholder DATABASE_URL</item>
+          <item>Verificar .gitignore já exclui .env.local (linha 34)</item>
+          <item>Confirmar com git status que .env.local não aparece</item>
+        </subtasks>
+        <successCriteria>.env.local existe e não é tracked pelo git</successCriteria>
+      </task>
+      <task id="5" effort="10min">
+        <name>Create Database Connection Helper</name>
+        <subtasks>
+          <item>Criar diretório: mkdir -p lib/db</item>
+          <item>Criar arquivo lib/db/index.ts com singleton Pool pattern</item>
+          <item>Implementar getDbConnection() que retorna pg.Pool</item>
+          <item>Implementar closeDbConnection() para cleanup</item>
+          <item>Configurar SSL para Neon (rejectUnauthorized: false)</item>
+          <item>Configurar pool (max: 10, idleTimeout: 30s, connectionTimeout: 10s)</item>
+          <item>Executar npx tsc --noEmit → Confirmar 0 errors</item>
+        </subtasks>
+        <successCriteria>Arquivo criado, TypeScript válido, exports disponíveis</successCriteria>
+      </task>
+      <task id="6" effort="10min">
+        <name>Create Connection Test Script</name>
+        <subtasks>
+          <item>Criar arquivo lib/db/test-connection.ts</item>
+          <item>Implementar SELECT 1 query + version check</item>
+          <item>Adicionar error handling com troubleshooting messages</item>
+          <item>npm install -D ts-node</item>
+          <item>Executar: node --loader ts-node/esm lib/db/test-connection.ts</item>
+          <item>Verificar output exibe ✅ Database connected successfully</item>
+        </subtasks>
+        <successCriteria>Script executa sem errors, exibe checkmark verde</successCriteria>
+      </task>
+      <task id="7" effort="5min">
+        <name>Update Documentation</name>
+        <subtasks>
+          <item>Abrir app/README.md</item>
+          <item>Adicionar seção "Database Setup" com instruções completas</item>
+          <item>Incluir troubleshooting (DATABASE_URL not defined, connection refused, SSL required)</item>
+          <item>git add README.md &amp;&amp; git commit -m "docs: add database setup instructions"</item>
+        </subtasks>
+        <successCriteria>README contém instruções completas e troubleshooting</successCriteria>
+      </task>
+      <task id="8" effort="3min">
+        <name>Verify Security Best Practices</name>
+        <subtasks>
+          <item>git status → Confirmar .env.local NÃO aparece, .env.example APARECE</item>
+          <item>Verificar DATABASE_URL contém password e termina com ?sslmode=require</item>
+          <item>Verificar .env.example é placeholder sem secrets reais</item>
+          <item>Verificar .gitignore linha 34 tem .env*.local</item>
+          <item>grep -r "DATABASE_URL" app/ → Confirmar secrets não hardcoded</item>
+        </subtasks>
+        <successCriteria>Nenhum secret exposto, .gitignore funcionando</successCriteria>
+      </task>
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    <criterion id="AC1">
+      <description>Neon Project Created</description>
+      <checks>
+        <item>Neon account criado em neon.tech</item>
+        <item>Projeto "sorte-grande" criado no dashboard</item>
+        <item>Plano gratuito selecionado (0.5 GB storage, 3 branches)</item>
+        <item>Region: AWS us-east-1</item>
+      </checks>
+    </criterion>
+    <criterion id="AC2">
+      <description>Database Branches Created</description>
+      <checks>
+        <item>Branch "production" criado (main branch automático)</item>
+        <item>Branch "staging" criado a partir de production</item>
+        <item>Branch "development" criado a partir de production</item>
+        <item>DATABASE_URL copiado do branch development</item>
+      </checks>
+    </criterion>
+    <criterion id="AC3">
+      <description>PostgreSQL Driver Installed</description>
+      <checks>
+        <item>npm install pg executado com sucesso</item>
+        <item>npm install -D @types/pg para tipos TypeScript</item>
+        <item>npm install dotenv para carregar .env em scripts Node</item>
+        <item>package.json contém: pg ^8.11.0, @types/pg ^8.10.0, dotenv ^16.3.0</item>
+      </checks>
+    </criterion>
+    <criterion id="AC4">
+      <description>Environment Variables Configured</description>
+      <checks>
+        <item>Arquivo .env.local criado no root do projeto app/</item>
+        <item>DATABASE_URL definido com connection string do Neon (development branch)</item>
+        <item>Arquivo .env.example criado com placeholders</item>
+        <item>.env.local NÃO commitado no git (verificar .gitignore)</item>
+      </checks>
+    </criterion>
+    <criterion id="AC5">
+      <description>Connection Helper Created</description>
+      <checks>
+        <item>Arquivo lib/db/index.ts criado</item>
+        <item>Export função getDbConnection() que retorna pg.Pool singleton</item>
+        <item>Tratamento de erro se DATABASE_URL não estiver definido</item>
+        <item>TypeScript strict mode compliant (0 errors)</item>
+      </checks>
+    </criterion>
+    <criterion id="AC6">
+      <description>Connection Test Passes</description>
+      <checks>
+        <item>Script lib/db/test-connection.ts criado</item>
+        <item>Script executa SELECT 1 via connection helper</item>
+        <item>Script roda via node --loader ts-node/esm lib/db/test-connection.ts sem errors</item>
+        <item>Console log exibe: ✓ Database connected successfully</item>
+      </checks>
+    </criterion>
+    <criterion id="AC7">
+      <description>Documentation Updated</description>
+      <checks>
+        <item>README.md atualizado com seção "Database Setup"</item>
+        <item>Instruções para copiar .env.example → .env.local</item>
+        <item>Link para obter DATABASE_URL do Neon</item>
+        <item>Comando de teste de conexão documentado</item>
+      </checks>
+    </criterion>
+    <criterion id="AC8">
+      <description>Security Best Practices</description>
+      <checks>
+        <item>DATABASE_URL contém password (não usar ?sslmode=require plain)</item>
+        <item>.env.local nunca commitado (verificar git status)</item>
+        <item>.env.example não contém secrets reais</item>
+        <item>Connection string usa SSL (Neon força SSL por padrão)</item>
+      </checks>
+    </criterion>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc>
+        <path>docs/sprint-artifacts/tech-spec-epic-1.md</path>
+        <title>Epic Technical Specification: Foundation &amp; Project Setup</title>
+        <section>Database section, NFR-S2, NFR-R2</section>
+        <snippet>Neon PostgreSQL serverless conectado com 3 branches (dev, staging, prod). Drizzle ORM será configurado na Story 1.3. Schema completo: users, suggestions, lottery_results, prizes com indexes otimizados.</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>Sorte Grande - Architecture Document</title>
+        <section>Data Layer - Neon PostgreSQL Serverless</section>
+        <snippet>Database principal usando Neon PostgreSQL serverless com branching (dev/staging/prod separados), autoscaling, connection pooling. Free tier: 0.5GB storage, 5 GB transfer/mês. Drizzle ORM escolhido sobre Prisma por ser mais leve, migrations simples, melhor performance.</snippet>
+      </doc>
+      <doc>
+        <path>docs/sprint-artifacts/1-1-initialize-nextjs-16-project.md</path>
+        <title>Story 1.1: Initialize Next.js 16 Project</title>
+        <section>Dev Agent Record - Completion Notes</section>
+        <snippet>Next.js 16 project criado em app/ directory. Configuration files: .env.local deve ser criado. Package manager: npm confirmado. Git setup: .gitignore configurado para .env files. Import alias @/* maps to project root.</snippet>
+      </doc>
+    </docs>
+
+    <code>
+      <artifact>
+        <path>app/package.json</path>
+        <kind>dependency-manifest</kind>
+        <symbol>dependencies</symbol>
+        <lines>11-15</lines>
+        <reason>Add pg, dotenv as runtime dependencies. Add @types/pg, ts-node as dev dependencies.</reason>
+      </artifact>
+      <artifact>
+        <path>app/.gitignore</path>
+        <kind>config</kind>
+        <symbol>.env*.local</symbol>
+        <lines>34</lines>
+        <reason>Verify .env.local is already ignored (line 34: .env*.local pattern)</reason>
+      </artifact>
+      <artifact>
+        <path>app/README.md</path>
+        <kind>documentation</kind>
+        <symbol>Database Setup section</symbol>
+        <lines>to-be-added</lines>
+        <reason>Update with database setup instructions, environment configuration, connection test commands, troubleshooting</reason>
+      </artifact>
+    </code>
+
+    <dependencies>
+      <npm>
+        <package name="pg" version="^8.11.0" type="runtime">PostgreSQL client for Node.js - core database driver</package>
+        <package name="dotenv" version="^16.3.0" type="runtime">Load environment variables from .env files - required for test scripts</package>
+        <package name="@types/pg" version="^8.10.0" type="dev">TypeScript types for pg driver</package>
+        <package name="ts-node" version="latest" type="dev">Execute TypeScript files in Node.js - required for test-connection.ts script</package>
+      </npm>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint type="pattern">
+      <name>Singleton Pattern for Database Pool</name>
+      <description>Use singleton pattern for pg.Pool to avoid multiple connection pools. Create pool once, reuse across application. Store in module-level variable.</description>
+      <source>Best practices for connection pooling - prevents connection leaks</source>
+    </constraint>
+    <constraint type="security">
+      <name>Environment Variables Security</name>
+      <description>DATABASE_URL must NEVER be committed to git. Use .env.local for secrets (auto-ignored by Next.js .gitignore). Use .env.example as template with placeholders only.</description>
+      <source>NFR-S2: Database Access Security - Zero secrets in source code</source>
+    </constraint>
+    <constraint type="architecture">
+      <name>SSL Configuration for Neon</name>
+      <description>Neon uses self-signed SSL certificates. Must set rejectUnauthorized: false in SSL config. Connection is still encrypted and secure. sslmode=require parameter required in DATABASE_URL.</description>
+      <source>Neon documentation - SSL connection requirements</source>
+    </constraint>
+    <constraint type="architecture">
+      <name>lib/ Directory Convention</name>
+      <description>Shared utilities go in lib/ directory following Next.js 16 conventions. Database utilities in lib/db/. Use @/* import alias for clean imports.</description>
+      <source>Next.js 16 project structure - Story 1.1 established this pattern</source>
+    </constraint>
+    <constraint type="testing">
+      <name>Manual Testing via Script</name>
+      <description>No automated tests needed for database setup. Connection test script (test-connection.ts) serves as smoke test. Run manually after implementation to verify connectivity.</description>
+      <source>Story Dev Notes - Testing Strategy</source>
+    </constraint>
+    <constraint type="deployment">
+      <name>Connection Pooling Configuration</name>
+      <description>Configure pg.Pool with max: 10 connections, idleTimeout: 30s, connectionTimeout: 10s. Neon has server-side pooling - our client-side pool works with it. No pg-pool library needed.</description>
+      <source>Neon serverless best practices + Tech Spec database section</source>
+    </constraint>
+  </constraints>
+
+  <interfaces>
+    <interface>
+      <name>getDbConnection</name>
+      <kind>function</kind>
+      <signature>export function getDbConnection(): Pool</signature>
+      <path>app/lib/db/index.ts</path>
+      <description>Returns singleton PostgreSQL connection pool. Throws error if DATABASE_URL not defined. Creates pool on first call, reuses on subsequent calls.</description>
+    </interface>
+    <interface>
+      <name>closeDbConnection</name>
+      <kind>function</kind>
+      <signature>export async function closeDbConnection(): Promise&lt;void&gt;</signature>
+      <path>app/lib/db/index.ts</path>
+      <description>Gracefully closes database connection pool. Used for cleanup in test scripts and application shutdown.</description>
+    </interface>
+    <interface>
+      <name>DATABASE_URL</name>
+      <kind>environment-variable</kind>
+      <signature>postgresql://user:password@host/dbname?sslmode=require</signature>
+      <path>app/.env.local</path>
+      <description>PostgreSQL connection string from Neon development branch. Contains credentials - must be kept secret. Format includes sslmode=require parameter.</description>
+    </interface>
+  </interfaces>
+
+  <tests>
+    <standards>
+      Testing for database setup is primarily manual verification using the connection test script. The script executes SELECT 1 query to verify connectivity, checks PostgreSQL version, and provides detailed error messages with troubleshooting steps. No automated E2E tests required for infrastructure setup. Story completion validated by: (1) test script passes without errors, (2) TypeScript compilation succeeds (npx tsc --noEmit), (3) git status confirms .env.local not tracked.
+    </standards>
+
+    <locations>
+      <location>app/lib/db/test-connection.ts</location>
+      <location>Manual verification: git status, npm list, TypeScript compilation</location>
+    </locations>
+
+    <ideas>
+      <idea ac="AC1">Manual: Verify Neon dashboard shows project "sorte-grande" with status Active</idea>
+      <idea ac="AC2">Manual: Verify 3 branches visible in Neon dashboard (production, staging, development)</idea>
+      <idea ac="AC3">Manual: Run npm list pg @types/pg dotenv - verify versions installed</idea>
+      <idea ac="AC4">Manual: Run git status - verify .env.local not listed, .env.example is listed</idea>
+      <idea ac="AC5">Manual: Run npx tsc --noEmit - verify 0 TypeScript errors in lib/db/index.ts</idea>
+      <idea ac="AC6">Manual: Run node --loader ts-node/esm lib/db/test-connection.ts - verify ✅ success message</idea>
+      <idea ac="AC7">Manual: Open app/README.md - verify "Database Setup" section exists with complete instructions</idea>
+      <idea ac="AC8">Manual: Run grep -r "DATABASE_URL" app/ - verify no hardcoded secrets (only in .env files)</idea>
+    </ideas>
+  </tests>
+</story-context>

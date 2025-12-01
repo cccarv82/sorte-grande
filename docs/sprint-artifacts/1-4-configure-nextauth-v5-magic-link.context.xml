@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<story-context id="sorte-grande-1-4-nextauth-magic-link" v="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>1.4</storyId>
+    <title>Configure NextAuth v5 Magic Link</title>
+    <status>ready-for-dev</status>
+    <generatedAt>2025-12-01</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/sprint-artifacts/1-4-configure-nextauth-v5-magic-link.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>usuário</asA>
+    <iWant>autenticar via magic link enviado por email</iWant>
+    <soThat>possa acessar a plataforma de sugestões de loteria de forma segura sem senhas</soThat>
+    <tasks>
+      <task id="1" title="Install NextAuth v5 and Dependencies">
+        <subtask>Navigate: cd app</subtask>
+        <subtask>Install NextAuth v5 beta: npm install next-auth@beta</subtask>
+        <subtask>Install Resend: npm install resend</subtask>
+        <subtask>Install Drizzle Adapter: npm install @auth/drizzle-adapter</subtask>
+        <subtask>Verify package.json contains all 3 dependencies</subtask>
+        <subtask>Run TypeScript check: npx tsc --noEmit</subtask>
+      </task>
+      <task id="2" title="Setup Resend Account and API Key">
+        <subtask>Create Resend account: https://resend.com/signup</subtask>
+        <subtask>Verify email address</subtask>
+        <subtask>Navigate to API Keys section</subtask>
+        <subtask>Generate new API key (name: "Sorte Grande Dev")</subtask>
+        <subtask>Copy API key (starts with re_...)</subtask>
+        <subtask>Add RESEND_API_KEY to .env.local</subtask>
+        <subtask>Update .env.example with placeholder</subtask>
+        <subtask>(Optional) Verify domain for production</subtask>
+      </task>
+      <task id="3" title="Generate NEXTAUTH_SECRET">
+        <subtask>Generate secret: openssl rand -base64 32</subtask>
+        <subtask>Copy generated string</subtask>
+        <subtask>Add to .env.local: NEXTAUTH_URL, NEXTAUTH_SECRET</subtask>
+        <subtask>Update .env.example with placeholders</subtask>
+      </task>
+      <task id="4" title="Create NextAuth Configuration">
+        <subtask>Create directory: mkdir -p lib/auth</subtask>
+        <subtask>Create lib/auth/config.ts with NextAuth configuration</subtask>
+        <subtask>Configure EmailProvider with Resend transport</subtask>
+        <subtask>Configure DrizzleAdapter with users table</subtask>
+        <subtask>Set JWT session strategy (30 days maxAge)</subtask>
+        <subtask>Add session callback extending session.user.id</subtask>
+        <subtask>Add JSDoc comments</subtask>
+        <subtask>Run TypeScript check: npx tsc --noEmit</subtask>
+      </task>
+      <task id="5" title="Create DrizzleAdapter Wrapper">
+        <subtask>Create lib/auth/adapter.ts</subtask>
+        <subtask>Import getDbConnection() from lib/db</subtask>
+        <subtask>Export drizzle database instance for adapter</subtask>
+        <subtask>Add JSDoc explaining connection reuse</subtask>
+      </task>
+      <task id="6" title="Create Auth Helper Exports">
+        <subtask>Create lib/auth/index.ts</subtask>
+        <subtask>Export auth, signIn, signOut, handlers from config</subtask>
+        <subtask>Add comprehensive JSDoc with usage examples</subtask>
+        <subtask>Test imports in dummy file</subtask>
+      </task>
+      <task id="7" title="Create NextAuth API Route">
+        <subtask>Create directory: mkdir -p app/api/auth/[...nextauth]</subtask>
+        <subtask>Create app/api/auth/[...nextauth]/route.ts</subtask>
+        <subtask>Export GET and POST handlers from NextAuth</subtask>
+        <subtask>Add JSDoc explaining available endpoints</subtask>
+        <subtask>Test API route: navigate to http://localhost:3000/api/auth/signin</subtask>
+      </task>
+      <task id="8" title="Add NextAuth Session Type Augmentation">
+        <subtask>Create app/types/next-auth.d.ts</subtask>
+        <subtask>Extend NextAuth Session to include user.id</subtask>
+        <subtask>Add JSDoc with usage example</subtask>
+        <subtask>Run TypeScript check: npx tsc --noEmit</subtask>
+      </task>
+      <task id="9" title="Create Route Protection Middleware">
+        <subtask>Create app/middleware.ts at project root</subtask>
+        <subtask>Import auth() from lib/auth</subtask>
+        <subtask>Define protected routes: /dashboard/*, /suggestions/*, /profile/*</subtask>
+        <subtask>Define public routes: /, /login, /verify, /api/auth/*</subtask>
+        <subtask>Add redirect logic for unauthenticated users</subtask>
+        <subtask>Configure middleware matcher</subtask>
+        <subtask>Add JSDoc explaining route protection</subtask>
+        <subtask>Test middleware: navigate to /dashboard (should redirect to /login)</subtask>
+      </task>
+      <task id="10" title="Test Magic Link Flow End-to-End">
+        <subtask>Start development server: npm run dev</subtask>
+        <subtask>Create test script: lib/auth/test-magic-link.ts</subtask>
+        <subtask>Run test script: npx tsx lib/auth/test-magic-link.ts</subtask>
+        <subtask>Check Resend dashboard for email logs</subtask>
+        <subtask>Verify email contains subject, button, expiration notice</subtask>
+        <subtask>Click magic link in email</subtask>
+        <subtask>Verify redirected to callback URL</subtask>
+        <subtask>Check session: navigate to /api/auth/session</subtask>
+        <subtask>Verify JSON response contains user.id and email</subtask>
+        <subtask>Test session persistence: refresh page</subtask>
+        <subtask>Test signOut: call signOut() or navigate to /api/auth/signout</subtask>
+        <subtask>Verify session cleared: /api/auth/session returns null</subtask>
+      </task>
+      <task id="11" title="Update Documentation">
+        <subtask>Open app/README.md</subtask>
+        <subtask>Add Authentication section after Database Schema</subtask>
+        <subtask>Include authentication flow examples</subtask>
+        <subtask>Document protected routes</subtask>
+        <subtask>Add environment variables configuration</subtask>
+        <subtask>Add testing instructions</subtask>
+        <subtask>Add resources links</subtask>
+        <subtask>Save file and review formatting</subtask>
+        <subtask>Commit documentation</subtask>
+      </task>
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    <criterion id="AC1" title="NextAuth v5 and Resend Installed">
+      <requirement>next-auth@beta installed (v5.0.0-beta.25 or latest stable v5)</requirement>
+      <requirement>resend installed as runtime dependency</requirement>
+      <requirement>@auth/drizzle-adapter installed for database integration</requirement>
+      <requirement>TypeScript compiles without errors (npx tsc --noEmit)</requirement>
+      <requirement>package.json contains all 3 dependencies with correct versions</requirement>
+    </criterion>
+    <criterion id="AC2" title="Resend Configured and API Key Obtained">
+      <requirement>Resend account created at https://resend.com</requirement>
+      <requirement>API key generated from Resend dashboard</requirement>
+      <requirement>Domain verified (or use resend.dev subdomain for testing)</requirement>
+      <requirement>RESEND_API_KEY added to .env.local</requirement>
+      <requirement>RESEND_API_KEY added to .env.example (with placeholder value)</requirement>
+      <requirement>Test email sent successfully via Resend API (verification script)</requirement>
+    </criterion>
+    <criterion id="AC3" title="NextAuth Configuration Created">
+      <requirement>lib/auth/config.ts created with NextAuth configuration</requirement>
+      <requirement>EmailProvider configured with Resend transport</requirement>
+      <requirement>DrizzleAdapter configured with users table from Story 1.3</requirement>
+      <requirement>JWT session strategy configured (30 days maxAge)</requirement>
+      <requirement>Session callback extends session with user.id</requirement>
+      <requirement>Magic link expiration set to 15 minutes (default)</requirement>
+      <requirement>NEXTAUTH_SECRET generated and added to .env.local</requirement>
+    </criterion>
+    <criterion id="AC4" title="NextAuth API Route Implemented">
+      <requirement>app/api/auth/[...nextauth]/route.ts created</requirement>
+      <requirement>Exports GET and POST handlers from NextAuth</requirement>
+      <requirement>Route handles all NextAuth endpoints: signin, callback, signout, session</requirement>
+      <requirement>API route accessible via http://localhost:3000/api/auth/signin</requirement>
+    </criterion>
+    <criterion id="AC5" title="DrizzleAdapter Integrated with Users Table">
+      <requirement>lib/auth/adapter.ts created with DrizzleAdapter wrapper</requirement>
+      <requirement>Adapter uses existing getDbConnection() from Story 1.2</requirement>
+      <requirement>Adapter references users table from lib/db/schema.ts</requirement>
+      <requirement>No new database tables created (uses existing users table)</requirement>
+      <requirement>emailVerified timestamp updated on successful magic link verification</requirement>
+    </criterion>
+    <criterion id="AC6" title="Auth Helper Functions Exported">
+      <requirement>lib/auth/index.ts created</requirement>
+      <requirement>Exports auth() function for server-side session access</requirement>
+      <requirement>Exports signIn() and signOut() functions for client components</requirement>
+      <requirement>Type-safe: Session type includes user.id (via type augmentation)</requirement>
+      <requirement>Helper functions importable: import { auth, signIn, signOut } from '@/lib/auth'</requirement>
+    </criterion>
+    <criterion id="AC7" title="Protected Routes Middleware Configured">
+      <requirement>middleware.ts created at project root</requirement>
+      <requirement>Middleware uses NextAuth auth() to check session</requirement>
+      <requirement>Protected routes defined: /dashboard/*, /suggestions/*, /profile/*</requirement>
+      <requirement>Public routes allowed: /, /login, /verify, /api/auth/*</requirement>
+      <requirement>Unauthenticated users redirected to /login</requirement>
+      <requirement>Middleware matcher configured correctly (config.matcher)</requirement>
+    </criterion>
+    <criterion id="AC8" title="Magic Link Flow Tested End-to-End">
+      <requirement>User can request magic link via NextAuth signIn('email', { email })</requirement>
+      <requirement>Email received in inbox (or Resend logs for testing)</requirement>
+      <requirement>Magic link contains valid token</requirement>
+      <requirement>Clicking magic link authenticates user</requirement>
+      <requirement>Session created with user.id and email</requirement>
+      <requirement>Session persists across page refreshes (JWT cookie)</requirement>
+      <requirement>Session expires after 30 days or on signOut()</requirement>
+    </criterion>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc path="docs/sprint-artifacts/tech-spec-epic-1.md">
+        <title>Epic Technical Specification: Foundation &amp; Project Setup</title>
+        <section>Authentication (Lines 359-378)</section>
+        <snippet>Story 1.4: Configure NextAuth - Resend Console (create account, verify domain, generate API key) → Local (npm install next-auth@beta resend, create lib/auth/config.ts, create api/auth/[...nextauth]/route.ts, add NEXTAUTH_SECRET and RESEND_API_KEY to .env.local, test magic link flow)</snippet>
+      </doc>
+      <doc path="docs/sprint-artifacts/tech-spec-epic-1.md">
+        <title>Epic Technical Specification: Foundation &amp; Project Setup</title>
+        <section>Data Models and Contracts (Lines 163-254)</section>
+        <snippet>Users table (NextAuth compatible): id (text UUID), email (text unique), name (text nullable), emailVerified (timestamp nullable), image (text nullable), createdAt (timestamp default now)</snippet>
+      </doc>
+      <doc path="docs/sprint-artifacts/tech-spec-epic-1.md">
+        <title>Epic Technical Specification: Foundation &amp; Project Setup</title>
+        <section>NextAuth Session Type (Lines 259-270)</section>
+        <snippet>Session interface extends DefaultSession with user.id (string UUID from users table)</snippet>
+      </doc>
+      <doc path="docs/architecture.md">
+        <title>Sorte Grande - Architecture Document</title>
+        <section>ADR-003: NextAuth vs Clerk</section>
+        <snippet>Decision: NextAuth v5. Rationale: Open source, self-hosted (data ownership), magic link built-in, free (Clerk charges after 10k MAU), native Next.js integration, huge community. Alternatives: Clerk (paid, vendor lock-in), Auth0 (over-featured, expensive), Custom (reinventing wheel, security risks)</snippet>
+      </doc>
+      <doc path="docs/epics-detailed.md">
+        <title>Sorte Grande - Detailed Epics &amp; User Stories</title>
+        <section>Epic 1: Foundation &amp; Project Setup, Story 1.4</section>
+        <snippet>Configure NextAuth v5 Magic Link - Tech: NextAuth v5, EmailProvider, Resend transport, JWT session, DrizzleAdapter. BDD: Given Resend API key, When configure NextAuth EmailProvider, Then user can request magic link, receive email via Resend, link expires in 15min, session lasts 30 days (JWT)</snippet>
+      </doc>
+      <doc path="docs/sprint-artifacts/1-3-define-database-schema.md">
+        <title>Story 1.3: Define Database Schema with Drizzle ORM</title>
+        <section>Dev Agent Record - Completion Notes</section>
+        <snippet>Users table created with NextAuth v5 compatibility: id (text UUID), email (unique), emailVerified (timestamp), createdAt. Index on email (idx_users_email) for login optimization. CASCADE delete configured for LGPD compliance (users → suggestions → prizes). No schema changes needed for NextAuth integration.</snippet>
+      </doc>
+      <doc path="docs/sprint-artifacts/1-3-define-database-schema.md">
+        <title>Story 1.3: Define Database Schema with Drizzle ORM</title>
+        <section>Senior Developer Review - Action Items</section>
+        <snippet>Advisory: Consider adding integration tests for CASCADE delete behavior in Story 1.4+ (when NextAuth is configured and users can be created/deleted). Add runtime JSONB validation in Epic 3 when parsing games field.</snippet>
+      </doc>
+    </docs>
+
+    <code>
+      <artifact path="app/lib/db/schema.ts" kind="schema" symbol="users" lines="18-34">
+        <reason>Users table schema - NextAuth v5 compatible. Required for DrizzleAdapter integration. Contains id (text UUID), email (unique), emailVerified (timestamp), name, image, createdAt. Index on email for login optimization.</reason>
+      </artifact>
+      <artifact path="app/lib/db/index.ts" kind="connection" symbol="getDbConnection" lines="1-58">
+        <reason>Database connection singleton. Must be reused by DrizzleAdapter to avoid multiple connection pools. Returns Pool instance configured for Neon PostgreSQL.</reason>
+      </artifact>
+      <artifact path="app/lib/db/index.ts" kind="export" symbol="schema" lines="58">
+        <reason>Schema exports including users table. Required for DrizzleAdapter to reference users table in NextAuth configuration.</reason>
+      </artifact>
+      <artifact path="app/types/database.ts" kind="types" symbol="Lottery, SuggestionStatus, PrizeTier" lines="1-73">
+        <reason>TypeScript type exports from Story 1.3. Pattern to follow for next-auth.d.ts type augmentation (Session interface extension).</reason>
+      </artifact>
+      <artifact path="app/drizzle.config.ts" kind="config" symbol="drizzle config" lines="1-11">
+        <reason>Drizzle Kit configuration with DATABASE_URL from .env.local. Pattern for environment variable usage (process.env.DATABASE_URL). Same pattern applies to NEXTAUTH_SECRET and RESEND_API_KEY.</reason>
+      </artifact>
+      <artifact path="app/package.json" kind="manifest" symbol="dependencies" lines="13-37">
+        <reason>Current dependencies including drizzle-orm, pg, dotenv, tsx. Will add next-auth@beta, resend, @auth/drizzle-adapter. Pattern for npm scripts (db:generate, db:push, db:validate) - add auth-related scripts if needed.</reason>
+      </artifact>
+      <artifact path="app/.env.example" kind="config" symbol="environment variables" lines="1-10">
+        <reason>Environment template pattern from Story 1.2. Add NEXTAUTH_URL, NEXTAUTH_SECRET, RESEND_API_KEY, EMAIL_FROM with placeholder values. Never commit actual values to git.</reason>
+      </artifact>
+    </code>
+
+    <dependencies>
+      <nodejs>
+        <package name="next-auth" version="^5.0.0-beta.25" dev="false">NextAuth v5 authentication framework</package>
+        <package name="resend" version="^4.0.0" dev="false">Email delivery service for magic links</package>
+        <package name="@auth/drizzle-adapter" version="^1.0.0" dev="false">NextAuth adapter for Drizzle ORM</package>
+        <package name="drizzle-orm" version="^0.44.7" dev="false">Existing: Type-safe ORM (Story 1.3)</package>
+        <package name="pg" version="^8.16.3" dev="false">Existing: PostgreSQL client (Story 1.2)</package>
+        <package name="next" version="16.0.0" dev="false">Existing: Next.js 16 framework (Story 1.1)</package>
+        <package name="react" version="19.0.0" dev="false">Existing: React 19 (Story 1.1)</package>
+        <package name="typescript" version="5.1+" dev="true">Existing: TypeScript strict mode (Story 1.1)</package>
+        <package name="tsx" version="^4.21.0" dev="true">Existing: TypeScript execution for scripts (Story 1.2)</package>
+        <package name="dotenv" version="^17.2.3" dev="false">Existing: Environment variable loading (Story 1.2)</package>
+      </nodejs>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint type="architecture">Use DrizzleAdapter with existing users table from Story 1.3 - DO NOT recreate schema or add new tables</constraint>
+    <constraint type="architecture">Reuse getDbConnection() singleton from lib/db/index.ts - avoid duplicate connection pools</constraint>
+    <constraint type="architecture">Follow NextAuth v5 JWT session strategy (NOT database sessions) - no sessions or verificationTokens tables needed</constraint>
+    <constraint type="security">Store all secrets in .env.local (NEXTAUTH_SECRET, RESEND_API_KEY) - never commit to git</constraint>
+    <constraint type="security">Use HttpOnly cookies for JWT tokens - prevent XSS attacks</constraint>
+    <constraint type="security">CSRF protection built into NextAuth - no additional configuration needed</constraint>
+    <constraint type="security">Magic links expire after 15 minutes (NextAuth default) - no configuration override</constraint>
+    <constraint type="pattern">Follow Story 1.3 pattern: tsx for scripts, dotenv loading (config({ path: '.env.local' })), TypeScript strict mode</constraint>
+    <constraint type="pattern">Follow Story 1.3 documentation pattern: comprehensive README section with commands, examples, resources</constraint>
+    <constraint type="pattern">Use lib/ directory structure: lib/auth/config.ts, lib/auth/adapter.ts, lib/auth/index.ts</constraint>
+    <constraint type="testing">Manual testing required for magic link flow - email integration too complex to mock in unit tests</constraint>
+    <constraint type="testing">Integration tests with Playwright + Mailosaur for future stories (Story 2.1+)</constraint>
+    <constraint type="lgpd">CASCADE delete from users table already configured in Story 1.3 - verify NextAuth user deletion triggers cascade</constraint>
+    <constraint type="edge-runtime">Middleware runs on Vercel Edge runtime - cannot use Node.js APIs (fs, crypto, etc.) - use NextAuth auth() function (Edge-compatible)</constraint>
+  </constraints>
+
+  <interfaces>
+    <interface name="NextAuth auth() function" kind="server-function">
+      <signature>async function auth(): Promise&lt;Session | null&gt;</signature>
+      <path>lib/auth/index.ts (exported from NextAuth config)</path>
+      <usage>Server Components, API routes, middleware - checks JWT token from HttpOnly cookie</usage>
+    </interface>
+    <interface name="NextAuth signIn() function" kind="client-function">
+      <signature>async function signIn(provider: 'email', options: { email: string }): Promise&lt;void&gt;</signature>
+      <path>lib/auth/index.ts (exported from NextAuth config)</path>
+      <usage>Client Components - triggers magic link email send via Resend</usage>
+    </interface>
+    <interface name="NextAuth signOut() function" kind="client-function">
+      <signature>async function signOut(): Promise&lt;void&gt;</signature>
+      <path>lib/auth/index.ts (exported from NextAuth config)</path>
+      <usage>Client Components - clears JWT token cookie and ends session</usage>
+    </interface>
+    <interface name="NextAuth handlers" kind="api-handlers">
+      <signature>{ GET: NextApiHandler, POST: NextApiHandler }</signature>
+      <path>lib/auth/config.ts (exported from NextAuth)</path>
+      <usage>app/api/auth/[...nextauth]/route.ts - handles all NextAuth API endpoints</usage>
+    </interface>
+    <interface name="Session interface (augmented)" kind="typescript-type">
+      <signature>interface Session { user: { id: string, email: string, name?: string, image?: string } }</signature>
+      <path>types/next-auth.d.ts (type augmentation)</path>
+      <usage>TypeScript type safety for session.user.id access</usage>
+    </interface>
+    <interface name="DrizzleAdapter" kind="nextauth-adapter">
+      <signature>DrizzleAdapter(db: Drizzle, options: { usersTable: PgTable })</signature>
+      <path>@auth/drizzle-adapter package</path>
+      <usage>lib/auth/config.ts - integrates NextAuth with Drizzle ORM and users table</usage>
+    </interface>
+    <interface name="Resend emails.send()" kind="email-api">
+      <signature>async function send(options: { from: string, to: string, subject: string, html: string }): Promise&lt;{ id: string }&gt;</signature>
+      <path>resend package</path>
+      <usage>lib/auth/config.ts EmailProvider sendVerificationRequest - sends magic link emails</usage>
+    </interface>
+    <interface name="getDbConnection()" kind="database-connection">
+      <signature>function getDbConnection(): Pool</signature>
+      <path>app/lib/db/index.ts (existing from Story 1.2)</path>
+      <usage>lib/auth/adapter.ts - reuse existing connection pool for DrizzleAdapter</usage>
+    </interface>
+    <interface name="users table schema" kind="drizzle-schema">
+      <signature>pgTable('users', { id: text, email: text unique, name: text, emailVerified: timestamp, image: text, createdAt: timestamp })</signature>
+      <path>app/lib/db/schema.ts (existing from Story 1.3)</path>
+      <usage>lib/auth/adapter.ts - DrizzleAdapter references users table for authentication</usage>
+    </interface>
+  </interfaces>
+
+  <tests>
+    <standards>
+      Manual testing required for Story 1.4 due to email integration complexity. Use Resend dashboard logs to verify email delivery. Test magic link flow: request link → check email → click link → verify session created. TypeScript compilation checks (npx tsc --noEmit) after each file creation. Future integration tests (Story 2.1+) will use Playwright + Mailosaur for E2E magic link testing with email capture. Follow Story 1.3 pattern: validation scripts (npm run) for smoke testing. No unit tests for NextAuth configuration (difficult to mock email provider).
+    </standards>
+    <locations>
+      <location>app/lib/auth/test-magic-link.ts - Manual test script for magic link flow (Task 10)</location>
+      <location>tests/acceptance/ - Future location for Playwright + Mailosaur E2E tests (Story 2.1+)</location>
+      <location>tests/integration/ - Future location for CASCADE delete tests when user account deleted (Story 2.1+)</location>
+    </locations>
+    <ideas>
+      <idea ac="AC1">TypeScript compilation check after installing packages: npx tsc --noEmit (should have 0 errors). Verify package.json has correct versions: next-auth ^5.0.0-beta.25, resend ^4.0.0, @auth/drizzle-adapter ^1.0.0</idea>
+      <idea ac="AC2">Manual Resend API test: Create test script that sends email via Resend SDK. Check Resend dashboard logs for delivery confirmation. Verify email appears in inbox (or spam folder if domain not verified).</idea>
+      <idea ac="AC3">Verify lib/auth/config.ts compiles: npx tsc --noEmit. Check EmailProvider configured with Resend transport. Verify DrizzleAdapter references users table from Story 1.3 schema. Confirm JWT session strategy with 30 days maxAge.</idea>
+      <idea ac="AC4">Test API route accessibility: Start dev server, navigate to http://localhost:3000/api/auth/signin (should render NextAuth sign-in UI). Check GET handler returns HTML, POST handler accepts email parameter.</idea>
+      <idea ac="AC5">Verify lib/auth/adapter.ts uses getDbConnection() singleton. Check no new database tables created (query pg_tables). Confirm emailVerified timestamp updated after magic link verification (SQL query: SELECT emailVerified FROM users WHERE email = 'test@example.com').</idea>
+      <idea ac="AC6">Test imports: import { auth, signIn, signOut } from '@/lib/auth' in dummy component. TypeScript should resolve types correctly. Verify auth() returns Session | null, signIn/signOut have correct signatures.</idea>
+      <idea ac="AC7">Test middleware: Navigate to /dashboard without authentication (should redirect to /login with callbackUrl parameter). Verify public routes accessible: /, /login, /verify. Check middleware matcher excludes _next/static, _next/image, favicon.ico.</idea>
+      <idea ac="AC8">E2E magic link test (Task 10): Run test script, request magic link for test@example.com, check Resend logs, copy magic link URL, visit URL in browser, verify session created (/api/auth/session returns JSON with user.id and email), test session persistence (refresh page, session still active), test signOut (session cleared).</idea>
+      <idea>Integration test (future Story 2.1+): Create user via NextAuth, verify user exists in users table, delete user via NextAuth account deletion, verify CASCADE delete removed all suggestions and prizes (LGPD compliance).</idea>
+      <idea>Negative test (future Story 2.1+): Use expired magic link (15+ minutes old), verify error message shown. Try to reuse already-clicked magic link, verify rejection.</idea>
+      <idea>Email deliverability test (production): Send magic link to Gmail, Outlook, Yahoo. Check if emails land in inbox or spam. Verify domain verification (SPF, DKIM, DMARC records) improves deliverability.</idea>
+    </ideas>
+  </tests>
+</story-context>

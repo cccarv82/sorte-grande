@@ -1,0 +1,709 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<storyContext version="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>6</storyId>
+    <storyTitle>Create Custom Lottery Components</storyTitle>
+    <storyFile>docs/sprint-artifacts/1-6-create-custom-lottery-components.md</storyFile>
+    <generated>2025-12-01</generated>
+    <status>ready-for-dev</status>
+  </metadata>
+
+  <story>
+    <asA>Desenvolvedor</asA>
+    <iWant>criar componentes React customizados específicos para loteria (ValueInput, LotteryGameCard, WheelGuaranteeDisplay)</iWant>
+    <soThat>a UI de loterias tenha componentes reutilizáveis e consistentes com o tema Emerald Trust</soThat>
+    <priority>high</priority>
+    <estimatedEffort>3-4 hours</estimatedEffort>
+  </story>
+
+  <acceptanceCriteria>
+    <criterion id="AC1">
+      <title>ValueInput Component Created</title>
+      <description>
+        - Component file created: `app/components/lottery/value-input.tsx`
+        - Component renders currency input (R$ format)
+        - Uses react-number-format for automatic formatting
+        - Validates min R$10, max R$500 via Zod schema
+        - Shows error message below input when invalid
+        - Accepts onChange callback with parsed number value
+        - TypeScript props interface defined with JSDoc comments
+        - Component is Client Component ('use client')
+        - Accessible: label association, error announcement to screen readers
+      </description>
+    </criterion>
+    <criterion id="AC2">
+      <title>LotteryGameCard Component Created</title>
+      <description>
+        - Component file created: `app/components/lottery/lottery-game-card.tsx`
+        - Component wraps shadcn Card component
+        - Displays game metadata (title, date, status badge)
+        - Displays lottery numbers in grid layout (6 cols for Mega-Sena)
+        - Number balls: 36x36px circles, bg #1a1a1a, border #333
+        - Hover effect on card: border changes to #10b981
+        - TypeScript props interface (numbers: number[], title: string, date: string, status: string)
+        - Can be Server Component (no interactivity needed)
+        - Responsive: mobile stacks, desktop shows grid
+      </description>
+    </criterion>
+    <criterion id="AC3">
+      <title>WheelGuaranteeDisplay Component Created</title>
+      <description>
+        - Component file created: `app/components/lottery/wheel-guarantee-display.tsx`
+        - Component wraps shadcn Badge component
+        - Displays guarantee text (e.g., "4 if 4", "5 if 6")
+        - Shows tooltip on hover explaining guarantee
+        - Uses @radix-ui/react-tooltip for accessible tooltip
+        - Tooltip auto-dismisses on ESC key
+        - TypeScript props interface (guaranteeType: string, explanation: string)
+        - Client Component (tooltip requires interactivity)
+        - Keyboard accessible: focus badge to show tooltip
+      </description>
+    </criterion>
+    <criterion id="AC4">
+      <title>Components Export via Index</title>
+      <description>
+        - Index file created: `app/components/lottery/index.ts`
+        - Exports ValueInput, LotteryGameCard, WheelGuaranteeDisplay
+        - Single import pattern available: `import { ValueInput } from '@/components/lottery'`
+        - TypeScript types exported alongside components
+      </description>
+    </criterion>
+    <criterion id="AC5">
+      <title>Validation Schema Created</title>
+      <description>
+        - Validation file created: `app/lib/validations/lottery.ts`
+        - Zod schema for ValueInput: `valueInputSchema`
+        - Schema validates: number, min 10, max 500, error messages in Portuguese
+        - Schema exported and used in ValueInput component
+        - TypeScript type inferred from schema: `ValueInputData`
+      </description>
+    </criterion>
+    <criterion id="AC6">
+      <title>Dependencies Installed</title>
+      <description>
+        - react-number-format installed (npm install --legacy-peer-deps)
+        - @radix-ui/react-tooltip installed (npm install --legacy-peer-deps)
+        - package.json updated with new dependencies
+        - TypeScript types available (@types packages if needed)
+        - No TypeScript compilation errors: `npx tsc --noEmit`
+      </description>
+    </criterion>
+    <criterion id="AC7">
+      <title>Test Page Created and Verified</title>
+      <description>
+        - Test page created: `app/app/test-lottery/page.tsx`
+        - Page renders all 3 components with example data
+        - ValueInput: test valid (R$100), invalid (R$5, R$600) values
+        - LotteryGameCard: test Mega-Sena game (6 numbers) and Lotofácil (15 numbers)
+        - WheelGuaranteeDisplay: test "4 if 4" and "5 if 6" guarantees
+        - Visual confirmation: Emerald theme applied, dark mode active
+        - Accessibility tested: keyboard navigation, focus indicators, ARIA labels
+        - Responsive tested: mobile (375px), tablet (768px), desktop (1024px)
+      </description>
+    </criterion>
+    <criterion id="AC8">
+      <title>Documentation Updated</title>
+      <description>
+        - README.md has "Custom Lottery Components" section
+        - ValueInput usage example with code snippet
+        - LotteryGameCard usage example with code snippet
+        - WheelGuaranteeDisplay usage example with code snippet
+        - Props interfaces documented for each component
+        - Import pattern explained: `import { ValueInput } from '@/components/lottery'`
+      </description>
+    </criterion>
+  </acceptanceCriteria>
+
+  <tasks>
+    <task id="TASK1" ac="AC6">
+      <title>Install Dependencies</title>
+      <subtasks>
+        - Navigate: `cd app`
+        - Install react-number-format: `npm install react-number-format --legacy-peer-deps`
+        - Install @radix-ui/react-tooltip: `npm install @radix-ui/react-tooltip --legacy-peer-deps`
+        - Verify installations in package.json
+        - Run: `npx tsc --noEmit` (verify 0 TypeScript errors)
+      </subtasks>
+      <estimatedEffort>5 min</estimatedEffort>
+    </task>
+    <task id="TASK2" ac="AC5">
+      <title>Create Validation Schema</title>
+      <subtasks>
+        - Create directory: `mkdir -p app/lib/validations`
+        - Create file: `app/lib/validations/lottery.ts`
+        - Import Zod: `import { z } from 'zod'`
+        - Define valueInputSchema with min(10), max(500), Portuguese error messages
+        - Export type: `ValueInputData = z.infer&lt;typeof valueInputSchema&gt;`
+        - Save file and verify TypeScript compilation
+      </subtasks>
+      <estimatedEffort>10 min</estimatedEffort>
+    </task>
+    <task id="TASK3" ac="AC1">
+      <title>Create ValueInput Component</title>
+      <subtasks>
+        - Create directory: `mkdir -p app/components/lottery`
+        - Create file: `app/components/lottery/value-input.tsx`
+        - Add 'use client' directive (NumericFormat requires client)
+        - Implement component with react-number-format NumericFormat
+        - Configure Brazilian currency format (R$, comma decimal, dot thousand)
+        - Integrate Zod validation schema from lib/validations/lottery
+        - Add error state display with ARIA error announcement
+        - Add JSDoc TypeScript comments for props interface
+        - Test: TypeScript compilation, currency formatting, validation
+      </subtasks>
+      <estimatedEffort>30 min</estimatedEffort>
+    </task>
+    <task id="TASK4" ac="AC2">
+      <title>Create LotteryGameCard Component</title>
+      <subtasks>
+        - Create file: `app/components/lottery/lottery-game-card.tsx`
+        - Import Card components from @/components/ui/card
+        - Import Badge from @/components/ui/badge
+        - Implement Server Component (no 'use client' needed)
+        - Create props interface (numbers, title, date, status, prize)
+        - Render Card with CardHeader (title + status badge)
+        - Render CardContent with number grid (responsive cols)
+        - Render CardFooter (prize if provided)
+        - Style: 36x36px number balls, #1a1a1a bg, hover border #10b981
+        - Test: Grid layout, status badges, responsive breakpoints
+      </subtasks>
+      <estimatedEffort>40 min</estimatedEffort>
+    </task>
+    <task id="TASK5" ac="AC3">
+      <title>Create WheelGuaranteeDisplay Component</title>
+      <subtasks>
+        - Create file: `app/components/lottery/wheel-guarantee-display.tsx`
+        - Add 'use client' directive (Tooltip requires client)
+        - Import Badge from @/components/ui/badge
+        - Import Tooltip primitives from @radix-ui/react-tooltip
+        - Create props interface (guaranteeType, explanation)
+        - Wrap Badge in Tooltip.Provider, Root, Trigger
+        - Implement Tooltip.Content with explanation text
+        - Style: Badge variant outline, primary color, tooltip shadow
+        - Add keyboard accessibility (focus to show, ESC to dismiss)
+        - Test: Hover, focus, keyboard navigation, ESC key
+      </subtasks>
+      <estimatedEffort>30 min</estimatedEffort>
+    </task>
+    <task id="TASK6" ac="AC4">
+      <title>Create Component Index Export</title>
+      <subtasks>
+        - Create file: `app/components/lottery/index.ts`
+        - Export ValueInput with type ValueInputProps
+        - Export LotteryGameCard with type LotteryGameCardProps
+        - Export WheelGuaranteeDisplay with type WheelGuaranteeDisplayProps
+        - Test import pattern: `import { ValueInput } from '@/components/lottery'`
+      </subtasks>
+      <estimatedEffort>5 min</estimatedEffort>
+    </task>
+    <task id="TASK7" ac="AC7">
+      <title>Create Test Page</title>
+      <subtasks>
+        - Create directory: `mkdir -p app/app/test-lottery`
+        - Create file: `app/app/test-lottery/page.tsx`
+        - Add 'use client' directive (ValueInput state management)
+        - Import all 3 components from @/components/lottery
+        - Create sections for each component with examples
+        - ValueInput: valid value, min violation, max violation
+        - LotteryGameCard: Mega-Sena (6 numbers), Lotofácil (15 numbers), winner/loser states
+        - WheelGuaranteeDisplay: multiple guarantee types with tooltips
+        - Add accessibility testing notes (keyboard nav instructions)
+        - Test: Visual appearance, interactions, responsive breakpoints
+      </subtasks>
+      <estimatedEffort>30 min</estimatedEffort>
+    </task>
+    <task id="TASK8" ac="AC8">
+      <title>Update Documentation</title>
+      <subtasks>
+        - Open `app/README.md`
+        - Add "Custom Lottery Components" section after "Design System"
+        - Document ValueInput with usage example and props
+        - Document LotteryGameCard with usage example and props
+        - Document WheelGuaranteeDisplay with usage example and props
+        - Explain import pattern and barrel exports
+        - Add validation schema location and usage
+        - Include accessibility notes (keyboard nav, ARIA)
+        - Save and review formatting
+      </subtasks>
+      <estimatedEffort>20 min</estimatedEffort>
+    </task>
+  </tasks>
+
+  <artifacts>
+    <documentation>
+      <document path="docs/epics-detailed.md" section="Epic 1, Story 1.6 (Lines 144-167)">
+        <relevance>Story definition with BDD scenarios, technical requirements, and UX specifications for custom lottery components</relevance>
+        <keyInsights>
+          - BDD scenario: Given shadcn/ui installed, When create ValueInput/GameCard/WheelGuaranteeDisplay, Then ValueInput formats R$ automatically with min/max validation
+          - Tech stack: react-number-format for currency, Zod for validation, Card/Badge wrappers from shadcn
+          - UX specs: Input h-14 text-2xl border #333 focus #10b981, Number balls 36x36px circles bg #1a1a1a, Card hover border #10b981
+          - Components will be used in Stories 3.1 (Value Input Form), 3.9 (Suggestion Results), 3.3 (Wheeling Templates)
+        </keyInsights>
+      </document>
+      <document path="docs/sprint-artifacts/1-5-install-shadcn-ui-components.md" section="Learnings from Previous Story">
+        <relevance>Previous story learnings including established patterns, infrastructure, and files to reuse (DO NOT recreate)</relevance>
+        <keyInsights>
+          - ✅ shadcn/ui base components available at app/components/ui/ (Button, Input, Card, Badge, Dialog, Sonner)
+          - ✅ Emerald Trust theme configured in app/app/globals.css (primary: 160 84% 39% = #10b981)
+          - ✅ Dark mode active via body className="dark"
+          - ✅ cn() utility function at app/lib/utils.ts for Tailwind class merging
+          - Pattern: Components in app/components/ui/ (shadcn convention), custom components should go in app/components/lottery/
+          - Pattern: Client Components need 'use client' directive, Server Components are default
+          - Pattern: Import alias @/ resolves to app/ directory
+          - Pattern: Composition over modification (extend shadcn components via props, don't edit source)
+          - Constraint: npm install requires --legacy-peer-deps flag (NextAuth nodemailer conflict)
+          - Constraint: Tailwind 4.0 linter warnings expected (@theme, @custom-variant) - ignore, doesn't block compilation
+          - Files to REUSE: Card.tsx, Badge.tsx, Input.tsx, utils.ts, globals.css (DO NOT recreate these)
+        </keyInsights>
+      </document>
+      <document path="docs/ux-design-specification.md" section="Component Specifications">
+        <relevance>Complete UX design specification including Emerald Trust theme, component styling, and accessibility requirements</relevance>
+        <keyInsights>
+          - Emerald Trust theme: Primary #10b981 (trust + energy), Secondary #34d399, Background #050505
+          - Component styling: Dark mode default, focus rings with emerald glow, hover states with secondary emerald
+          - Currency input: Height 56px (h-14), Font size 24px (text-2xl), Border #333333, Focus ring #10b981
+          - Number balls: 36x36px circles, Background #1a1a1a, Border #333333, Font 14px medium, Grid layout 6 cols (Mega-Sena)
+          - Card hover: Border transition to #10b981, Subtle shadow on hover
+          - Accessibility: WCAG 2.1 Level A minimum, keyboard navigation (Tab/Enter/Space/ESC), ARIA labels, focus indicators
+          - Responsive: Mobile-first (375px), Tablet 768px, Desktop 1024px+, Touch targets 44x44px minimum
+        </keyInsights>
+      </document>
+      <document path="docs/architecture.md" section="Component Architecture">
+        <relevance>Architectural patterns for React components including Server/Client Component strategy, TypeScript requirements, and composition patterns</relevance>
+        <keyInsights>
+          - Next.js 16 App Router: Server Components default (no directive), Client Components need 'use client'
+          - Client Component triggers: useState, useEffect, event handlers, browser APIs, third-party libraries with interactivity
+          - TypeScript strict mode: All components must have typed props interfaces
+          - Composition pattern: Extend shadcn components via props wrapper pattern, not by editing source
+          - Import alias: @/* resolves to app/ directory (configured in tsconfig.json)
+          - Component organization: shadcn/ui in components/ui/, custom components in feature directories (e.g., components/lottery/)
+          - Accessibility: Radix UI primitives provide WCAG 2.1 Level A baseline, maintain in custom components
+        </keyInsights>
+      </document>
+      <document path="docs/sprint-artifacts/1-6-create-custom-lottery-components.md" section="Dev Notes">
+        <relevance>Implementation guidance including critical path, key files, technical constraints, edge cases, and citations</relevance>
+        <keyInsights>
+          - Critical path: Install dependencies → Create validation schema → Create components → Export index → Test page → Documentation
+          - Key files: app/components/lottery/*.tsx (new), app/lib/validations/lottery.ts (new), app/app/test-lottery/page.tsx (temporary)
+          - Technical constraints: TypeScript strict mode, WCAG 2.1 Level A, dark mode, Emerald Trust theme colors
+          - Component composition: ValueInput extends Input, LotteryGameCard wraps Card, WheelGuaranteeDisplay wraps Badge
+          - Validation strategy: Zod schema centralized in lib/validations/lottery.ts, reused across components
+          - Testing strategy: Visual testing via test page (no automated tests for MVP), accessibility testing (keyboard nav)
+          - Edge cases: react-number-format Brazilian format (R$, comma decimal, dot thousand), LotteryGameCard responsive grid (6/5/8 cols), Tooltip ESC dismissal, npm --legacy-peer-deps
+          - Technical debt: Unit tests (Vitest), E2E tests (Playwright), Storybook, i18n, performance optimization (memoization)
+        </keyInsights>
+      </document>
+    </documentation>
+
+    <existingCode>
+      <file path="app/package.json">
+        <purpose>Project dependencies - will be updated with react-number-format and @radix-ui/react-tooltip</purpose>
+        <currentState>
+          - Next.js 16.0.6, React 19.2.0, TypeScript 5.x installed
+          - Tailwind CSS 4.0+ installed (@tailwindcss/postcss)
+          - shadcn/ui dependencies installed: @radix-ui/react-slot, @radix-ui/react-dialog, @radix-ui/react-toast, class-variance-authority, clsx, tailwind-merge, lucide-react, tailwindcss-animate
+          - Zod already available (used by Drizzle ORM in Story 1.3)
+          - No react-number-format yet (to be added)
+          - No @radix-ui/react-tooltip yet (to be added)
+        </currentState>
+        <relevantSnippets>
+          "dependencies": {
+            "next": "16.0.6",
+            "react": "19.2.0",
+            "react-dom": "19.2.0",
+            "@radix-ui/react-dialog": "^1.1.15",
+            "@radix-ui/react-slot": "^1.2.4",
+            "@radix-ui/react-toast": "^1.2.15",
+            "class-variance-authority": "^0.7.1",
+            "clsx": "^2.1.1",
+            "tailwind-merge": "^3.4.0",
+            "tailwindcss-animate": "^1.0.7",
+            "drizzle-orm": "^0.44.7" // Includes Zod
+          }
+        </relevantSnippets>
+        <actionRequired>Add react-number-format and @radix-ui/react-tooltip using npm install --legacy-peer-deps</actionRequired>
+      </file>
+      <file path="app/tsconfig.json">
+        <purpose>TypeScript configuration with import alias @/* - used for component imports from components/lottery/</purpose>
+        <currentState>
+          - Strict mode enabled (all components must be typed)
+          - Import alias @/* configured to resolve to app/ directory
+          - JSX set to react-jsx (React 19 compatible)
+          - Module resolution: bundler (Next.js 16 requirement)
+        </currentState>
+        <relevantSnippets>
+          "compilerOptions": {
+            "strict": true,
+            "paths": { "@/*": ["./*"] },
+            "jsx": "react-jsx",
+            "moduleResolution": "bundler"
+          }
+        </relevantSnippets>
+        <actionRequired>No changes needed - alias already configured for @/components/lottery imports</actionRequired>
+      </file>
+      <file path="app/lib/utils.ts">
+        <purpose>Utility functions including cn() for Tailwind class merging - REUSE in custom components</purpose>
+        <currentState>
+          - cn() function using clsx + tailwind-merge
+          - Used throughout shadcn/ui components
+          - Pattern established in Story 1.5
+        </currentState>
+        <relevantSnippets>
+          import { clsx, type ClassValue } from "clsx"
+          import { twMerge } from "tailwind-merge"
+          
+          export function cn(...inputs: ClassValue[]) {
+            return twMerge(clsx(inputs))
+          }
+        </relevantSnippets>
+        <actionRequired>Import and use cn() in all custom lottery components for className prop handling</actionRequired>
+      </file>
+      <file path="app/components/ui/card.tsx">
+        <purpose>shadcn Card component - WRAP in LotteryGameCard, DO NOT recreate</purpose>
+        <currentState>
+          - Installed in Story 1.5
+          - Exports: Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter
+          - Already styled with Emerald Trust theme via CSS variables
+          - Server Component (no interactivity)
+        </currentState>
+        <usage>
+          import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
+          
+          // Wrap in LotteryGameCard
+          &lt;Card className={cn('hover:border-primary/50', className)}&gt;
+            &lt;CardHeader&gt;&lt;CardTitle&gt;{title}&lt;/CardTitle&gt;&lt;/CardHeader&gt;
+            &lt;CardContent&gt;{/* number grid */}&lt;/CardContent&gt;
+          &lt;/Card&gt;
+        </usage>
+        <actionRequired>Import and wrap in LotteryGameCard - add hover border effect and number grid content</actionRequired>
+      </file>
+      <file path="app/components/ui/badge.tsx">
+        <purpose>shadcn Badge component - WRAP in WheelGuaranteeDisplay, DO NOT recreate</purpose>
+        <currentState>
+          - Installed in Story 1.5
+          - Variants: default, secondary, destructive, outline
+          - Already styled with Emerald Trust theme
+          - Server Component (no interactivity)
+        </currentState>
+        <usage>
+          import { Badge } from '@/components/ui/badge'
+          
+          // Wrap in Tooltip for WheelGuaranteeDisplay
+          &lt;Badge variant="outline" className="border-primary/50 text-primary"&gt;
+            ✓ {guaranteeType}
+          &lt;/Badge&gt;
+        </usage>
+        <actionRequired>Import and wrap in Tooltip.Trigger for WheelGuaranteeDisplay component</actionRequired>
+      </file>
+      <file path="app/components/ui/input.tsx">
+        <purpose>shadcn Input component - CAN extend pattern for ValueInput (but use react-number-format instead)</purpose>
+        <currentState>
+          - Installed in Story 1.5
+          - Base input styling with Emerald theme
+          - Supports error state via className
+          - Client Component pattern for controlled inputs
+        </currentState>
+        <usage>
+          // DO NOT directly extend Input - use react-number-format NumericFormat instead
+          // But follow same styling pattern: h-14, border, focus ring, error state
+        </usage>
+        <actionRequired>Reference for styling pattern, but use NumericFormat from react-number-format for ValueInput</actionRequired>
+      </file>
+      <file path="app/app/globals.css">
+        <purpose>Global styles with Emerald Trust theme CSS variables - REFERENCE for colors, DO NOT recreate</purpose>
+        <currentState>
+          - Emerald Trust theme defined in :root and .dark
+          - Primary: 160 84% 39% (HSL = #10b981)
+          - Secondary: 159 65% 55% (HSL = #34d399)
+          - Background: 0 0% 2% (HSL = #050505)
+          - Card: 0 0% 6% (HSL = #0f0f0f)
+          - Border: 0 0% 10% (HSL = #1a1a1a)
+          - Ring: 160 84% 39% (same as primary)
+          - Dark mode active by default
+        </currentState>
+        <usage>
+          // Use CSS variables in components via Tailwind classes
+          className="bg-primary text-primary-foreground" // #10b981 background
+          className="border-border" // #1a1a1a border
+          className="ring-ring" // #10b981 focus ring
+          
+          // Or use explicit hex for edge cases
+          className="bg-[#1a1a1a]" // Number ball background
+        </usage>
+        <actionRequired>NO changes needed - reference CSS variables in component styling</actionRequired>
+      </file>
+      <file path="app/app/layout.tsx">
+        <purpose>Root layout with dark mode className - components inherit dark theme</purpose>
+        <currentState>
+          - Body has className="dark" (dark mode always active)
+          - Toaster component from sonner installed
+          - Metadata configured
+        </currentState>
+        <relevance>All custom components inherit dark mode styling from layout - no additional dark mode logic needed</relevance>
+      </file>
+    </existingCode>
+
+    <interfaces>
+      <interface name="ValueInput Component API" kind="React Component Props">
+        <signature>
+          export interface ValueInputProps {
+            value?: number
+            onChange?: (value: number | undefined) =&gt; void
+            error?: string
+            className?: string
+          }
+          
+          export function ValueInput(props: ValueInputProps): JSX.Element
+        </signature>
+        <path>app/components/lottery/value-input.tsx</path>
+        <notes>
+          - Uses react-number-format NumericFormat component internally
+          - Validates with Zod schema (min R$10, max R$500)
+          - Returns parsed number value (not string) via onChange
+          - Handles both internal validation (Zod) and external errors (error prop)
+          - ARIA error announcement for screen readers
+        </notes>
+      </interface>
+      <interface name="LotteryGameCard Component API" kind="React Component Props">
+        <signature>
+          export interface LotteryGameCardProps {
+            title: string
+            numbers: number[]
+            date?: string
+            status?: 'pending' | 'realized' | 'winner' | 'loser'
+            prize?: string
+            className?: string
+          }
+          
+          export function LotteryGameCard(props: LotteryGameCardProps): JSX.Element
+        </signature>
+        <path>app/components/lottery/lottery-game-card.tsx</path>
+        <notes>
+          - Wraps shadcn Card component
+          - Responsive grid: 6 cols (≤6 numbers), 5 cols (7-10 numbers), 6/8 cols (11+ numbers)
+          - Status badge variants: pending (default), realized (secondary), winner (primary), loser (outline)
+          - Date formatted to pt-BR locale (DD de MMMM de YYYY)
+          - Hover effect: border-primary/50 transition
+        </notes>
+      </interface>
+      <interface name="WheelGuaranteeDisplay Component API" kind="React Component Props">
+        <signature>
+          export interface WheelGuaranteeDisplayProps {
+            guaranteeType: string // e.g., "4 if 4", "5 if 6"
+            explanation: string // Tooltip text
+            className?: string
+          }
+          
+          export function WheelGuaranteeDisplay(props: WheelGuaranteeDisplayProps): JSX.Element
+        </signature>
+        <path>app/components/lottery/wheel-guarantee-display.tsx</path>
+        <notes>
+          - Wraps shadcn Badge in Radix Tooltip
+          - Badge variant: outline with primary color
+          - Tooltip Provider required (wrap component or use in Provider)
+          - Keyboard accessible: focus badge to show, ESC to dismiss
+          - Tooltip auto-positions (sideOffset: 5px, arrow included)
+        </notes>
+      </interface>
+      <interface name="Validation Schema API" kind="Zod Schema">
+        <signature>
+          import { z } from 'zod'
+          
+          export const valueInputSchema = z.object({
+            value: z.number()
+              .min(10, 'Valor mínimo é R$ 10,00')
+              .max(500, 'Valor máximo é R$ 500,00')
+          })
+          
+          export type ValueInputData = z.infer&lt;typeof valueInputSchema&gt;
+        </signature>
+        <path>app/lib/validations/lottery.ts</path>
+        <notes>
+          - Centralized validation for all lottery value inputs
+          - Error messages in Portuguese for UX
+          - Can be extended with additional lottery validations in future
+          - TypeScript type automatically inferred from schema
+        </notes>
+      </interface>
+      <interface name="Component Barrel Exports" kind="Module Exports">
+        <signature>
+          export { ValueInput, type ValueInputProps } from './value-input'
+          export { LotteryGameCard, type LotteryGameCardProps } from './lottery-game-card'
+          export { WheelGuaranteeDisplay, type WheelGuaranteeDisplayProps } from './wheel-guarantee-display'
+        </signature>
+        <path>app/components/lottery/index.ts</path>
+        <notes>
+          - Single import pattern: import { ValueInput, LotteryGameCard } from '@/components/lottery'
+          - Types exported alongside components for TypeScript IntelliSense
+          - Follows shadcn/ui barrel export convention
+        </notes>
+      </interface>
+    </interfaces>
+
+    <dependencies>
+      <framework name="Next.js" version="16.0.6">
+        <notes>App Router, Server/Client Components, TypeScript support, Turbopack</notes>
+      </framework>
+      <framework name="React" version="19.2.0">
+        <notes>Latest React with improved Server Components, automatic batching, transitions</notes>
+      </framework>
+      <framework name="TypeScript" version="^5">
+        <notes>Strict mode enabled, all components must have typed props</notes>
+      </framework>
+      <framework name="Tailwind CSS" version="^4">
+        <notes>@import syntax, @theme inline, CSS variables for theming, dark mode via className</notes>
+      </framework>
+      <library name="react-number-format" version="latest">
+        <notes>Currency input formatting - TO BE INSTALLED in this story</notes>
+        <usage>import { NumericFormat } from 'react-number-format' // For ValueInput component</usage>
+      </library>
+      <library name="@radix-ui/react-tooltip" version="latest">
+        <notes>Accessible tooltip primitive - TO BE INSTALLED in this story</notes>
+        <usage>import * as Tooltip from '@radix-ui/react-tooltip' // For WheelGuaranteeDisplay component</usage>
+      </library>
+      <library name="@radix-ui/react-slot" version="^1.2.4">
+        <notes>Already installed (Story 1.5) - used by Button component</notes>
+      </library>
+      <library name="@radix-ui/react-dialog" version="^1.1.15">
+        <notes>Already installed (Story 1.5) - Dialog primitive</notes>
+      </library>
+      <library name="@radix-ui/react-toast" version="^1.2.15">
+        <notes>Already installed (Story 1.5) - Toast/Sonner primitive</notes>
+      </library>
+      <library name="class-variance-authority" version="^0.7.1">
+        <notes>Already installed (Story 1.5) - variant styling for components</notes>
+      </library>
+      <library name="clsx" version="^2.1.1">
+        <notes>Already installed (Story 1.5) - conditional className utility</notes>
+      </library>
+      <library name="tailwind-merge" version="^3.4.0">
+        <notes>Already installed (Story 1.5) - merge Tailwind classes without conflicts</notes>
+      </library>
+      <library name="lucide-react" version="^0.555.0">
+        <notes>Already installed (Story 1.5) - icon library</notes>
+      </library>
+      <library name="zod" version="latest">
+        <notes>Already installed (Story 1.3 - Drizzle ORM) - validation schema library</notes>
+        <usage>import { z } from 'zod' // For valueInputSchema validation</usage>
+      </library>
+    </dependencies>
+
+    <constraints>
+      <constraint type="architecture">
+        <rule>Server Components are default - Client Components require 'use client' directive</rule>
+        <reason>Next.js 16 App Router pattern for optimal performance</reason>
+        <affectedComponents>ValueInput (Client - uses useState), WheelGuaranteeDisplay (Client - uses Tooltip), LotteryGameCard (Server - no interactivity)</affectedComponents>
+      </constraint>
+      <constraint type="architecture">
+        <rule>Custom components in app/components/lottery/ directory (NOT in ui/)</rule>
+        <reason>shadcn/ui convention: ui/ reserved for shadcn components, custom components in feature directories</reason>
+        <affectedComponents>All 3 custom lottery components</affectedComponents>
+      </constraint>
+      <constraint type="styling">
+        <rule>Use Emerald Trust theme colors via CSS variables: primary (160 84% 39%), border (#1a1a1a), ring (same as primary)</rule>
+        <reason>Consistent brand identity established in Story 1.5</reason>
+        <affectedComponents>All components must use className="border-border", className="ring-ring", className="text-primary"</affectedComponents>
+      </constraint>
+      <constraint type="styling">
+        <rule>Dark mode always active - do NOT implement light mode toggle</rule>
+        <reason>Design decision: dark mode only for MVP, body has className="dark"</reason>
+        <affectedComponents>All components inherit dark theme from layout.tsx</affectedComponents>
+      </constraint>
+      <constraint type="accessibility">
+        <rule>WCAG 2.1 Level A minimum - keyboard navigation (Tab/Enter/Space/ESC), ARIA labels, focus indicators</rule>
+        <reason>Accessibility requirement from architecture + Radix UI baseline</reason>
+        <affectedComponents>ValueInput (ARIA error announcement), LotteryGameCard (ARIA labels on numbers), WheelGuaranteeDisplay (keyboard tooltip)</affectedComponents>
+      </constraint>
+      <constraint type="typescript">
+        <rule>TypeScript strict mode - all components must have typed props interfaces with JSDoc comments</rule>
+        <reason>Code quality + developer experience (IntelliSense)</reason>
+        <affectedComponents>All 3 components need export interface Props with JSDoc /** */ comments</affectedComponents>
+      </constraint>
+      <constraint type="composition">
+        <rule>Compose with shadcn/ui components via props wrapper - DO NOT edit shadcn source files</rule>
+        <reason>Maintainability + upgrade path for shadcn components</reason>
+        <affectedComponents>LotteryGameCard wraps Card, WheelGuaranteeDisplay wraps Badge, ValueInput follows Input styling pattern</affectedComponents>
+      </constraint>
+      <constraint type="validation">
+        <rule>Centralize Zod schemas in app/lib/validations/ directory for reusability</rule>
+        <reason>DRY principle + single source of truth for business rules</reason>
+        <affectedComponents>valueInputSchema in lib/validations/lottery.ts</affectedComponents>
+      </constraint>
+      <constraint type="dependency">
+        <rule>Use npm install --legacy-peer-deps flag for all dependency installations</rule>
+        <reason>Workaround for NextAuth nodemailer peer dependency conflict (documented in Story 1.4)</reason>
+        <affectedComponents>Installing react-number-format and @radix-ui/react-tooltip</affectedComponents>
+      </constraint>
+      <constraint type="testing">
+        <rule>Visual testing via test page required (no automated tests for MVP)</rule>
+        <reason>Rapid MVP development - automated tests deferred to post-MVP</reason>
+        <affectedComponents>Create app/app/test-lottery/page.tsx with all 3 components</affectedComponents>
+      </constraint>
+    </constraints>
+  </artifacts>
+
+  <tests>
+    <standards>
+      For MVP, visual testing via test page is sufficient. Create app/app/test-lottery/page.tsx with examples of all 3 components in various states. Test manually: currency formatting, validation errors, number grid layouts, tooltip interactions, keyboard navigation, responsive breakpoints. Automated tests (Vitest unit tests, Playwright E2E tests) are deferred to post-MVP technical debt.
+    </standards>
+    <locations>
+      - app/app/test-lottery/page.tsx (manual visual testing)
+      - Future: tests/unit/components/lottery/*.test.tsx (Vitest)
+      - Future: tests/e2e/lottery-components.spec.ts (Playwright)
+    </locations>
+    <ideas>
+      <idea ac="AC1">
+        - ValueInput renders with R$ prefix and comma decimal separator
+        - ValueInput validates R$5 shows error "Valor mínimo é R$ 10,00"
+        - ValueInput validates R$600 shows error "Valor máximo é R$ 500,00"
+        - ValueInput onChange callback receives parsed number (not string)
+        - ValueInput keyboard input works (type numbers, delete, arrow keys)
+        - ValueInput ARIA error announcement for screen readers
+      </idea>
+      <idea ac="AC2">
+        - LotteryGameCard renders 6 numbers in 6-column grid (Mega-Sena)
+        - LotteryGameCard renders 15 numbers in 5-column grid (Lotofácil)
+        - LotteryGameCard number balls are 36x36px circles with #1a1a1a background
+        - LotteryGameCard status badge shows correct variant (pending/realized/winner/loser)
+        - LotteryGameCard hover effect changes border to #10b981
+        - LotteryGameCard date formats to pt-BR locale (DD de MMMM de YYYY)
+        - LotteryGameCard responsive: mobile stacks, desktop shows grid
+      </idea>
+      <idea ac="AC3">
+        - WheelGuaranteeDisplay renders badge with guarantee type (e.g., "4 if 4")
+        - WheelGuaranteeDisplay shows tooltip on hover with explanation text
+        - WheelGuaranteeDisplay tooltip dismisses on ESC key
+        - WheelGuaranteeDisplay keyboard accessible: Tab to focus, tooltip shows
+        - WheelGuaranteeDisplay tooltip has arrow pointing to badge
+      </idea>
+      <idea ac="AC4">
+        - Import pattern works: import { ValueInput } from '@/components/lottery'
+        - TypeScript types available: ValueInputProps, LotteryGameCardProps, WheelGuaranteeDisplayProps
+      </idea>
+      <idea ac="AC5">
+        - Zod schema validates number min 10 max 500
+        - Zod schema error messages in Portuguese
+        - TypeScript type ValueInputData inferred from schema
+      </idea>
+      <idea ac="AC6">
+        - react-number-format installed in package.json
+        - @radix-ui/react-tooltip installed in package.json
+        - npx tsc --noEmit runs with 0 errors
+      </idea>
+      <idea ac="AC7">
+        - Test page accessible at /test-lottery
+        - All 3 components visible with examples
+        - Emerald theme (#10b981) visible on interactions
+        - Dark mode background (#050505) applied
+        - Responsive at 375px (mobile), 768px (tablet), 1024px (desktop)
+      </idea>
+      <idea ac="AC8">
+        - README.md has "Custom Lottery Components" section
+        - Usage examples with code snippets for all 3 components
+        - Props interfaces documented
+        - Import pattern explained
+      </idea>
+    </ideas>
+  </tests>
+</storyContext>

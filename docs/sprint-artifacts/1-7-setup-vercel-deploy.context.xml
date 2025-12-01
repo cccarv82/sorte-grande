@@ -1,0 +1,274 @@
+<story-context id=".bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>1.7</storyId>
+    <title>Setup Vercel Deploy</title>
+    <status>drafted</status>
+    <generatedAt>2025-12-01</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/sprint-artifacts/1-7-setup-vercel-deploy.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>desenvolvedor</asA>
+    <iWant>configurar deploy automático na Vercel com CI/CD</iWant>
+    <soThat>o projeto tenha deploys automáticos e cron jobs configurados</soThat>
+    <tasks>
+      - Task 1: Cleanup Test Pages (5 min)
+      - Task 2: Create Environment Variables Template (10 min)
+      - Task 3: Create Cron Job Endpoint (20 min)
+      - Task 4: Create Vercel Configuration (15 min)
+      - Task 5: Connect GitHub to Vercel (10 min)
+      - Task 6: Configure Environment Variables (15 min)
+      - Task 7: Verify Production Deployment (20 min)
+      - Task 8: Test Preview Deployments (15 min)
+      - Task 9: Configure Cron Job in Vercel (10 min)
+      - Task 10: Update Documentation (20 min)
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    AC1: Vercel Project Connected
+    - GitHub repository conectado na Vercel
+    - Vercel project criado com nome "sorte-grande"
+    - Branch main configurado como production branch
+    - Preview deployments habilitados para pull requests
+    - Vercel detecta Next.js automaticamente (framework preset)
+    - Build command: cd app && npm run build
+    - Output directory: app/.next
+    - Install command: cd app && npm install --legacy-peer-deps
+
+    AC2: Environment Variables Configured
+    - DATABASE_URL configurado em Vercel (Neon production connection string)
+    - NEXTAUTH_SECRET configurado (generated via openssl rand -base64 32)
+    - NEXTAUTH_URL configurado (https://sorte-grande.vercel.app)
+    - RESEND_API_KEY configurado (Resend API key)
+    - EMAIL_FROM configurado (noreply@yourdomain.com)
+    - All environment variables encrypted in Vercel Dashboard
+    - .env.example created in app/ directory with placeholder values
+    - .env.local added to .gitignore (verified not committed)
+
+    AC3: Deployment Configuration Created
+    - vercel.json created at monorepo root
+    - Cron job configured: "30 20 * * 3,6" (Quarta/Sábado 20:30 BRT)
+    - Cron job path: "api/cron/sync-results" configured
+    - Headers configured for security (X-Frame-Options, CSP)
+    - Redirects configured (if needed)
+    - Rewrites configured for API routes (if needed)
+    - Build settings: Node.js 18.x, npm install --legacy-peer-deps
+
+    AC4: Cron Job Endpoint Created
+    - File created: app/api/cron/sync-results/route.ts
+    - GET handler implemented with Bearer token authentication
+    - Authorization header validated: Bearer ${process.env.CRON_SECRET}
+    - 401 response if token invalid or missing
+    - Cron job logs success/failure to console
+    - Returns JSON: { success: true, message: "Results synced" }
+    - Error handling with try/catch and 500 response on failure
+    - TypeScript types defined for request/response
+
+    AC5: Test Pages Removed
+    - app/app/test-lottery/ directory deleted
+    - No other test pages in app/ directory (verify with file search)
+    - Verify build passes without test pages: npm run build
+    - Verify no broken imports referencing deleted test pages
+
+    AC6: First Deployment Successful
+    - Push to main branch triggers automatic deployment
+    - Vercel deployment completes successfully (no build errors)
+    - Production URL accessible: https://sorte-grande.vercel.app
+    - Home page renders correctly (verify in browser)
+    - API routes respond correctly (test /api/auth/session)
+    - No console errors in browser DevTools
+    - Lighthouse score: Performance > 90, Accessibility > 95, Best Practices > 90
+
+    AC7: Preview Deployments Working
+    - Create feature branch and push commit
+    - Open pull request on GitHub
+    - Vercel comment posted on PR with preview URL
+    - Preview URL accessible and functional
+    - Preview environment uses preview environment variables (if configured)
+    - Changes visible in preview URL immediately after push
+
+    AC8: Monitoring and Documentation
+    - Vercel Analytics enabled in Vercel Dashboard
+    - Vercel Logs accessible for debugging
+    - README.md updated with "Deployment" section
+    - Deployment section includes: Vercel setup, environment variables, cron jobs
+    - README includes troubleshooting guide (common deployment issues)
+    - CRON_SECRET documented in .env.example
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc>
+        <path>docs/epics-detailed.md</path>
+        <title>Epic 1 - Story 1.7: Setup Vercel Deploy</title>
+        <section>Story 1.7 BDD Specification</section>
+        <snippet>
+          Como desenvolvedor quero deploy automático Vercel para que tenha CI/CD.
+          Given repo no GitHub, When conecto na Vercel and adiciono env vars (DATABASE_URL, NEXTAUTH_SECRET, RESEND_API_KEY),
+          Then deploy automático funciona and preview URLs gerados para PRs and cron job configurado (vercel.json).
+          Tech: Vercel deployment, cron: "30 20 * * 3,6" (Qua/Sáb 20:30).
+        </snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>Sorte Grande - Architecture Document</title>
+        <section>Deployment Architecture - Vercel Configuration</section>
+        <snippet>
+          vercel.json: crons configuration for /api/cron/verify-prizes at "30 20 * * 3,6".
+          Environment Variables: DATABASE_URL, NEXTAUTH_SECRET, NEXTAUTH_URL, RESEND_API_KEY, CRON_SECRET.
+          Environments: Development (dev branch), Staging (staging branch preview), Production (main branch, sorte-grande.vercel.app).
+          Vercel Free tier: 100 GB bandwidth/month, serverless functions, automatic CI/CD, preview deployments.
+        </snippet>
+      </doc>
+      <doc>
+        <path>docs/sprint-artifacts/1-6-create-custom-lottery-components.md</path>
+        <title>Story 1.6 Learnings</title>
+        <section>Dev Agent Record - Previous Story Learnings</section>
+        <snippet>
+          Custom Lottery Components ready in app/components/lottery/.
+          Test page at app/app/test-lottery/page.tsx (DELETE before production deploy).
+          Dependencies installed with --legacy-peer-deps (NextAuth nodemailer conflict).
+          TypeScript compilation: 0 errors. Dev server running Next.js 16.0.6 with Turbopack.
+          Tailwind 4.0 CSS variables configured (inline styles workaround).
+          Files to review: app/app/test-lottery/page.tsx (delete), app/.env.local (not committed), app/.gitignore (verify .env.local listed).
+        </snippet>
+      </doc>
+    </docs>
+
+    <code>
+      <file>
+        <path>app/package.json</path>
+        <kind>manifest</kind>
+        <symbol>dependencies</symbol>
+        <lines>18-44</lines>
+        <reason>Production dependencies include Next.js 16.0.6, NextAuth 5.0.0-beta.30, Drizzle ORM, Resend email service. Verify all dependencies production-safe before deploy.</reason>
+      </file>
+      <file>
+        <path>app/next.config.ts</path>
+        <kind>config</kind>
+        <symbol>nextConfig</symbol>
+        <lines>1-8</lines>
+        <reason>Next.js configuration file - currently minimal, may need production optimizations (headers, redirects, etc) during deployment setup.</reason>
+      </file>
+      <file>
+        <path>app/.gitignore</path>
+        <kind>config</kind>
+        <symbol>.env* ignore rules</symbol>
+        <lines>35-37</lines>
+        <reason>Verifies .env* files ignored (except .env.example). Critical to prevent committing secrets. Current rule: .env* !.env.example</reason>
+      </file>
+      <file>
+        <path>app/app/test-lottery/page.tsx</path>
+        <kind>test-page</kind>
+        <symbol>TestLotteryPage</symbol>
+        <lines>all</lines>
+        <reason>Test page created in Story 1.6 - MUST DELETE before production deploy (AC5). Contains temporary testing UI for lottery components.</reason>
+      </file>
+    </code>
+
+    <dependencies>
+      <node>
+        <package>next</package>
+        <version>16.0.6</version>
+        <notes>Next.js canary version - App Router, Turbopack, Server Actions. Vercel native support.</notes>
+      </node>
+      <node>
+        <package>next-auth</package>
+        <version>5.0.0-beta.30</version>
+        <notes>NextAuth v5 beta - requires --legacy-peer-deps due to nodemailer peer dependency conflict.</notes>
+      </node>
+      <node>
+        <package>drizzle-orm</package>
+        <version>0.44.7</version>
+        <notes>Type-safe ORM for Neon PostgreSQL - requires DATABASE_URL env var for serverless connections.</notes>
+      </node>
+      <node>
+        <package>resend</package>
+        <version>6.5.2</version>
+        <notes>Email service for magic links - requires RESEND_API_KEY env var.</notes>
+      </node>
+      <node>
+        <package>@radix-ui/react-tooltip</package>
+        <version>1.2.8</version>
+        <notes>Radix UI tooltip (Story 1.6) - production dependency, no special deployment config needed.</notes>
+      </node>
+      <node>
+        <package>react-number-format</package>
+        <version>5.4.4</version>
+        <notes>Brazilian currency formatting (Story 1.6) - production dependency.</notes>
+      </node>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    1. MONOREPO STRUCTURE: vercel.json MUST be at monorepo root (not inside app/ directory)
+    2. BUILD COMMANDS: All npm commands must prefix with "cd app &&" due to monorepo structure
+    3. OUTPUT DIRECTORY: app/.next (relative to monorepo root, not absolute path)
+    4. INSTALL FLAG: npm install --legacy-peer-deps required (NextAuth nodemailer peer dependency conflict from Story 1.4)
+    5. ENVIRONMENT VARIABLES: Never commit .env.local - use .env.example template only
+    6. CRON JOB SECURITY: Bearer token authentication required for /api/cron/* endpoints (CRON_SECRET env var)
+    7. TEST PAGES: Delete app/app/test-lottery/ before production deploy (AC5 requirement)
+    8. DATABASE CONNECTION: Use Neon PGBOUNCER pooled connection string for serverless functions
+    9. TIMEZONE CONSIDERATION: Cron expression "30 20 * * 3,6" = 20:30 UTC (23:30 BRT if UTC-3)
+    10. NODE VERSION: Node.js 18.x recommended for Next.js 16 on Vercel
+    11. VERCEL FREE TIER: 100 GB bandwidth/month, 100 GB-hours compute/month limits
+    12. PREVIEW DEPLOYMENTS: Every PR gets automatic preview URL with preview environment variables
+  </constraints>
+
+  <interfaces>
+    <api>
+      <name>Cron Job Endpoint - Lottery Results Sync</name>
+      <kind>REST GET endpoint</kind>
+      <signature>
+        GET /api/cron/sync-results
+        Headers: { "Authorization": "Bearer ${CRON_SECRET}" }
+        Response: { "success": true, "message": "Lottery results sync completed", "timestamp": "ISO8601" }
+        Status Codes: 200 (success), 401 (unauthorized), 500 (internal error)
+      </signature>
+      <path>app/api/cron/sync-results/route.ts</path>
+    </api>
+    <api>
+      <name>NextAuth Session API</name>
+      <kind>REST GET endpoint (existing)</kind>
+      <signature>
+        GET /api/auth/session
+        Response: { "user": null } (unauthenticated) or { "user": { "id", "email", "name" } } (authenticated)
+        Status Codes: 200
+      </signature>
+      <path>app/api/auth/[...nextauth]/route.ts</path>
+    </api>
+  </interfaces>
+
+  <tests>
+    <standards>
+      Manual testing only for this story (infrastructure setup).
+      No automated tests required for deployment configuration.
+      Testing framework: Manual browser testing + curl for API endpoints + Lighthouse audit.
+      Test locations: Vercel Dashboard (deployment logs), Production URL (browser), Preview URL (PR testing).
+    </standards>
+
+    <locations>
+      No test files for this story.
+      Testing performed via:
+      - Vercel Dashboard → Deployments (build logs, runtime logs)
+      - Production URL: https://sorte-grande.vercel.app
+      - Preview URL: https://sorte-grande-git-<branch>-<username>.vercel.app
+      - Chrome DevTools → Lighthouse (performance audit)
+      - Terminal: curl commands for API endpoint testing
+    </locations>
+
+    <ideas>
+      AC1 Test: Verify Vercel project appears in dashboard, main branch = production, preview deployments enabled
+      AC2 Test: Verify all 6 environment variables configured in Vercel Dashboard (DATABASE_URL, NEXTAUTH_SECRET, NEXTAUTH_URL, RESEND_API_KEY, EMAIL_FROM, CRON_SECRET)
+      AC3 Test: Verify vercel.json exists at monorepo root with cron config "30 20 * * 3,6"
+      AC4 Test: curl /api/cron/sync-results without token → 401, with token → 200 + success JSON
+      AC5 Test: Verify app/app/test-lottery/ deleted, npm run build passes, no broken imports
+      AC6 Test: Push to main → deployment succeeds, production URL loads, /api/auth/session responds, Lighthouse > 90/95/90
+      AC7 Test: Create PR → Vercel bot comments with preview URL, preview URL accessible and functional
+      AC8 Test: Verify Vercel Analytics enabled, logs accessible, README.md has Deployment section, CRON_SECRET in .env.example
+    </ideas>
+  </tests>
+</story-context>

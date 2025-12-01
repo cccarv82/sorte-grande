@@ -1,0 +1,423 @@
+<story-context id=".bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>1.3</storyId>
+    <title>Define Database Schema with Drizzle ORM</title>
+    <status>drafted</status>
+    <generatedAt>2025-12-01</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/sprint-artifacts/1-3-define-database-schema.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>desenvolvedor</asA>
+    <iWant>schema completo do banco de dados definido com Drizzle ORM (users, suggestions, lottery_results, prizes)</iWant>
+    <soThat>a estrutura de dados esteja pronta para persistir usuários, sugestões e resultados de loterias</soThat>
+    <tasks>
+      <task id="1" ac="AC1" effort="5min">
+        <title>Install Drizzle ORM and Dependencies</title>
+        <subtasks>
+          <subtask>Navigate: cd app</subtask>
+          <subtask>Install runtime dependency: npm install drizzle-orm</subtask>
+          <subtask>Install dev dependency: npm install -D drizzle-kit</subtask>
+          <subtask>Install pg driver integration: npm install drizzle-orm/pg (peer dependency)</subtask>
+          <subtask>Verify package.json contains drizzle-orm ^0.30.0 and drizzle-kit ^0.21.0</subtask>
+        </subtasks>
+        <successCriteria>npm list drizzle-orm drizzle-kit shows both packages installed</successCriteria>
+      </task>
+      <task id="2" ac="AC1" effort="5min">
+        <title>Configure Drizzle Kit</title>
+        <subtasks>
+          <subtask>Create file: app/drizzle.config.ts with schema, out, dialect, dbCredentials config</subtask>
+          <subtask>Verify .env.local exists with DATABASE_URL (from Story 1.2)</subtask>
+          <subtask>Add npm scripts to package.json: db:generate, db:push, db:studio</subtask>
+          <subtask>Test configuration: npm run db:generate (should fail gracefully with "no schema yet")</subtask>
+        </subtasks>
+        <successCriteria>Drizzle Kit can read config without errors</successCriteria>
+      </task>
+      <task id="3" ac="AC2" effort="10min">
+        <title>Define Users Table Schema</title>
+        <subtasks>
+          <subtask>Create file: app/lib/db/schema.ts</subtask>
+          <subtask>Import Drizzle types: pgTable, serial, text, integer, timestamp, jsonb, date, index, unique</subtask>
+          <subtask>Define users table: id (text PK UUID), email (unique), name, emailVerified, image, createdAt with email index</subtask>
+          <subtask>Add JSDoc comments explaining NextAuth compatibility</subtask>
+          <subtask>Run TypeScript check: npx tsc --noEmit</subtask>
+        </subtasks>
+        <successCriteria>No TypeScript errors, users table defined</successCriteria>
+      </task>
+      <task id="4" ac="AC3" effort="15min">
+        <title>Define Suggestions Table Schema</title>
+        <subtasks>
+          <subtask>In lib/db/schema.ts, add suggestions table with all 12 fields</subtask>
+          <subtask>userId foreign key references users.id with CASCADE delete</subtask>
+          <subtask>Add indexes on userId and status</subtask>
+          <subtask>Add JSDoc with field explanations (especially jsonb structure)</subtask>
+          <subtask>Run TypeScript check: npx tsc --noEmit</subtask>
+        </subtasks>
+        <successCriteria>suggestions table defined with foreign key to users</successCriteria>
+      </task>
+      <task id="5" ac="AC4" effort="10min">
+        <title>Define Lottery Results Table Schema</title>
+        <subtasks>
+          <subtask>In lib/db/schema.ts, add lottery_results table with 7 fields</subtask>
+          <subtask>Add unique constraint on (lottery, contestNumber)</subtask>
+          <subtask>Add indexes on lottery and drawDate</subtask>
+          <subtask>Add JSDoc explaining drawNumbers array format</subtask>
+          <subtask>Run TypeScript check: npx tsc --noEmit</subtask>
+        </subtasks>
+        <successCriteria>lottery_results table defined with unique constraint</successCriteria>
+      </task>
+      <task id="6" ac="AC5" effort="10min">
+        <title>Define Prizes Table Schema</title>
+        <subtasks>
+          <subtask>In lib/db/schema.ts, add prizes table with 9 fields</subtask>
+          <subtask>suggestionId foreign key references suggestions.id with CASCADE delete</subtask>
+          <subtask>Add index on suggestionId</subtask>
+          <subtask>Add JSDoc explaining prize detection logic</subtask>
+          <subtask>Run TypeScript check: npx tsc --noEmit</subtask>
+        </subtasks>
+        <successCriteria>prizes table defined with foreign key to suggestions</successCriteria>
+      </task>
+      <task id="7" ac="AC6" effort="10min">
+        <title>Create TypeScript Type Exports</title>
+        <subtasks>
+          <subtask>Create directory: mkdir -p types</subtask>
+          <subtask>Create file: app/types/database.ts with Lottery, SuggestionStatus, PrizeTier types, Game and PrizeTiers interfaces</subtask>
+          <subtask>Update lib/db/index.ts to export schema</subtask>
+          <subtask>Test imports in a dummy file to verify type resolution</subtask>
+        </subtasks>
+        <successCriteria>Types importable from @/types/database and @/lib/db/schema</successCriteria>
+      </task>
+      <task id="8" ac="AC7" effort="10min">
+        <title>Generate and Apply Migrations</title>
+        <subtasks>
+          <subtask>Generate migrations: npm run db:generate</subtask>
+          <subtask>Verify migration file created: drizzle/0000_*.sql</subtask>
+          <subtask>Review generated SQL (check indexes, constraints, foreign keys)</subtask>
+          <subtask>Apply migrations to Neon: npm run db:push</subtask>
+          <subtask>Verify tables created in Neon Console: users, suggestions, lottery_results, prizes</subtask>
+          <subtask>Verify indexes created: SELECT indexname FROM pg_indexes</subtask>
+        </subtasks>
+        <successCriteria>All 4 tables + indexes visible in Neon database</successCriteria>
+      </task>
+      <task id="9" ac="AC8" effort="10min">
+        <title>Create Schema Validation Script</title>
+        <subtasks>
+          <subtask>Create file: app/lib/db/validate-schema.ts with table and index checks</subtask>
+          <subtask>Run validation: npx tsx lib/db/validate-schema.ts</subtask>
+          <subtask>Confirm all 4 tables + indexes listed</subtask>
+          <subtask>Add script to package.json: db:validate</subtask>
+        </subtasks>
+        <successCriteria>Validation script passes, lists 4 tables + indexes</successCriteria>
+      </task>
+      <task id="10" ac="AC8" effort="10min">
+        <title>Update Documentation</title>
+        <subtasks>
+          <subtask>Open app/README.md</subtask>
+          <subtask>Add "Database Schema" section after "Database Setup" with schema overview, Drizzle commands, example queries</subtask>
+          <subtask>Save file</subtask>
+          <subtask>Commit documentation: git add README.md && git commit -m "docs: add Drizzle schema documentation"</subtask>
+        </subtasks>
+        <successCriteria>README has complete Drizzle section with examples</successCriteria>
+      </task>
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    <ac id="AC1">
+      <title>Drizzle ORM Installed and Configured</title>
+      <criteria>
+        <item>drizzle-orm installed as runtime dependency (npm install drizzle-orm)</item>
+        <item>drizzle-kit installed as dev dependency (npm install -D drizzle-kit)</item>
+        <item>drizzle.config.ts created at project root with schema, out, dialect, dbCredentials</item>
+        <item>TypeScript compiles without errors (npx tsc --noEmit)</item>
+      </criteria>
+    </ac>
+    <ac id="AC2">
+      <title>Users Table Defined (NextAuth Compatible)</title>
+      <criteria>
+        <item>lib/db/schema.ts contains users table with Drizzle pgTable</item>
+        <item>Schema includes fields: id (text/UUID), email (text unique), name (text nullable), emailVerified (timestamp nullable), image (text nullable), createdAt (timestamp default now)</item>
+        <item>Email has unique constraint</item>
+        <item>Index on email field for login queries</item>
+      </criteria>
+    </ac>
+    <ac id="AC3">
+      <title>Suggestions Table Defined</title>
+      <criteria>
+        <item>suggestions table created with 12 fields: id, userId (FK), lottery, value, games (jsonb), wheelTemplate, guarantee, status, contestNumber, createdAt, realizedAt, verifiedAt</item>
+        <item>userId foreign key → users.id with CASCADE delete</item>
+        <item>Index on userId for user's suggestions list</item>
+        <item>Index on status for filtering pending/verified suggestions</item>
+      </criteria>
+    </ac>
+    <ac id="AC4">
+      <title>Lottery Results Table Defined</title>
+      <criteria>
+        <item>lottery_results table created with 7 fields: id, lottery, contestNumber, drawNumbers (integer array), drawDate, prizes (jsonb), createdAt</item>
+        <item>Unique constraint on (lottery, contestNumber) prevents duplicates</item>
+        <item>Index on lottery for filtering by game type</item>
+        <item>Index on drawDate for sorting recent results</item>
+      </criteria>
+    </ac>
+    <ac id="AC5">
+      <title>Prizes Table Defined</title>
+      <criteria>
+        <item>prizes table created with 9 fields: id, suggestionId (FK), gameIndex, contestNumber, prizeTier, prizeValue, matchedNumbers (integer array), viewedAt, createdAt</item>
+        <item>suggestionId foreign key → suggestions.id with CASCADE delete</item>
+        <item>Index on suggestionId for listing prizes of a suggestion</item>
+      </criteria>
+    </ac>
+    <ac id="AC6">
+      <title>TypeScript Types Exported</title>
+      <criteria>
+        <item>types/database.ts created with exported types: Lottery, SuggestionStatus, PrizeTier, Game interface, PrizeTiers interface</item>
+        <item>Types importable: import { Lottery, SuggestionStatus } from '@/types/database'</item>
+      </criteria>
+    </ac>
+    <ac id="AC7">
+      <title>Migrations Generated and Applied</title>
+      <criteria>
+        <item>drizzle-kit generate executed successfully</item>
+        <item>Migration SQL file created in drizzle/ directory (e.g., 0000_initial_schema.sql)</item>
+        <item>drizzle-kit push executed successfully</item>
+        <item>Schema applied to Neon database (verified via Neon console or pg query)</item>
+        <item>All 4 tables visible in Neon: users, suggestions, lottery_results, prizes</item>
+      </criteria>
+    </ac>
+    <ac id="AC8">
+      <title>Schema Validation and Documentation</title>
+      <criteria>
+        <item>README.md updated with "Database Schema" section explaining migrations, commands, example queries</item>
+        <item>Validation query script created: lib/db/validate-schema.ts</item>
+        <item>Script queries all 4 tables and confirms existence</item>
+        <item>Script runs successfully: npx tsx lib/db/validate-schema.ts</item>
+      </criteria>
+    </ac>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc>
+        <path>docs/sprint-artifacts/tech-spec-epic-1.md</path>
+        <title>Epic 1 Technical Specification</title>
+        <section>Data Models and Contracts (Lines 163-254)</section>
+        <snippet>Complete database schema with 4 tables: users (NextAuth compatible), suggestions (lottery games with wheeling data), lottery_results (official draw results), prizes (detected winnings). Uses Drizzle ORM for type-safe queries, JSONB for flexible arrays, integer for monetary values in centavos, foreign keys with CASCADE delete for LGPD compliance.</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>System Architecture</title>
+        <section>Data Layer - Database (ADR-002)</section>
+        <snippet>Decision to use Drizzle ORM over Prisma for database layer. Rationale: Drizzle provides better type-safety for complex SQL queries, lighter bundle size (~10KB vs ~30KB), and superior support for PostgreSQL-specific features like arrays and JSONB. Migrations are declarative and versionable.</snippet>
+      </doc>
+      <doc>
+        <path>docs/sprint-artifacts/1-2-setup-neon-postgresql.md</path>
+        <title>Story 1.2 - Setup Neon PostgreSQL</title>
+        <section>Completion Notes and Dev Agent Record</section>
+        <snippet>Database connection established via getDbConnection() singleton in lib/db/index.ts. DATABASE_URL configured in .env.local. PostgreSQL 17.6 running in sa-east-1 region. pg 8.16.3 drivers installed. SSL configured with rejectUnauthorized: false for Neon. tsx preferred for TypeScript script execution.</snippet>
+      </doc>
+    </docs>
+    <code>
+      <artifact>
+        <path>app/lib/db/index.ts</path>
+        <kind>database-connection</kind>
+        <symbol>getDbConnection, closeDbConnection</symbol>
+        <lines>1-50</lines>
+        <reason>Existing connection helper from Story 1.2. Provides singleton Pool instance for database queries. Drizzle will use this Pool for executing queries and migrations.</reason>
+      </artifact>
+      <artifact>
+        <path>app/.env.local</path>
+        <kind>environment-config</kind>
+        <symbol>DATABASE_URL</symbol>
+        <lines>1-5</lines>
+        <reason>Contains Neon PostgreSQL connection string. Required by drizzle.config.ts for migrations and by connection helper for runtime queries.</reason>
+      </artifact>
+      <artifact>
+        <path>app/package.json</path>
+        <kind>dependency-manifest</kind>
+        <symbol>dependencies, devDependencies</symbol>
+        <lines>1-50</lines>
+        <reason>Will be modified to add drizzle-orm (runtime) and drizzle-kit (dev). Already contains pg 8.16.3, dotenv 17.2.3, tsx 4.21.0 from Story 1.2.</reason>
+      </artifact>
+      <artifact>
+        <path>app/tsconfig.json</path>
+        <kind>typescript-config</kind>
+        <symbol>compilerOptions</symbol>
+        <lines>1-30</lines>
+        <reason>TypeScript strict mode configuration. Ensures Drizzle schema definitions have full type safety and inference.</reason>
+      </artifact>
+    </code>
+    <dependencies>
+      <npm>
+        <package name="drizzle-orm" version="^0.30.0" kind="runtime">Type-safe ORM for PostgreSQL queries</package>
+        <package name="drizzle-kit" version="^0.21.0" kind="dev">CLI tool for generating and applying migrations</package>
+        <package name="pg" version="8.16.3" kind="runtime">PostgreSQL client (already installed from Story 1.2)</package>
+        <package name="@types/pg" version="8.15.6" kind="dev">TypeScript types for pg (already installed from Story 1.2)</package>
+        <package name="dotenv" version="17.2.3" kind="runtime">Environment variable loading (already installed from Story 1.2)</package>
+        <package name="tsx" version="4.21.0" kind="dev">TypeScript execution for scripts (already installed from Story 1.2)</package>
+      </npm>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint type="architecture">
+      <rule>Use Drizzle ORM declarative schema definition (ADR-002)</rule>
+      <rule>All table definitions in single file: lib/db/schema.ts</rule>
+      <rule>Export TypeScript types separately in types/database.ts</rule>
+      <rule>Migrations must be versionable and stored in drizzle/ directory</rule>
+    </constraint>
+    <constraint type="data-modeling">
+      <rule>Foreign keys must use CASCADE delete for LGPD compliance (right to be forgotten)</rule>
+      <rule>Monetary values stored as integers in centavos (avoid floating point errors)</rule>
+      <rule>Use JSONB for flexible array structures (games, prizes, drawNumbers as arrays when needed)</rule>
+      <rule>Use text enums instead of PostgreSQL ENUM type (allows changes without ALTER TYPE migration)</rule>
+      <rule>Timestamps must have timezone awareness (timestamp with mode: 'date')</rule>
+    </constraint>
+    <constraint type="security">
+      <rule>DATABASE_URL must remain in .env.local (git-ignored)</rule>
+      <rule>No hardcoded credentials in drizzle.config.ts (use process.env)</rule>
+      <rule>SSL must be enforced for Neon connections (inherited from Story 1.2 connection helper)</rule>
+    </constraint>
+    <constraint type="testing">
+      <rule>Manual testing via validation script (lib/db/validate-schema.ts)</rule>
+      <rule>TypeScript compilation must pass: npx tsc --noEmit</rule>
+      <rule>Tables and indexes must be verified in Neon Console</rule>
+      <rule>Integration tests in future stories will exercise schema (no tests in this story)</rule>
+    </constraint>
+    <constraint type="patterns">
+      <rule>Reuse getDbConnection() singleton from Story 1.2 for Drizzle queries</rule>
+      <rule>Use tsx for running TypeScript scripts (consistency with Story 1.2)</rule>
+      <rule>Follow same documentation patterns: npm scripts in package.json, README sections</rule>
+      <rule>Index naming convention: idx_{table}_{column} (e.g., idx_users_email)</rule>
+    </constraint>
+  </constraints>
+
+  <interfaces>
+    <interface>
+      <name>getDbConnection</name>
+      <kind>function</kind>
+      <signature>function getDbConnection(): Pool</signature>
+      <path>app/lib/db/index.ts</path>
+      <description>Singleton Pool instance for database connections. Used by Drizzle for query execution. Returns existing Pool or creates new one with Neon connection string from DATABASE_URL.</description>
+    </interface>
+    <interface>
+      <name>closeDbConnection</name>
+      <kind>function</kind>
+      <signature>async function closeDbConnection(): Promise&lt;void&gt;</signature>
+      <path>app/lib/db/index.ts</path>
+      <description>Gracefully closes database connection pool. Should be called at end of scripts (e.g., validate-schema.ts).</description>
+    </interface>
+    <interface>
+      <name>users</name>
+      <kind>drizzle-table</kind>
+      <signature>export const users = pgTable('users', { id, email, name, emailVerified, image, createdAt })</signature>
+      <path>app/lib/db/schema.ts</path>
+      <description>NextAuth-compatible users table. id is text UUID (not serial). email has unique constraint and index. Used for authentication and user management.</description>
+    </interface>
+    <interface>
+      <name>suggestions</name>
+      <kind>drizzle-table</kind>
+      <signature>export const suggestions = pgTable('suggestions', { id, userId, lottery, value, games, wheelTemplate, guarantee, status, contestNumber, timestamps })</signature>
+      <path>app/lib/db/schema.ts</path>
+      <description>Lottery suggestions generated by wheeling engine. games is JSONB array. userId foreign key with CASCADE delete. status enum: pending/realized/verified.</description>
+    </interface>
+    <interface>
+      <name>lotteryResults</name>
+      <kind>drizzle-table</kind>
+      <signature>export const lotteryResults = pgTable('lottery_results', { id, lottery, contestNumber, drawNumbers, drawDate, prizes, createdAt })</signature>
+      <path>app/lib/db/schema.ts</path>
+      <description>Official lottery results synced from Caixa API. drawNumbers is integer array. Unique constraint on (lottery, contestNumber) prevents duplicates.</description>
+    </interface>
+    <interface>
+      <name>prizes</name>
+      <kind>drizzle-table</kind>
+      <signature>export const prizes = pgTable('prizes', { id, suggestionId, gameIndex, contestNumber, prizeTier, prizeValue, matchedNumbers, viewedAt, createdAt })</signature>
+      <path>app/lib/db/schema.ts</path>
+      <description>Detected prizes from verified suggestions. suggestionId foreign key with CASCADE delete. matchedNumbers is integer array. viewedAt tracks if user saw notification.</description>
+    </interface>
+    <interface>
+      <name>Lottery</name>
+      <kind>typescript-type</kind>
+      <signature>export type Lottery = 'megasena' | 'lotofacil'</signature>
+      <path>app/types/database.ts</path>
+      <description>Union type for lottery games supported in MVP. Enforces type-safety when referencing lottery field.</description>
+    </interface>
+    <interface>
+      <name>SuggestionStatus</name>
+      <kind>typescript-type</kind>
+      <signature>export type SuggestionStatus = 'pending' | 'realized' | 'verified'</signature>
+      <path>app/types/database.ts</path>
+      <description>Lifecycle status of suggestions. pending: just created, realized: user played the games, verified: prize check completed.</description>
+    </interface>
+    <interface>
+      <name>Game</name>
+      <kind>typescript-interface</kind>
+      <signature>export interface Game { numbers: number[] }</signature>
+      <path>app/types/database.ts</path>
+      <description>Structure for games stored in suggestions.games JSONB field. Each game is an array of lottery numbers (e.g., [3, 12, 18, 27, 34, 45] for Mega Sena).</description>
+    </interface>
+    <interface>
+      <name>PrizeTiers</name>
+      <kind>typescript-interface</kind>
+      <signature>export interface PrizeTiers { sena?: number, quina?: number, quadra?: number, quinze?: number, etc }</signature>
+      <path>app/types/database.ts</path>
+      <description>Structure for prize values stored in lottery_results.prizes JSONB field. Values in centavos. Optional fields (different lotteries have different tiers).</description>
+    </interface>
+  </interfaces>
+
+  <tests>
+    <standards>
+      <p>Story 1.3 follows manual testing approach with validation script instead of automated tests. TypeScript compilation serves as compile-time validation. Schema validation script (lib/db/validate-schema.ts) queries database to confirm all 4 tables and indexes exist. Integration tests exercising schema will be created in future stories (Epic 2+) that use the database. Testing frameworks: Playwright for E2E (from Story 1.1), manual validation for schema.</p>
+    </standards>
+    <locations>
+      <location>app/lib/db/validate-schema.ts - Schema validation script</location>
+      <location>app/tests/integration/ - Future integration tests (Epic 2+)</location>
+      <location>app/tests/e2e/ - Existing E2E tests from Story 1.1</location>
+    </locations>
+    <ideas>
+      <idea ac="AC1">
+        <test>Verify drizzle-orm and drizzle-kit packages installed: npm list drizzle-orm drizzle-kit</test>
+        <test>Verify drizzle.config.ts exists and has correct structure (schema, out, dialect, dbCredentials)</test>
+        <test>Verify TypeScript compiles without errors: npx tsc --noEmit</test>
+      </idea>
+      <idea ac="AC2">
+        <test>Verify users table exists in lib/db/schema.ts with correct field definitions</test>
+        <test>Verify email field has unique constraint</test>
+        <test>Verify idx_users_email index exists via validate-schema.ts</test>
+      </idea>
+      <idea ac="AC3">
+        <test>Verify suggestions table exists with all 12 fields</test>
+        <test>Verify userId foreign key references users.id with CASCADE</test>
+        <test>Verify indexes idx_suggestions_user_id and idx_suggestions_status exist</test>
+      </idea>
+      <idea ac="AC4">
+        <test>Verify lottery_results table exists with all 7 fields</test>
+        <test>Verify unique constraint on (lottery, contestNumber)</test>
+        <test>Verify indexes idx_lottery_results_lottery and idx_lottery_results_draw_date exist</test>
+      </idea>
+      <idea ac="AC5">
+        <test>Verify prizes table exists with all 9 fields</test>
+        <test>Verify suggestionId foreign key references suggestions.id with CASCADE</test>
+        <test>Verify index idx_prizes_suggestion_id exists</test>
+      </idea>
+      <idea ac="AC6">
+        <test>Verify types/database.ts exists with Lottery, SuggestionStatus, PrizeTier types</test>
+        <test>Verify types/database.ts exports Game and PrizeTiers interfaces</test>
+        <test>Test import statement: import { Lottery } from '@/types/database' compiles</test>
+      </idea>
+      <idea ac="AC7">
+        <test>Run npm run db:generate and verify migration file created in drizzle/</test>
+        <test>Review generated SQL for correctness (tables, indexes, constraints)</test>
+        <test>Run npm run db:push and verify no errors</test>
+        <test>Query Neon database: SELECT tablename FROM pg_tables WHERE schemaname = 'public' and confirm 4 tables</test>
+      </idea>
+      <idea ac="AC8">
+        <test>Run npx tsx lib/db/validate-schema.ts and verify script passes</test>
+        <test>Verify script output lists all 4 tables: users, suggestions, lottery_results, prizes</test>
+        <test>Verify script output lists all indexes</test>
+        <test>Verify README.md has "Database Schema" section with examples</test>
+      </idea>
+    </ideas>
+  </tests>
+</story-context>

@@ -1,0 +1,13 @@
+{
+  "buildCommand": "cd app && npm run build",
+  "outputDirectory": "app/.next",
+  "installCommand": "cd app && npm install --legacy-peer-deps",
+  "devCommand": "cd app && npm run dev",
+  "framework": "nextjs",
+  "crons": [
+    {
+      "path": "/api/cron/sync-results",
+      "schedule": "30 20 * * 3,6"
+    }
+  ]
+}

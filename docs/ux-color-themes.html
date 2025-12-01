@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorte Grande - Explorador de Temas de Cores</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 1px solid #333;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #d4af37 0%, #f4e5a5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #999;
+            font-size: 1.1rem;
+        }
+
+        .instructions {
+            max-width: 900px;
+            margin: 0 auto 40px;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+
+        .instructions h2 {
+            color: #d4af37;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .instructions ul {
+            padding-left: 20px;
+            color: #ccc;
+        }
+
+        .instructions li {
+            margin: 10px 0;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .theme-card {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 30px;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .theme-card:hover {
+            border-color: #d4af37;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+        }
+
+        .theme-header {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+
+        .theme-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .theme-header .subtitle {
+            color: #999;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        .theme-description {
+            color: #ccc;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .best-for {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #d4af37;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .color-swatch {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 10px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.05);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .color-swatch .label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            z-index: 1;
+        }
+
+        .color-swatch .hex {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            z-index: 1;
+        }
+
+        .components-demo {
+            margin-top: 30px;
+        }
+
+        .components-demo h3 {
+            color: #d4af37;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .component-group {
+            margin: 20px 0;
+        }
+
+        .component-label {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .buttons-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .input-demo {
+            margin: 15px 0;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            border: 2px solid;
+            background: transparent;
+            transition: all 0.2s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            transform: translateY(-1px);
+        }
+
+        .card-demo {
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border: 2px solid;
+        }
+
+        .card-demo h4 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .card-demo p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 5px;
+        }
+
+        .alert {
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Theme 1: Private Gold - Inspirado Itaú Private Bank */
+        .theme-1 .theme-header h2 { color: #d4af37; }
+        .theme-1 .btn-primary { background: linear-gradient(135deg, #d4af37 0%, #f4e5a5 50%, #d4af37 100%); color: #000; font-weight: 700; }
+        .theme-1 .btn-primary:hover { box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4); }
+        .theme-1 .btn-secondary { background: transparent; color: #d4af37; border: 2px solid #d4af37; }
+        .theme-1 .btn-secondary:hover { background: rgba(212, 175, 55, 0.1); }
+        .theme-1 .btn-ghost { background: transparent; color: #ccc; border: 1px solid #333; }
+        .theme-1 .btn-ghost:hover { background: rgba(255, 255, 255, 0.05); }
+        .theme-1 .input-field { border-color: #333; color: #fff; }
+        .theme-1 .input-field:focus { border-color: #d4af37; box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1); }
+        .theme-1 .card-demo { background: #0f0f0f; border-color: #333; color: #ccc; }
+        .theme-1 .badge { background: rgba(212, 175, 55, 0.15); color: #d4af37; border: 1px solid rgba(212, 175, 55, 0.3); }
+        .theme-1 .alert { background: #1a1a1a; border-color: #d4af37; color: #ccc; }
+
+        /* Theme 2: Platinum Gray - Elegância Minimalista */
+        .theme-2 .theme-header h2 { color: #e0e0e0; }
+        .theme-2 .btn-primary { background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%); color: #000; font-weight: 700; }
+        .theme-2 .btn-primary:hover { box-shadow: 0 5px 20px rgba(224, 224, 224, 0.3); }
+        .theme-2 .btn-secondary { background: transparent; color: #e0e0e0; border: 2px solid #e0e0e0; }
+        .theme-2 .btn-secondary:hover { background: rgba(224, 224, 224, 0.1); }
+        .theme-2 .btn-ghost { background: transparent; color: #999; border: 1px solid #444; }
+        .theme-2 .btn-ghost:hover { background: rgba(255, 255, 255, 0.05); }
+        .theme-2 .input-field { border-color: #444; color: #fff; }
+        .theme-2 .input-field:focus { border-color: #e0e0e0; box-shadow: 0 0 0 3px rgba(224, 224, 224, 0.1); }
+        .theme-2 .card-demo { background: #141414; border-color: #444; color: #ccc; }
+        .theme-2 .badge { background: rgba(224, 224, 224, 0.1); color: #e0e0e0; border: 1px solid rgba(224, 224, 224, 0.3); }
+        .theme-2 .alert { background: #1a1a1a; border-color: #e0e0e0; color: #ccc; }
+
+        /* Theme 3: Emerald Trust - Verde Confiança */
+        .theme-3 .theme-header h2 { color: #10b981; }
+        .theme-3 .btn-primary { background: linear-gradient(135deg, #10b981 0%, #34d399 100%); color: #000; font-weight: 700; }
+        .theme-3 .btn-primary:hover { box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4); }
+        .theme-3 .btn-secondary { background: transparent; color: #10b981; border: 2px solid #10b981; }
+        .theme-3 .btn-secondary:hover { background: rgba(16, 185, 129, 0.1); }
+        .theme-3 .btn-ghost { background: transparent; color: #ccc; border: 1px solid #333; }
+        .theme-3 .btn-ghost:hover { background: rgba(255, 255, 255, 0.05); }
+        .theme-3 .input-field { border-color: #333; color: #fff; }
+        .theme-3 .input-field:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
+        .theme-3 .card-demo { background: #0f0f0f; border-color: #333; color: #ccc; }
+        .theme-3 .badge { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .theme-3 .alert { background: #1a1a1a; border-color: #10b981; color: #ccc; }
+
+        /* Theme 4: Royal Blue - Autoridade e Precisão */
+        .theme-4 .theme-header h2 { color: #3b82f6; }
+        .theme-4 .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%); color: #fff; font-weight: 700; }
+        .theme-4 .btn-primary:hover { box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4); }
+        .theme-4 .btn-secondary { background: transparent; color: #3b82f6; border: 2px solid #3b82f6; }
+        .theme-4 .btn-secondary:hover { background: rgba(59, 130, 246, 0.1); }
+        .theme-4 .btn-ghost { background: transparent; color: #ccc; border: 1px solid #333; }
+        .theme-4 .btn-ghost:hover { background: rgba(255, 255, 255, 0.05); }
+        .theme-4 .input-field { border-color: #333; color: #fff; }
+        .theme-4 .input-field:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        .theme-4 .card-demo { background: #0f0f0f; border-color: #333; color: #ccc; }
+        .theme-4 .badge { background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .theme-4 .alert { background: #1a1a1a; border-color: #3b82f6; color: #ccc; }
+
+        @media (max-width: 768px) {
+            .theme-grid {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎨 Sorte Grande - Explorador de Temas</h1>
+        <p>Explore as opções de cores e componentes visuais</p>
+    </div>
+
+    <div class="instructions">
+        <h2>📋 Como usar este explorador</h2>
+        <ul>
+            <li><strong>Compare os temas:</strong> Veja 4 direções visuais diferentes inspiradas em elegância e confiança</li>
+            <li><strong>Explore componentes:</strong> Cada tema mostra botões, inputs, cards e alerts em ação</li>
+            <li><strong>Sinta a personalidade:</strong> Qual tema transmite mais confiança e empoderamento?</li>
+            <li><strong>Clique nas cores:</strong> Passe o mouse sobre as paletas para ver os códigos hex</li>
+        </ul>
+    </div>
+
+    <div class="theme-grid">
+        <!-- THEME 1: Private Gold -->
+        <div class="theme-card theme-1">
+            <div class="theme-header">
+                <h2>Theme 1: Private Gold</h2>
+                <div class="subtitle">Inspirado em Itaú Private Bank</div>
+                <p class="theme-description">
+                    Elegância premium com dourado sofisticado. Transmite exclusividade, confiança e seriedade. 
+                    Perfeito para posicionar Sorte Grande como ferramenta profissional, não jogo casual.
+                </p>
+                <span class="best-for">✨ Melhor para: Exclusividade e Premium</span>
+            </div>
+
+            <div class="color-palette">
+                <div class="color-swatch" style="background: linear-gradient(135deg, #d4af37 0%, #f4e5a5 100%);">
+                    <div class="label">Primary</div>
+                    <div class="hex">#d4af37</div>
+                </div>
+                <div class="color-swatch" style="background: #0a0a0a; color: #fff;">
+                    <div class="label">Background</div>
+                    <div class="hex">#0a0a0a</div>
+                </div>
+                <div class="color-swatch" style="background: #1a1a1a; color: #fff;">
+                    <div class="label">Surface</div>
+                    <div class="hex">#1a1a1a</div>
+                </div>
+                <div class="color-swatch" style="background: #ffffff; color: #000;">
+                    <div class="label">Text</div>
+                    <div class="hex">#ffffff</div>
+                </div>
+                <div class="color-swatch" style="background: #10b981; color: #fff;">
+                    <div class="label">Success</div>
+                    <div class="hex">#10b981</div>
+                </div>
+                <div class="color-swatch" style="background: #ef4444; color: #fff;">
+                    <div class="label">Error</div>
+                    <div class="hex">#ef4444</div>
+                </div>
+            </div>
+
+            <div class="components-demo">
+                <h3>Componentes em Ação</h3>
+                
+                <div class="component-group">
+                    <div class="component-label">Botões</div>
+                    <div class="buttons-row">
+                        <button class="btn btn-primary">Gerar Sugestão</button>
+                        <button class="btn btn-secondary">Ver Histórico</button>
+                        <button class="btn btn-ghost">Copiar Jogos</button>
+                    </div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">Input de Valor</div>
+                    <div class="input-demo">
+                        <input type="text" class="input-field" placeholder="R$ 100,00" value="R$ 150,00">
+                    </div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">Card de Jogo</div>
+                    <div class="card-demo">
+                        <h4>Mega Sena - Jogo #1</h4>
+                        <p>03 • 12 • 18 • 27 • 34 • 45</p>
+                        <div style="margin-top: 10px;">
+                            <span class="badge">Garantia: 4 if 4</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">Alert de Premiação</div>
+                    <div class="alert">
+                        <div class="alert-icon">🎉</div>
+                        <div>
+                            <strong>Parabéns! Você ganhou!</strong><br>
+                            <span style="font-size: 0.9rem;">Quadra no Jogo #3 - R$ 1.200,00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THEME 2: Platinum Gray -->
+        <div class="theme-card theme-2">
+            <div class="theme-header">
+                <h2>Theme 2: Platinum Gray</h2>
+                <div class="subtitle">Elegância Minimalista</div>
+                <p class="theme-description">
+                    Sofisticação pura com tons de cinza premium. Ultra-moderno e clean. Foca em conteúdo sem distrações.
+                    Transmite profissionalismo e tecnologia de ponta.
+                </p>
+                <span class="best-for">🎯 Melhor para: Minimalismo e Modernidade</span>
+            </div>
+
+            <div class="color-palette">
+                <div class="color-swatch" style="background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%); color: #000;">
+                    <div class="label">Primary</div>
+                    <div class="hex">#e0e0e0</div>
+                </div>
+                <div class="color-swatch" style="background: #0a0a0a; color: #fff;">
+                    <div class="label">Background</div>
+                    <div class="hex">#0a0a0a</div>
+                </div>
+                <div class="color-swatch" style="background: #141414; color: #fff;">
+                    <div class="label">Surface</div>
+                    <div class="hex">#141414</div>
+                </div>
+                <div class="color-swatch" style="background: #ffffff; color: #000;">
+                    <div class="label">Text</div>
+                    <div class="hex">#ffffff</div>
+                </div>
+                <div class="color-swatch" style="background: #10b981; color: #fff;">
+                    <div class="label">Success</div>
+                    <div class="hex">#10b981</div>
+                </div>
+                <div class="color-swatch" style="background: #ef4444; color: #fff;">
+                    <div class="label">Error</div>
+                    <div class="hex">#ef4444</div>
+                </div>
+            </div>
+
+            <div class="components-demo">
+                <h3>Componentes em Ação</h3>
+                
+                <div class="component-group">
+                    <div class="component-label">Botões</div>
+                    <div class="buttons-row">
+                        <button class="btn btn-primary">Gerar Sugestão</button>
+                        <button class="btn btn-secondary">Ver Histórico</button>
+                        <button class="btn btn-ghost">Copiar Jogos</button>
+                    </div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">Input de Valor</div>
+                    <div class="input-demo">
+                        <input type="text" class="input-field" placeholder="R$ 100,00" value="R$ 150,00">
+                    </div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">Card de Jogo</div>
+                    <div class="card-demo">
+                        <h4>Mega Sena - Jogo #1</h4>
+                        <p>03 • 12 • 18 • 27 • 34 • 45</p>
+                        <div style="margin-top: 10px;">
+                            <span class="badge">Garantia: 4 if 4</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">Alert de Premiação</div>
+                    <div class="alert">
+                        <div class="alert-icon">🎉</div>
+                        <div>
+                            <strong>Parabéns! Você ganhou!</strong><br>
+                            <span style="font-size: 0.9rem;">Quadra no Jogo #3 - R$ 1.200,00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THEME 3: Emerald Trust -->
+        <div class="theme-card theme-3">
+            <div class="theme-header">
+                <h2>Theme 3: Emerald Trust</h2>
+                <div class="subtitle">Verde Confiança</div>
+                <p class="theme-description">
+                    Verde esmeralda sofisticado combinado com dark mode. Psicologia de cores: verde = crescimento, confiança, decisões inteligentes.
+                    Equilibra seriedade com otimismo controlado.
+                </p>
+                <span class="best-for">🌱 Melhor para: Confiança e Crescimento</span>
+            </div>
+
+            <div class="color-palette">
+                <div class="color-swatch" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%); color: #fff;">
+                    <div class="label">Primary</div>
+                    <div class="hex">#10b981</div>
+                </div>
+                <div class="color-swatch" style="background: #0a0a0a; color: #fff;">
+                    <div class="label">Background</div>
+                    <div class="hex">#0a0a0a</div>
+                </div>
+                <div class="color-swatch" style="background: #0f0f0f; color: #fff;">
+                    <div class="label">Surface</div>
+                    <div class="hex">#0f0f0f</div>
+                </div>
+                <div class="color-swatch" style="background: #ffffff; color: #000;">
+                    <div class="label">Text</div>
+                    <div class="hex">#ffffff</div>
+                </div>
+                <div class="color-swatch" style="background: #10b981; color: #fff;">
+                    <div class="label">Success</div>
+                    <div class="hex">#10b981</div>
+                </div>
+                <div class="color-swatch" style="background: #ef4444; color: #fff;">
+                    <div class="label">Error</div>
+                    <div class="hex">#ef4444</div>
+                </div>
+            </div>
+
+            <div class="components-demo">
+                <h3>Componentes em Ação</h3>
+                
+                <div class="component-group">
+                    <div class="component-label">Botões</div>
+                    <div class="buttons-row">
+                        <button class="btn btn-primary">Gerar Sugestão</button>
+                        <button class="btn btn-secondary">Ver Histórico</button>
+                        <button class="btn btn-ghost">Copiar Jogos</button>
+                    </div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">Input de Valor</div>
+                    <div class="input-demo">
+                        <input type="text" class="input-field" placeholder="R$ 100,00" value="R$ 150,00">
+                    </div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">Card de Jogo</div>
+                    <div class="card-demo">
+                        <h4>Mega Sena - Jogo #1</h4>
+                        <p>03 • 12 • 18 • 27 • 34 • 45</p>
+                        <div style="margin-top: 10px;">
+                            <span class="badge">Garantia: 4 if 4</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">Alert de Premiação</div>
+                    <div class="alert">
+                        <div class="alert-icon">🎉</div>
+                        <div>
+                            <strong>Parabéns! Você ganhou!</strong><br>
+                            <span style="font-size: 0.9rem;">Quadra no Jogo #3 - R$ 1.200,00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THEME 4: Royal Blue -->
+        <div class="theme-card theme-4">
+            <div class="theme-header">
+                <h2>Theme 4: Royal Blue</h2>
+                <div class="subtitle">Autoridade e Precisão</div>
+                <p class="theme-description">
+                    Azul royal transmite autoridade, precisão matemática e confiabilidade institucional. 
+                    Remete a sistemas financeiros e tecnológicos sérios. Mais acessível que dourado, igualmente confiável.
+                </p>
+                <span class="best-for">🔷 Melhor para: Autoridade e Tech</span>
+            </div>
+
+            <div class="color-palette">
+                <div class="color-swatch" style="background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%); color: #fff;">
+                    <div class="label">Primary</div>
+                    <div class="hex">#3b82f6</div>
+                </div>
+                <div class="color-swatch" style="background: #0a0a0a; color: #fff;">
+                    <div class="label">Background</div>
+                    <div class="hex">#0a0a0a</div>
+                </div>
+                <div class="color-swatch" style="background: #0f0f0f; color: #fff;">
+                    <div class="label">Surface</div>
+                    <div class="hex">#0f0f0f</div>
+                </div>
+                <div class="color-swatch" style="background: #ffffff; color: #000;">
+                    <div class="label">Text</div>
+                    <div class="hex">#ffffff</div>
+                </div>
+                <div class="color-swatch" style="background: #10b981; color: #fff;">
+                    <div class="label">Success</div>
+                    <div class="hex">#10b981</div>
+                </div>
+                <div class="color-swatch" style="background: #ef4444; color: #fff;">
+                    <div class="label">Error</div>
+                    <div class="hex">#ef4444</div>
+                </div>
+            </div>
+
+            <div class="components-demo">
+                <h3>Componentes em Ação</h3>
+                
+                <div class="component-group">
+                    <div class="component-label">Botões</div>
+                    <div class="buttons-row">
+                        <button class="btn btn-primary">Gerar Sugestão</button>
+                        <button class="btn btn-secondary">Ver Histórico</button>
+                        <button class="btn btn-ghost">Copiar Jogos</button>
+                    </div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">Input de Valor</div>
+                    <div class="input-demo">
+                        <input type="text" class="input-field" placeholder="R$ 100,00" value="R$ 150,00">
+                    </div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">Card de Jogo</div>
+                    <div class="card-demo">
+                        <h4>Mega Sena - Jogo #1</h4>
+                        <p>03 • 12 • 18 • 27 • 34 • 45</p>
+                        <div style="margin-top: 10px;">
+                            <span class="badge">Garantia: 4 if 4</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">Alert de Premiação</div>
+                    <div class="alert">
+                        <div class="alert-icon">🎉</div>
+                        <div>
+                            <strong>Parabéns! Você ganhou!</strong><br>
+                            <span style="font-size: 0.9rem;">Quadra no Jogo #3 - R$ 1.200,00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="instructions" style="margin-top: 60px;">
+        <h2>💭 Reflexão: Qual tema combina mais com Sorte Grande?</h2>
+        <ul>
+            <li><strong>Private Gold:</strong> Máxima exclusividade, perfeito para "sistema privado para gente rica"</li>
+            <li><strong>Platinum Gray:</strong> Ultra-moderno, tech-forward, minimalista puro</li>
+            <li><strong>Emerald Trust:</strong> Equilibra seriedade com energia positiva de crescimento</li>
+            <li><strong>Royal Blue:</strong> Autoridade institucional, precisão matemática, confiável</li>
+        </ul>
+    </div>
+</body>
+</html>

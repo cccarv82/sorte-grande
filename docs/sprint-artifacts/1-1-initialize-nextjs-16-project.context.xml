@@ -1,0 +1,364 @@
+<story-context id=".bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>1.1</storyId>
+    <title>Initialize Next.js 16 Project</title>
+    <status>drafted</status>
+    <generatedAt>2025-11-30</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/sprint-artifacts/1-1-initialize-nextjs-16-project.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>desenvolvedor</asA>
+    <iWant>projeto Next.js 16 configurado com TypeScript, Tailwind e App Router</iWant>
+    <soThat>tenha uma base sólida e moderna para construir o Sorte Grande</soThat>
+    <tasks>
+      <task id="1" owner="Developer" effort="10min">
+        <title>Execute create-next-app Command</title>
+        <subtasks>
+          <subtask>Navegar para C:\Users\Carlos\Development\my-projects\sorte-grande</subtask>
+          <subtask>Executar: npx create-next-app@latest app --typescript --tailwind --app --eslint --turbopack --import-alias "@/*"</subtask>
+          <subtask>Aguardar instalação (pode levar 2-5 minutos)</subtask>
+          <subtask>Verificar saída sem erros</subtask>
+        </subtasks>
+        <dependencies>Requer Node.js 20.9+ instalado</dependencies>
+      </task>
+      <task id="2" owner="Developer" effort="5min">
+        <title>Verify TypeScript Configuration</title>
+        <subtasks>
+          <subtask>Abrir app/tsconfig.json</subtask>
+          <subtask>Verificar "strict": true no compilerOptions</subtask>
+          <subtask>Verificar paths mapping: "@/*": ["./src/*"] ou "./*"</subtask>
+          <subtask>Executar npm run build para testar compilation</subtask>
+          <subtask>Resolver quaisquer erros TypeScript (se houver)</subtask>
+        </subtasks>
+        <successCriteria>Build completa com 0 TypeScript errors</successCriteria>
+      </task>
+      <task id="3" owner="Developer" effort="5min">
+        <title>Test Development Server</title>
+        <subtasks>
+          <subtask>Navegar: cd app</subtask>
+          <subtask>Instalar dependências: npm install (se necessário)</subtask>
+          <subtask>Iniciar dev server: npm run dev</subtask>
+          <subtask>Verificar terminal exibe "✓ Ready in Xms (turbopack)"</subtask>
+          <subtask>Abrir http://localhost:3000 no navegador</subtask>
+          <subtask>Confirmar página inicial do Next.js carrega</subtask>
+          <subtask>Editar app/page.tsx e salvar</subtask>
+          <subtask>Confirmar browser faz refresh automático &lt; 500ms</subtask>
+          <subtask>Parar servidor: Ctrl+C</subtask>
+        </subtasks>
+        <successCriteria>Dev server roda sem erros, hot reload funciona</successCriteria>
+      </task>
+      <task id="4" owner="Developer" effort="3min">
+        <title>Verify ESLint Setup</title>
+        <subtasks>
+          <subtask>Verificar .eslintrc.json existe</subtask>
+          <subtask>Executar: npm run lint</subtask>
+          <subtask>Confirmar 0 errors, 0 warnings</subtask>
+          <subtask>Se houver warnings, avaliar se são aceitáveis (geralmente são)</subtask>
+        </subtasks>
+        <successCriteria>npm run lint passa sem erros críticos</successCriteria>
+      </task>
+      <task id="5" owner="Developer" effort="5min">
+        <title>Verify Tailwind CSS</title>
+        <subtasks>
+          <subtask>Abrir tailwind.config.ts</subtask>
+          <subtask>Verificar content inclui ./app/**/*.{js,ts,jsx,tsx}</subtask>
+          <subtask>Abrir postcss.config.mjs</subtask>
+          <subtask>Verificar plugins incluem tailwindcss e autoprefixer</subtask>
+          <subtask>Editar app/page.tsx e adicionar classe Tailwind (ex: className="text-blue-500")</subtask>
+          <subtask>Rodar dev server e verificar estilo aplicado</subtask>
+        </subtasks>
+        <successCriteria>Classes Tailwind funcionam visualmente</successCriteria>
+      </task>
+      <task id="6" owner="Developer" effort="5min">
+        <title>Initialize Git Repository</title>
+        <subtasks>
+          <subtask>Navegar: cd app</subtask>
+          <subtask>Verificar .gitignore contém: node_modules/, .next/, .env*.local</subtask>
+          <subtask>Executar: git init</subtask>
+          <subtask>Executar: git add .</subtask>
+          <subtask>Executar: git commit -m "chore: initialize Next.js 16 project"</subtask>
+        </subtasks>
+        <successCriteria>Commit inicial criado com todos os arquivos base</successCriteria>
+      </task>
+      <task id="7" owner="Developer" effort="5min">
+        <title>Run Full Quality Check</title>
+        <subtasks>
+          <subtask>Executar: npm run build → Deve completar &lt; 2 min</subtask>
+          <subtask>Executar: npm run lint → 0 errors</subtask>
+          <subtask>Executar: npm run dev → Servidor inicia &lt; 5s</subtask>
+          <subtask>Verificar http://localhost:3000 carrega</subtask>
+          <subtask>Verificar console browser sem errors</subtask>
+          <subtask>Parar servidor</subtask>
+        </subtasks>
+        <successCriteria>Todos os comandos passam, projeto está pronto para Story 1.2</successCriteria>
+      </task>
+      <task id="8" owner="Developer" effort="5min">
+        <title>Document Setup Steps</title>
+        <subtasks>
+          <subtask>Criar/atualizar app/README.md com: Node.js version requirement (20.9+), Setup steps: npm install / npm run dev, Available scripts: dev, build, lint, Import alias documentation (@/*)</subtask>
+          <subtask>Adicionar nota sobre Turbopack</subtask>
+          <subtask>Commit: git commit -am "docs: add setup instructions"</subtask>
+        </subtasks>
+        <successCriteria>README contém instruções completas de setup</successCriteria>
+      </task>
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    <criterion id="AC1" priority="critical">
+      <title>Next.js Project Created</title>
+      <description>Comando npx create-next-app@latest app --typescript --tailwind --app --eslint --turbopack --import-alias "@/*" executado com sucesso</description>
+      <verification>
+        <item>Diretório app/ criado com estrutura inicial</item>
+        <item>package.json contém Next.js 16.x, React 19.x, TypeScript 5.x</item>
+      </verification>
+      <source>Tech Spec Epic 1 - AC1</source>
+    </criterion>
+    <criterion id="AC2" priority="critical">
+      <title>TypeScript Strict Mode Configured</title>
+      <description>tsconfig.json existe com "strict": true</description>
+      <verification>
+        <item>Compilation sem erros TypeScript</item>
+        <item>Import alias @/* mapeado para ./src/* ou ./*</item>
+      </verification>
+      <source>Tech Spec Epic 1 - NFR-P1</source>
+    </criterion>
+    <criterion id="AC3" priority="critical">
+      <title>Development Server Runs</title>
+      <description>cd app &amp;&amp; npm run dev inicia servidor sem erros</description>
+      <verification>
+        <item>Navegador em http://localhost:3000 exibe página inicial do Next.js</item>
+        <item>Hot reload funciona (editar arquivo → refresh automático &lt; 500ms)</item>
+      </verification>
+      <source>Tech Spec Epic 1 - NFR-P3</source>
+    </criterion>
+    <criterion id="AC4" priority="high">
+      <title>Turbopack Bundler Active</title>
+      <description>Terminal exibe "✓ Ready in Xms (turbopack)" ao rodar npm run dev</description>
+      <verification>
+        <item>Não exibe warnings de Webpack</item>
+      </verification>
+      <source>Tech Spec Epic 1 - NFR-P3</source>
+    </criterion>
+    <criterion id="AC5" priority="critical">
+      <title>Build Succeeds</title>
+      <description>npm run build completa sem erros</description>
+      <verification>
+        <item>Output mostra páginas compiladas</item>
+        <item>Build time &lt; 2 minutos (NFR-P3)</item>
+      </verification>
+      <source>Tech Spec Epic 1 - NFR-P3</source>
+    </criterion>
+    <criterion id="AC6" priority="high">
+      <title>ESLint Configured</title>
+      <description>npm run lint executa sem erros</description>
+      <verification>
+        <item>.eslintrc.json contém extends: ["next/core-web-vitals"]</item>
+        <item>Nenhum arquivo com erros de lint</item>
+      </verification>
+      <source>Tech Spec Epic 1 - NFR-M1</source>
+    </criterion>
+    <criterion id="AC7" priority="high">
+      <title>Tailwind CSS Configured</title>
+      <description>tailwind.config.ts existe</description>
+      <verification>
+        <item>postcss.config.mjs configurado</item>
+        <item>Classes Tailwind funcionam (testar no código)</item>
+      </verification>
+      <source>Tech Spec Epic 1 - NFR-M1</source>
+    </criterion>
+    <criterion id="AC8" priority="medium">
+      <title>Git Repository Initialized</title>
+      <description>.git/ directory criado</description>
+      <verification>
+        <item>.gitignore contém node_modules/, .next/, .env.local</item>
+        <item>Commit inicial criado: "chore: initialize Next.js 16 project"</item>
+      </verification>
+      <source>Tech Spec Epic 1 - NFR-M1</source>
+    </criterion>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc>
+        <path>docs/sprint-artifacts/tech-spec-epic-1.md</path>
+        <title>Epic Technical Specification: Foundation &amp; Project Setup</title>
+        <section>Project Initialization (Lines 99-115)</section>
+        <snippet>Next.js 16 inicializado com create-next-app, TypeScript 5.1+ strict mode configurado, Tailwind CSS 3.4+ com tema Emerald Trust, App Router (/app directory) configurado, Import alias @/* para imports limpos, ESLint + Prettier configurados</snippet>
+        <relevance>Defines exact initialization requirements and configuration standards for this story</relevance>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>Sorte Grande - Architecture Document</title>
+        <section>Project Initialization (Lines 14-47)</section>
+        <snippet>Decisão: Usar create-next-app (Next.js 16) como base. Comando: npx create-next-app@latest app --typescript --tailwind --app --eslint --turbopack --import-alias "@/*". O que o starter já fornece: TypeScript configurado, Tailwind CSS configurado, ESLint com regras Next.js, App Router (/app directory), Turbopack (bundler 700x mais rápido), Import alias @/* para imports limpos, Configuração production-ready</snippet>
+        <relevance>Provides architectural rationale and exact initialization command</relevance>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>Sorte Grande - Architecture Document</title>
+        <section>Decision Summary (Lines 49-69)</section>
+        <snippet>Framework: Next.js App Router 16.0+ - SSR+CSR hybrid, API routes, otimizações automáticas, Vercel deploy. Language: TypeScript 5.1+ - Type safety, melhor DX, evita bugs em runtime. Styling: Tailwind CSS 3.4+ - Utility-first, customização total, alinhado com shadcn/ui</snippet>
+        <relevance>Confirms technology stack decisions and version requirements</relevance>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>Sorte Grande - Architecture Document</title>
+        <section>Project Structure (Lines 71-140)</section>
+        <snippet>sorte-grande/ root com docs/ e app/ directories. app/src/ contém app/ (App Router), components/ (ui/ + lottery/ + layout/), lib/ (db/ + wheeling/ + lottery/ + integrations/), types/. Root app/ tem public/, package.json, next.config.ts, tailwind.config.ts</snippet>
+        <relevance>Defines expected directory structure after initialization</relevance>
+      </doc>
+      <doc>
+        <path>docs/epics-detailed.md</path>
+        <title>Epic Breakdown Document</title>
+        <section>Epic 1, Story 1.1: Initialize Next.js 16 Project</section>
+        <snippet>Inicializar projeto Next.js 16 com TypeScript, Tailwind CSS e App Router usando create-next-app. Acceptance Criteria: (1) Projeto criado com estrutura inicial, (2) TypeScript strict mode configurado, (3) Dev server roda sem erros, (4) Turbopack ativo</snippet>
+        <relevance>Original story definition and acceptance criteria source</relevance>
+      </doc>
+      <doc>
+        <path>docs/prd.md</path>
+        <title>Sorte Grande - Product Requirements Document</title>
+        <section>Executive Summary (Lines 1-42)</section>
+        <snippet>Stack: Next.js + Vercel + Neon PostgreSQL + shadcn/ui (TypeScript full-stack). MVP: 50 usuários gratuitos para validar UX, engagement e proposta de valor</snippet>
+        <relevance>Confirms technology stack and MVP scope</relevance>
+      </doc>
+    </docs>
+    <code>
+      <artifact>
+        <path>app/package.json</path>
+        <kind>manifest</kind>
+        <symbol>dependencies</symbol>
+        <lines>N/A</lines>
+        <reason>Will be created by create-next-app with Next.js 16.x, React 19.x, TypeScript 5.x dependencies</reason>
+      </artifact>
+      <artifact>
+        <path>app/tsconfig.json</path>
+        <kind>config</kind>
+        <symbol>compilerOptions</symbol>
+        <lines>N/A</lines>
+        <reason>Will be created with strict mode enabled and import alias @/* configured</reason>
+      </artifact>
+      <artifact>
+        <path>app/tailwind.config.ts</path>
+        <kind>config</kind>
+        <symbol>tailwind.config</symbol>
+        <lines>N/A</lines>
+        <reason>Will be created with content paths for app directory</reason>
+      </artifact>
+      <artifact>
+        <path>app/next.config.ts</path>
+        <kind>config</kind>
+        <symbol>nextConfig</symbol>
+        <lines>N/A</lines>
+        <reason>Will be created with default Next.js 16 configuration</reason>
+      </artifact>
+      <artifact>
+        <path>app/.eslintrc.json</path>
+        <kind>config</kind>
+        <symbol>eslintConfig</symbol>
+        <lines>N/A</lines>
+        <reason>Will be created with next/core-web-vitals preset</reason>
+      </artifact>
+    </code>
+    <dependencies>
+      <node>
+        <package name="next" version="^16.0.0" reason="Framework principal - App Router, SSR/CSR, API Routes" />
+        <package name="react" version="^19.0.0" reason="UI library requirement para Next.js 16" />
+        <package name="react-dom" version="^19.0.0" reason="React DOM renderer requirement" />
+        <package name="typescript" version="^5.1.0" reason="Type checking e development experience" />
+        <package name="tailwindcss" version="^3.4.0" reason="CSS utility framework" />
+        <package name="postcss" version="^8.0.0" reason="CSS processing para Tailwind" />
+        <package name="autoprefixer" version="^10.0.0" reason="Browser compatibility CSS" />
+        <package name="eslint" version="^8.0.0" reason="Code linting" />
+        <package name="eslint-config-next" version="latest" reason="Next.js specific lint rules" />
+        <devDependencies>
+          <package name="@types/node" version="^20.0.0" reason="Node.js type definitions" />
+          <package name="@types/react" version="^19.0.0" reason="React type definitions" />
+          <package name="@types/react-dom" version="^19.0.0" reason="React DOM type definitions" />
+        </devDependencies>
+      </node>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint type="technical" priority="critical">
+      <title>Node.js Version Requirement</title>
+      <description>Node.js version must be &gt;= 20.9.0 for Next.js 16 compatibility</description>
+      <verification>Run: node -v before initialization</verification>
+    </constraint>
+    <constraint type="architectural" priority="critical">
+      <title>App Router Only (Not Pages Router)</title>
+      <description>Must use /app directory (App Router) not /pages directory. This is non-negotiable per ADR-001</description>
+      <verification>Ensure --app flag in create-next-app command</verification>
+    </constraint>
+    <constraint type="technical" priority="critical">
+      <title>TypeScript Strict Mode</title>
+      <description>tsconfig.json must have "strict": true enabled for maximum type safety</description>
+      <verification>Check tsconfig.json after initialization</verification>
+    </constraint>
+    <constraint type="architectural" priority="high">
+      <title>Import Alias Convention</title>
+      <description>All imports must use @/* alias for clean imports (e.g., import { foo } from '@/lib/utils')</description>
+      <verification>Verify tsconfig.json paths mapping includes "@/*": ["./src/*"] or "./*"</verification>
+    </constraint>
+    <constraint type="technical" priority="high">
+      <title>Turbopack Bundler</title>
+      <description>Development server must use Turbopack bundler (700x faster than Webpack)</description>
+      <verification>Terminal output shows "turbopack" when running npm run dev</verification>
+    </constraint>
+    <constraint type="process" priority="medium">
+      <title>Git Repository Initialization</title>
+      <description>Project must be version controlled from day 1 with proper .gitignore</description>
+      <verification>git init and initial commit created</verification>
+    </constraint>
+    <constraint type="technical" priority="medium">
+      <title>Build Time Performance</title>
+      <description>Production build must complete in under 2 minutes (NFR-P3)</description>
+      <verification>Run npm run build and measure time</verification>
+    </constraint>
+    <constraint type="platform" priority="high">
+      <title>Windows PowerShell Compatibility</title>
+      <description>All commands must work in Windows PowerShell 5.1 environment</description>
+      <verification>User is on Windows, paths use forward slashes in code</verification>
+    </constraint>
+  </constraints>
+
+  <interfaces>
+    <interface>
+      <name>Next.js CLI</name>
+      <kind>command-line</kind>
+      <signature>npx create-next-app@latest [project-name] [options]</signature>
+      <path>N/A (external tool)</path>
+      <description>Creates new Next.js application with specified configuration flags</description>
+    </interface>
+    <interface>
+      <name>npm Scripts</name>
+      <kind>command-line</kind>
+      <signature>npm run [dev|build|start|lint]</signature>
+      <path>app/package.json</path>
+      <description>Standard Next.js scripts for development, build, production, and linting</description>
+    </interface>
+  </interfaces>
+
+  <tests>
+    <standards>
+      Manual verification only for this story (infrastructure setup). No automated tests required. Verification steps include: (1) Dev server starts successfully, (2) Page loads at localhost:3000, (3) Hot reload works within 500ms, (4) Build completes successfully, (5) Lint passes with 0 errors. Testing framework will be established in later stories when application code is added.
+    </standards>
+    <locations>
+      N/A - No test files for this story. Future test directories will be: app/src/__tests__/ (unit), app/src/app/**/*.test.tsx (integration), app/e2e/ (end-to-end after Playwright setup in Epic 1).
+    </locations>
+    <ideas>
+      <idea ac="AC1">Verify package.json contains correct Next.js 16.x, React 19.x, TypeScript 5.x versions using JSON parsing</idea>
+      <idea ac="AC2">Verify tsconfig.json has "strict": true by parsing JSON and checking compilerOptions.strict === true</idea>
+      <idea ac="AC3">Start dev server programmatically and check HTTP response from localhost:3000 returns 200 status</idea>
+      <idea ac="AC4">Parse dev server terminal output and verify it contains string "turbopack" (not "webpack")</idea>
+      <idea ac="AC5">Run npm run build and verify exit code is 0 and .next directory is created</idea>
+      <idea ac="AC6">Run npm run lint and verify exit code is 0 (no errors)</idea>
+      <idea ac="AC7">Verify tailwind.config.ts exists and postcss.config.mjs includes tailwindcss plugin</idea>
+      <idea ac="AC8">Verify .git directory exists and git log shows at least 1 commit</idea>
+    </ideas>
+  </tests>
+</story-context>
