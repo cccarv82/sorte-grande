@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   
   if (!authHeader) {
     return NextResponse.json(
-      { error: 'Unauthorized', message: 'No authorization header provided' },
+      { error: 'Unauthorized' },
       { status: 401 }
     )
   }
@@ -15,24 +15,16 @@ export async function GET(request: NextRequest) {
   const token = authHeader.replace('Bearer ', '').trim()
   const expectedSecret = process.env.CRON_SECRET?.trim()
 
-  console.log('[CRON] Token length:', token.length, 'Expected length:', expectedSecret?.length)
-  console.log('[CRON] Token first 10 chars:', token.substring(0, 10))
-  console.log('[CRON] Expected first 10 chars:', expectedSecret?.substring(0, 10))
-
   if (!expectedSecret) {
     return NextResponse.json(
-      { error: 'Server configuration error', message: 'CRON_SECRET not configured' },
+      { error: 'Server configuration error' },
       { status: 500 }
     )
   }
 
   if (token !== expectedSecret) {
     return NextResponse.json(
-      { 
-        error: 'Unauthorized', 
-        message: 'Invalid token',
-        debug: { tokenLen: token.length, expectedLen: expectedSecret.length }
-      },
+      { error: 'Unauthorized' },
       { status: 401 }
     )
   }
