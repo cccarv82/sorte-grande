@@ -5,9 +5,19 @@ export async function GET(request: NextRequest) {
   const authHeader = request.headers.get('authorization')
   const expectedToken = `Bearer ${process.env.CRON_SECRET}`
 
+  // DEBUG: Log env var status (remove after testing)
+  console.log('[CRON DEBUG] CRON_SECRET exists:', !!process.env.CRON_SECRET)
+  console.log('[CRON DEBUG] Auth header received:', !!authHeader)
+
   if (!authHeader || authHeader !== expectedToken) {
     return NextResponse.json(
-      { error: 'Unauthorized' },
+      { 
+        error: 'Unauthorized',
+        debug: {
+          hasSecret: !!process.env.CRON_SECRET,
+          hasAuth: !!authHeader
+        }
+      },
       { status: 401 }
     )
   }
