@@ -19,6 +19,7 @@
 ## Requirements Context
 
 ### Source Documents
+- **Tech Spec Epic 1:** `docs/sprint-artifacts/tech-spec-epic-1.md` (AC7 - Landing Page requirements, Story 1.8 workflow)
 - **Epics Detailed:** `docs/epics-detailed.md` (Epic 1, Story 1.8 - Create Landing Page Layout)
 - **UX Design Specification:** `docs/ux-design-specification.md` (Design Direction, Emerald Trust theme, Landing Page mockup)
 - **UX Design Directions HTML:** `docs/ux-design-directions.html` (Lines 574-630 - Landing Page mockup completo)
@@ -107,6 +108,9 @@ Landing page profissional é crítica porque:
 - Tailwind 4.0 CSS variables não funcionam em className (usar inline styles para gradients)
 - Next.js 16 Canary pode ter breaking changes (documentar workarounds)
 - shadcn/ui Button component funciona, mas pode precisar ajustes de estilo inline
+
+**Pending Review Items from Story 1.7:**
+- [ ] **[Low] .env.example has duplicate entries** - Lines 1-51 contain duplicate NEXTAUTH_URL, NEXTAUTH_SECRET, RESEND_API_KEY, EMAIL_FROM. Note: Story 1.8 doesn't modify .env.example, but be aware of this if adding variables in future. [Source: docs/sprint-artifacts/1-7-setup-vercel-deploy.md#Action-Items]
 
 [Source: docs/sprint-artifacts/1-7-setup-vercel-deploy.md#Dev-Agent-Record, docs/sprint-artifacts/1-6-create-custom-lottery-components.md#Learnings]
 
@@ -728,6 +732,7 @@ style={{
 - [shadcn/ui Button](https://ui.shadcn.com/docs/components/button) - Button component API
 - [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/) - Accessibility checklist
 - [Lighthouse](https://developer.chrome.com/docs/lighthouse/) - Performance audit tool
+- Tech Spec Epic 1: docs/sprint-artifacts/tech-spec-epic-1.md (AC7 - Landing Page, Lines 693-701)
 - UX Design Specification: docs/ux-design-specification.md (Emerald Trust theme, Landing Page design)
 - UX Design Directions HTML: docs/ux-design-directions.html (Lines 574-630 - Landing Page mockup)
 - Epics Detailed: docs/epics-detailed.md (Lines 193-220 - Story 1.8 requirements)
@@ -739,6 +744,7 @@ style={{
 | Date | Author | Changes |
 |------|--------|---------|
 | 2025-12-01 | Carlos (via SM Agent Bob) | Initial story creation via *create-story workflow |
+| 2025-12-01 | Carlos (via SM Agent Bob) | Validation improvements: Added tech spec citation, documented pending review item from Story 1.7 |
 
 ---
 
