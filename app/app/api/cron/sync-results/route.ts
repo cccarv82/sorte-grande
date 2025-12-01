@@ -12,8 +12,12 @@ export async function GET(request: NextRequest) {
   }
 
   // Extract token from "Bearer <token>" format
-  const token = authHeader.replace('Bearer ', '')
-  const expectedSecret = process.env.CRON_SECRET
+  const token = authHeader.replace('Bearer ', '').trim()
+  const expectedSecret = process.env.CRON_SECRET?.trim()
+
+  console.log('[CRON] Token length:', token.length, 'Expected length:', expectedSecret?.length)
+  console.log('[CRON] Token first 10 chars:', token.substring(0, 10))
+  console.log('[CRON] Expected first 10 chars:', expectedSecret?.substring(0, 10))
 
   if (!expectedSecret) {
     return NextResponse.json(
@@ -24,7 +28,11 @@ export async function GET(request: NextRequest) {
 
   if (token !== expectedSecret) {
     return NextResponse.json(
-      { error: 'Unauthorized', message: 'Invalid token' },
+      { 
+        error: 'Unauthorized', 
+        message: 'Invalid token',
+        debug: { tokenLen: token.length, expectedLen: expectedSecret.length }
+      },
       { status: 401 }
     )
   }
