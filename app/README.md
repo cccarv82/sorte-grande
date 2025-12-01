@@ -148,6 +148,117 @@ npm run db:validate
 npm run db:studio
 ```
 
+## Deployment (Vercel)
+
+This application is deployed on **Vercel** with automatic CI/CD from GitHub.
+
+### Production URL
+
+🌐 **Live Application:** https://sorte-grande.vercel.app
+
+### Deployment Pipeline
+
+- **Production Branch:** `main` → Auto-deploys to production
+- **Feature Branches:** Any branch → Auto-creates preview deployment
+- **Pull Requests:** Preview URL posted as comment by Vercel bot
+
+### Environment Variables (Production)
+
+Required environment variables must be configured in Vercel Dashboard:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `DATABASE_URL` | Neon PostgreSQL connection string (production branch) | `postgresql://user:password@host.neon.tech/db` |
+| `NEXTAUTH_SECRET` | Secret for NextAuth v5 token encryption | Generate with `openssl rand -base64 32` |
+| `NEXTAUTH_URL` | Production URL for NextAuth callbacks | `https://sorte-grande.vercel.app` |
+| `RESEND_API_KEY` | Resend API key for magic link emails | `re_xxxxxxxxxxxxxxxxx` |
+| `EMAIL_FROM` | Email sender address | `noreply@yourdomain.com` |
+| `CRON_SECRET` | Bearer token for cron job authentication | Generate with `openssl rand -base64 32` |
+
+**To add environment variables:**
+
+1. Go to: https://vercel.com/cccarv82s-projects/sorte-grande/settings/environment-variables
+2. Add each variable with appropriate scope (Production, Preview, Development)
+3. Redeploy to apply changes: `vercel --prod`
+
+### Cron Jobs
+
+**Lottery Results Sync:**
+- **Schedule:** Every Wednesday and Saturday at 20:30 UTC (17:30 BRT)
+- **Endpoint:** `POST /api/cron/sync-results`
+- **Authentication:** Bearer token (`CRON_SECRET`)
+- **Configuration:** `vercel.json` at monorepo root
+
+Cron jobs are automatically configured from `vercel.json` on deployment.
+
+### Manual Deployment
+
+**Deploy to production:**
+```bash
+vercel --prod
+```
+
+**Create preview deployment:**
+```bash
+vercel
+```
+
+**View deployment logs:**
+```bash
+vercel logs <deployment-url>
+```
+
+### Vercel CLI Setup
+
+**Install Vercel CLI:**
+```bash
+npm install -g vercel
+```
+
+**Login to Vercel:**
+```bash
+vercel login
+```
+
+**Link local project:**
+```bash
+vercel link
+```
+
+**Pull environment variables to local:**
+```bash
+vercel env pull .env.local
+```
+
+### Monitoring
+
+- **Analytics:** Vercel Analytics enabled (visitor stats, performance metrics)
+- **Logs:** Real-time logs available in Vercel Dashboard
+- **Errors:** Automatic error tracking and alerts
+- **Performance:** Lighthouse scores monitored on every deployment
+
+### Troubleshooting Deployment
+
+**Build failed with TypeScript errors:**
+- Run `npm run build` locally to catch errors before pushing
+- Check `vercel logs <deployment-url>` for detailed error messages
+- Ensure all environment variables are set in Vercel Dashboard
+
+**Environment variables not working:**
+- Verify variables are set with correct scope (Production/Preview/Development)
+- Redeploy after adding new variables: `vercel --prod`
+- Use `vercel env ls` to list all configured variables
+
+**Cron job not triggering:**
+- Verify `vercel.json` has correct path (`/api/cron/sync-results`)
+- Check cron schedule syntax in Vercel Dashboard → Settings → Cron Jobs
+- Test endpoint manually: `curl https://sorte-grande.vercel.app/api/cron/sync-results -H "Authorization: Bearer YOUR_CRON_SECRET"`
+
+**Database connection timeout in production:**
+- Ensure production `DATABASE_URL` points to Neon **production branch**
+- Verify Neon project is not suspended (check billing)
+- Check Neon connection pooling settings (increase max connections if needed)
+
 ### Schema Definition
 
 Schema is defined in `lib/db/schema.ts` using Drizzle's declarative syntax with TypeScript:
