@@ -2,7 +2,7 @@
 
 **Epic:** Epic 1 - Foundation & Project Setup  
 **Story ID:** 1.8  
-**Status:** drafted  
+**Status:** ready-for-dev  
 **Created:** 2025-12-01  
 **Author:** Carlos (via SM Agent Bob)
 
@@ -751,7 +751,7 @@ style={{
 ## Dev Agent Record
 
 ### Context Reference
-- **Context XML:** `docs/sprint-artifacts/1-8-create-landing-page-layout.context.xml` (to be generated when story starts)
+- **Context XML:** `docs/sprint-artifacts/1-8-create-landing-page-layout.context.xml` (generated 2025-12-01)
 - **Dependencies:** Story 1.1 (Next.js), Story 1.4 (NextAuth /login), Story 1.5 (shadcn/ui), Story 1.7 (Vercel deployment)
 
 ### Agent Model Used

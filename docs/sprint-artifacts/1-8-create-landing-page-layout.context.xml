@@ -1,0 +1,370 @@
+<story-context id=".bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>1.8</storyId>
+    <title>Create Landing Page Layout</title>
+    <status>drafted</status>
+    <generatedAt>2025-12-01</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/sprint-artifacts/1-8-create-landing-page-layout.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>visitante</asA>
+    <iWant>landing page profissional com hero + "Como funciona"</iWant>
+    <soThat>entenda a proposta e confie no sistema antes de registrar</soThat>
+    <tasks>
+      <task id="1" title="Create Layout Components (AppHeader &amp; Footer)" effort="30 min" owner="Developer">
+        <subtask>Create directory: mkdir -p components/layout</subtask>
+        <subtask>Create file: components/layout/AppHeader.tsx</subtask>
+        <subtask>Implement AppHeader with gradient logo + Entrar button</subtask>
+        <subtask>Create file: components/layout/Footer.tsx</subtask>
+        <subtask>Implement Footer with links + copyright</subtask>
+        <subtask>Test components in isolation</subtask>
+        <subtask>Verify gradient works (inline styles)</subtask>
+        <subtask>Verify responsive (Chrome DevTools)</subtask>
+        <subtask>Commit: git add . &amp;&amp; git commit -m "feat: create AppHeader and Footer layout components"</subtask>
+      </task>
+      <task id="2" title="Create Landing Page Sections (Hero, HowItWorks, Disclaimer)" effort="60 min" owner="Developer">
+        <subtask>Create directory: mkdir -p components/landing</subtask>
+        <subtask>Create file: components/landing/HeroSection.tsx</subtask>
+        <subtask>Implement HeroSection with title, subtitle, CTA button</subtask>
+        <subtask>Create file: components/landing/HowItWorksSection.tsx</subtask>
+        <subtask>Implement HowItWorksSection with 4 numbered steps</subtask>
+        <subtask>Create file: components/landing/DisclaimerSection.tsx</subtask>
+        <subtask>Implement DisclaimerSection with warning box</subtask>
+        <subtask>Test each component in isolation</subtask>
+        <subtask>Verify responsive breakpoints (Chrome DevTools resize)</subtask>
+        <subtask>Commit: git add . &amp;&amp; git commit -m "feat: create landing page sections (Hero, HowItWorks, Disclaimer)"</subtask>
+      </task>
+      <task id="3" title="Integrate Components into Landing Page" effort="20 min" owner="Developer">
+        <subtask>Open file: app/page.tsx</subtask>
+        <subtask>Replace placeholder content with landing page component imports</subtask>
+        <subtask>Run dev server: npm run dev</subtask>
+        <subtask>Open http://localhost:3000</subtask>
+        <subtask>Verify all sections visible</subtask>
+        <subtask>Verify "Entrar" button links to /login</subtask>
+        <subtask>Verify "Começar Grátis" button links to /login</subtask>
+        <subtask>Verify no console errors (F12)</subtask>
+        <subtask>Commit: git add . &amp;&amp; git commit -m "feat: integrate landing page components"</subtask>
+      </task>
+      <task id="4" title="Add Meta Tags &amp; SEO Optimization" effort="15 min" owner="Developer">
+        <subtask>Open file: app/page.tsx</subtask>
+        <subtask>Add metadata export with title, description, keywords</subtask>
+        <subtask>Verify metadata appears in &lt;head&gt; (view-source in browser)</subtask>
+        <subtask>Test SEO with Lighthouse (Chrome DevTools → Lighthouse → Generate report)</subtask>
+        <subtask>Verify title shows in browser tab</subtask>
+        <subtask>Commit: git add . &amp;&amp; git commit -m "feat: add SEO metadata to landing page"</subtask>
+      </task>
+      <task id="5" title="Responsive Design Testing" effort="20 min" owner="Developer">
+        <subtask>Open http://localhost:3000</subtask>
+        <subtask>Open Chrome DevTools (F12) → Toggle device toolbar (Ctrl+Shift+M)</subtask>
+        <subtask>Test Mobile (375px width): logo readable, CTA full-width, steps vertical, footer vertical</subtask>
+        <subtask>Test Tablet (768px width): 2-column steps, CTA not full-width, footer in row</subtask>
+        <subtask>Test Desktop (1440px width): max-width constraint, 4-column steps, proportional spacing</subtask>
+        <subtask>Fix any responsive issues found</subtask>
+        <subtask>Commit fixes: git add . &amp;&amp; git commit -m "fix: responsive design adjustments"</subtask>
+      </task>
+      <task id="6" title="Accessibility &amp; Performance Audit" effort="25 min" owner="Developer">
+        <subtask>Run TypeScript check: npx tsc --noEmit</subtask>
+        <subtask>Fix any TypeScript errors</subtask>
+        <subtask>Run ESLint: npm run lint</subtask>
+        <subtask>Fix any linting errors</subtask>
+        <subtask>Open Chrome DevTools → Lighthouse</subtask>
+        <subtask>Generate report (Desktop mode): Performance &gt; 90, Accessibility &gt; 90, Best Practices &gt; 90, SEO &gt; 90</subtask>
+        <subtask>Review accessibility issues: semantic HTML, heading hierarchy, keyboard navigation, color contrast</subtask>
+        <subtask>Fix any critical issues</subtask>
+        <subtask>Re-run Lighthouse to confirm fixes</subtask>
+        <subtask>Commit fixes: git add . &amp;&amp; git commit -m "fix: accessibility and performance improvements"</subtask>
+      </task>
+      <task id="7" title="Production Deployment &amp; Verification" effort="15 min" owner="Developer">
+        <subtask>Commit all changes: git add . &amp;&amp; git commit -m "feat: complete Story 1.8 - landing page layout"</subtask>
+        <subtask>Push to main: git push origin main</subtask>
+        <subtask>Wait for Vercel deployment (check Vercel Dashboard or GitHub Actions)</subtask>
+        <subtask>Open production URL: https://sorte-grande-ten.vercel.app</subtask>
+        <subtask>Verify landing page visible in production</subtask>
+        <subtask>Verify all sections render correctly</subtask>
+        <subtask>Verify "Entrar" button works</subtask>
+        <subtask>Verify "Começar Grátis" button works</subtask>
+        <subtask>Test responsive on real mobile device (optional)</subtask>
+        <subtask>Run Lighthouse on production URL</subtask>
+        <subtask>Screenshot landing page for documentation (optional)</subtask>
+      </task>
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    <ac id="AC1" title="Landing Page Route Functional">
+      <criterion>Route `/` renders landing page (not placeholder)</criterion>
+      <criterion>Page loads within 2 seconds (measured via Chrome DevTools Network tab)</criterion>
+      <criterion>No console errors in browser DevTools (F12)</criterion>
+      <criterion>Page is server-side rendered (view-source shows full HTML content)</criterion>
+      <criterion>Meta tags present (title, description) for SEO</criterion>
+      <criterion>Open Graph tags (optional for MVP, recommended for future)</criterion>
+    </ac>
+    <ac id="AC2" title="AppHeader Component">
+      <criterion>Component created: components/layout/AppHeader.tsx</criterion>
+      <criterion>Logo "Sorte Grande" with gradient text (#10b981→#34d399)</criterion>
+      <criterion>Button "Entrar" (ghost variant) linking to /login</criterion>
+      <criterion>Header sticky on scroll (optional for MVP)</criterion>
+      <criterion>Responsive: logo font-size adapts mobile/desktop</criterion>
+      <criterion>Logo uses inline gradient style (Tailwind 4.0 workaround)</criterion>
+      <criterion>TypeScript types defined for props</criterion>
+    </ac>
+    <ac id="AC3" title="Hero Section">
+      <criterion>Component created: components/landing/HeroSection.tsx</criterion>
+      <criterion>Title: "Apostas inteligentes baseadas em matemática"</criterion>
+      <criterion>Title font-size: 2.5rem mobile, 3.5rem desktop (responsive)</criterion>
+      <criterion>Subtitle: Brief description (1-2 sentences)</criterion>
+      <criterion>CTA button "Começar Grátis" with gradient background (#10b981→#34d399)</criterion>
+      <criterion>CTA button shadow: 0 4px 12px rgba(16,185,129,0.3)</criterion>
+      <criterion>CTA button links to /login</criterion>
+      <criterion>CTA button uses shadcn/ui Button component (or custom styled)</criterion>
+      <criterion>Section centered with max-width constraint</criterion>
+    </ac>
+    <ac id="AC4" title="Como Funciona Section">
+      <criterion>Component created: components/landing/HowItWorksSection.tsx</criterion>
+      <criterion>Section title "Como funciona" (h2, text-primary)</criterion>
+      <criterion>4 steps displayed in grid or column layout</criterion>
+      <criterion>Each step has numbered circle (32x32px, gradient background #10b981→#34d399, black text, font-bold)</criterion>
+      <criterion>Each step has step title (h4, font-semibold)</criterion>
+      <criterion>Each step has step description (p, text-muted)</criterion>
+      <criterion>Step 1: "Informe o valor" - "Digite quanto você quer investir"</criterion>
+      <criterion>Step 2: "Receba jogos otimizados" - "Sistema aplica Wheeling Systems automaticamente"</criterion>
+      <criterion>Step 3: "Copie e realize" - "Cole na Loteria Online da Caixa"</criterion>
+      <criterion>Step 4: "Verificação automática" - "Receba notificação se ganhar"</criterion>
+      <criterion>Responsive: single column mobile, 2-column tablet, 4-column desktop (optional)</criterion>
+    </ac>
+    <ac id="AC5" title="Disclaimer Section">
+      <criterion>Component created: components/landing/DisclaimerSection.tsx</criterion>
+      <criterion>Warning icon ⚠️ at start</criterion>
+      <criterion>Text: "Wheeling Systems NÃO aumenta chances de jackpot (matematicamente impossível). Organiza apostas de forma inteligente com garantias condicionais."</criterion>
+      <criterion>Background: rgba(239,68,68,0.1) (red semi-transparent)</criterion>
+      <criterion>Border: 1px solid #ef4444 (red)</criterion>
+      <criterion>Border-radius: 8px or 12px</criterion>
+      <criterion>Padding: 16px or 20px</criterion>
+      <criterion>Font-size: 14px or 16px (legível mas não dominante)</criterion>
+      <criterion>Text color: text-red-500 or similar</criterion>
+    </ac>
+    <ac id="AC6" title="Footer Component">
+      <criterion>Component created: components/layout/Footer.tsx</criterion>
+      <criterion>Links: "Termos de Uso", "Política de Privacidade", "Como Funciona" (placeholders, can link to / for MVP)</criterion>
+      <criterion>Copyright text: "© 2025 Sorte Grande. Todos os direitos reservados."</criterion>
+      <criterion>Background: subtle border-top or background-surface</criterion>
+      <criterion>Text color: text-muted</criterion>
+      <criterion>Centered content with max-width</criterion>
+      <criterion>Responsive: links in row (desktop) or column (mobile)</criterion>
+    </ac>
+    <ac id="AC7" title="Responsive Design">
+      <criterion>Mobile (&lt;768px): Single column layout</criterion>
+      <criterion>Mobile (&lt;768px): CTA button full-width</criterion>
+      <criterion>Mobile (&lt;768px): Logo font-size smaller (1.25rem or 1.5rem)</criterion>
+      <criterion>Mobile (&lt;768px): Steps stacked vertically</criterion>
+      <criterion>Mobile (&lt;768px): Footer links stacked vertically</criterion>
+      <criterion>Tablet (768-1024px): 2-column layout for steps (optional)</criterion>
+      <criterion>Tablet (768-1024px): CTA button max-width (not full-width)</criterion>
+      <criterion>Desktop (&gt;1024px): Max-width container (1200px or 1400px)</criterion>
+      <criterion>Desktop (&gt;1024px): 4-column layout for steps (optional)</criterion>
+      <criterion>Desktop (&gt;1024px): Hero title 3.5rem</criterion>
+    </ac>
+    <ac id="AC8" title="Accessibility &amp; Performance">
+      <criterion>Semantic HTML: &lt;header&gt;, &lt;main&gt;, &lt;section&gt;, &lt;footer&gt; tags</criterion>
+      <criterion>Heading hierarchy: h1 (hero title), h2 (section titles), h3/h4 (step titles)</criterion>
+      <criterion>Link "Entrar" accessible via keyboard (Tab key)</criterion>
+      <criterion>CTA button accessible via keyboard (Tab + Enter)</criterion>
+      <criterion>Color contrast meets WCAG 2.1 AA (text on backgrounds)</criterion>
+      <criterion>Lighthouse Performance score &gt; 90</criterion>
+      <criterion>Lighthouse Accessibility score &gt; 90</criterion>
+      <criterion>No TypeScript errors (npx tsc --noEmit)</criterion>
+      <criterion>No ESLint errors (npm run lint)</criterion>
+    </ac>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc path="docs/sprint-artifacts/tech-spec-epic-1.md" title="Tech Spec Epic 1" section="AC7 - Landing Page Requirements">
+        <snippet>AC7 Landing Page defines the comprehensive requirements for the landing page including hero section, "Como funciona" with 4 steps, disclaimer section, responsive design, and SEO optimization. This is the authoritative source for acceptance criteria and technical constraints.</snippet>
+      </doc>
+      <doc path="docs/sprint-artifacts/tech-spec-epic-1.md" title="Tech Spec Epic 1" section="Story 1.8 Workflow">
+        <snippet>Workflow defines the step-by-step implementation process for Story 1.8, including creating layout components (AppHeader, Footer), landing sections (Hero, HowItWorks, Disclaimer), integration, SEO optimization, responsive testing, accessibility audit, and production deployment verification.</snippet>
+      </doc>
+      <doc path="docs/epics-detailed.md" title="Epics Detailed" section="Epic 1, Story 1.8 - Create Landing Page Layout">
+        <snippet>Story 1.8 establishes the landing page as the first contact point with potential users. Requirements include professional presentation with hero section, "Como funciona" with 4 steps, honest disclaimer about Wheeling Systems limitations, AppHeader with gradient logo, Footer with legal links, responsive design (mobile-first), and SSR for SEO.</snippet>
+      </doc>
+      <doc path="docs/ux-design-specification.md" title="UX Design Specification" section="Emerald Trust Theme">
+        <snippet>Emerald Trust (#10b981) is the chosen color theme for Sorte Grande, communicating trust, growth, and intelligent decisions. The theme combines fintech reliability with controlled optimism. Primary color #10b981 (emerald green) gradients to #34d399, on dark background (#0a0a0a) for sophistication and reduced eye strain.</snippet>
+      </doc>
+      <doc path="docs/ux-design-specification.md" title="UX Design Specification" section="Landing Page Design">
+        <snippet>Landing page design emphasizes "Trust-Based Generation" pattern - system decides everything, user trusts the methodology. Hero section has title "Apostas inteligentes baseadas em matemática", gradient CTA button with shadow, "Como funciona" with 4 numbered steps (32x32px circles), and honest disclaimer in red warning box.</snippet>
+      </doc>
+      <doc path="docs/ux-design-directions.html" title="UX Design Directions HTML" section="Lines 574-630 - Landing Page Mockup">
+        <snippet>Complete visual mockup of the landing page showing gradient logo, hero section with centered title and CTA button, "Como funciona" section with 4 numbered steps in grid layout, disclaimer warning box with red border, and footer with legal links. This is the definitive visual reference.</snippet>
+      </doc>
+      <doc path="docs/architecture.md" title="Architecture Document" section="Component Structure">
+        <snippet>Next.js 16 App Router with Server Components by default for SEO optimization. Project structure defines components/layout/ for reusable layout components (AppHeader, Footer), components/landing/ for landing-specific sections, and app/page.tsx as the landing page route. Server Components should be used unless client interactivity is required.</snippet>
+      </doc>
+      <doc path="docs/architecture.md" title="Architecture Document" section="Design System - shadcn/ui">
+        <snippet>shadcn/ui is the chosen component library, providing accessible components based on Radix UI. Button, Input, Card, Badge, Toast, Dialog components are available. Components are customizable with Tailwind CSS and follow WCAG 2.1 Level A accessibility standards by default.</snippet>
+      </doc>
+      <doc path="docs/sprint-artifacts/1-7-setup-vercel-deploy.md" title="Previous Story - Story 1.7" section="Production Deployment">
+        <snippet>Production deployment is live at https://sorte-grande-ten.vercel.app with automatic CI/CD pipeline. Environment variables configured (DATABASE_URL, NEXTAUTH_SECRET, NEXTAUTH_URL, RESEND_API_KEY, EMAIL_FROM, CRON_SECRET). GitHub repository has 547 files. Any push to main triggers automatic deployment with preview URLs for PRs.</snippet>
+      </doc>
+      <doc path="docs/sprint-artifacts/1-7-setup-vercel-deploy.md" title="Previous Story - Story 1.7" section="Known Limitations">
+        <snippet>Tailwind 4.0 CSS variables don't work in className - use inline styles for gradients. Next.js 16 Canary may have breaking changes. shadcn/ui Button component works but may need inline style adjustments. --legacy-peer-deps flag required for npm installs due to NextAuth nodemailer conflict.</snippet>
+      </doc>
+    </docs>
+    <code>
+      <file path="app/components/ui/button.tsx" kind="component" symbol="Button" reason="shadcn/ui Button component available for CTA button in Hero section. Can be customized with variant props and className.">
+        <lines>1-57</lines>
+      </file>
+      <file path="app/components/ui/input.tsx" kind="component" symbol="Input" reason="shadcn/ui Input component available (not needed for landing page but referenced in design system).">
+        <lines>1-22</lines>
+      </file>
+      <file path="app/components/ui/card.tsx" kind="component" symbol="Card" reason="shadcn/ui Card component available (optional for future landing page enhancements).">
+        <lines>1-76</lines>
+      </file>
+      <file path="app/components/lottery/index.ts" kind="module" symbol="lottery components" reason="Custom lottery components from Story 1.6 - ValueInput, LotteryGameCard, WheelGuaranteeDisplay. These demonstrate the gradient pattern and Emerald Trust theme application.">
+        <lines>1-10</lines>
+      </file>
+      <file path="app/app/page.tsx" kind="route" symbol="Home" reason="Current landing page placeholder - needs to be replaced with professional landing page components.">
+        <lines>1-24</lines>
+      </file>
+      <file path="app/app/layout.tsx" kind="route" symbol="RootLayout" reason="Root layout with Providers (theme, authentication). Landing page will use this layout.">
+        <lines>1-50</lines>
+      </file>
+      <file path="app/app/globals.css" kind="style" symbol="global styles" reason="Tailwind CSS base styles and custom CSS variables for Emerald Trust theme.">
+        <lines>1-100</lines>
+      </file>
+    </code>
+    <dependencies>
+      <node>
+        <package name="next" version="16.0.6" reason="Next.js framework with App Router and Server Components for SSR landing page" />
+        <package name="react" version="19.2.0" reason="React library for component-based UI" />
+        <package name="react-dom" version="19.2.0" reason="React DOM renderer" />
+        <package name="tailwindcss" version="^4" reason="Utility-first CSS framework for styling (Emerald Trust theme)" />
+        <package name="@radix-ui/react-slot" version="^1.2.4" reason="Radix UI primitive used by shadcn/ui Button component" />
+        <package name="class-variance-authority" version="^0.7.1" reason="CVA for Button component variants" />
+        <package name="clsx" version="^2.1.1" reason="Utility for className composition" />
+        <package name="tailwind-merge" version="^3.4.0" reason="Utility for merging Tailwind classes without conflicts" />
+        <package name="lucide-react" version="^0.555.0" reason="Icon library (optional for warning icon in disclaimer)" />
+      </node>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint type="architecture">Server Components by default - do not add 'use client' directive unless client interactivity required. Landing page should be SSR for SEO optimization.</constraint>
+    <constraint type="architecture">Semantic HTML required - use &lt;header&gt;, &lt;main&gt;, &lt;section&gt;, &lt;footer&gt; tags for accessibility and SEO.</constraint>
+    <constraint type="architecture">Max-width container (1200px or 1400px) to prevent edge-to-edge layout on large screens.</constraint>
+    <constraint type="architecture">Mobile-first responsive design - base styles target &lt;768px, use md: for tablet, lg: for desktop.</constraint>
+    <constraint type="styling">Tailwind 4.0 limitation - CSS variables don't work in className. Use inline styles for gradients: style={{ background: 'linear-gradient(135deg, #10b981 0%, #34d399 100%)' }}</constraint>
+    <constraint type="styling">Gradient text (logo) requires WebkitBackgroundClip and WebkitTextFillColor: style={{ background: 'linear-gradient(...)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}</constraint>
+    <constraint type="styling">CTA button shadow must use inline boxShadow: boxShadow: '0 4px 12px rgba(16,185,129,0.3)'</constraint>
+    <constraint type="framework">Next.js metadata export must be in Server Component (page.tsx). Use: export const metadata: Metadata = { title: '...', description: '...', keywords: '...' }</constraint>
+    <constraint type="testing">Manual testing required - Lighthouse Performance &gt; 90, Accessibility &gt; 90, Best Practices &gt; 90, SEO &gt; 90.</constraint>
+    <constraint type="testing">Responsive testing required - Chrome DevTools device toolbar for mobile (375px), tablet (768px), desktop (1440px).</constraint>
+    <constraint type="deployment">Production deployment automatic on push to main branch. Verify at https://sorte-grande-ten.vercel.app after merge.</constraint>
+  </constraints>
+
+  <interfaces>
+    <interface name="AppHeader Component API" kind="React Component">
+      <signature>
+export function AppHeader(): JSX.Element
+
+Props: None (stateless component)
+Returns: JSX.Element with header, logo, and "Entrar" button
+      </signature>
+      <path>components/layout/AppHeader.tsx</path>
+    </interface>
+    <interface name="Footer Component API" kind="React Component">
+      <signature>
+export function Footer(): JSX.Element
+
+Props: None (stateless component)
+Returns: JSX.Element with footer, links, and copyright
+      </signature>
+      <path>components/layout/Footer.tsx</path>
+    </interface>
+    <interface name="HeroSection Component API" kind="React Component">
+      <signature>
+export function HeroSection(): JSX.Element
+
+Props: None (stateless component)
+Returns: JSX.Element with title, subtitle, and CTA button
+      </signature>
+      <path>components/landing/HeroSection.tsx</path>
+    </interface>
+    <interface name="HowItWorksSection Component API" kind="React Component">
+      <signature>
+export function HowItWorksSection(): JSX.Element
+
+Props: None (stateless component, 4 steps hardcoded)
+Returns: JSX.Element with "Como funciona" title and 4 steps grid
+      </signature>
+      <path>components/landing/HowItWorksSection.tsx</path>
+    </interface>
+    <interface name="DisclaimerSection Component API" kind="React Component">
+      <signature>
+export function DisclaimerSection(): JSX.Element
+
+Props: None (stateless component)
+Returns: JSX.Element with warning box and disclaimer text
+      </signature>
+      <path>components/landing/DisclaimerSection.tsx</path>
+    </interface>
+    <interface name="Next.js Link Component" kind="Next.js Component">
+      <signature>
+import Link from 'next/link'
+
+&lt;Link href="/login"&gt;...&lt;/Link&gt;
+
+Used for navigation to /login route (from "Entrar" button and CTA button)
+      </signature>
+      <path>next/link</path>
+    </interface>
+    <interface name="Next.js Metadata API" kind="Next.js API">
+      <signature>
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: string,
+  description: string,
+  keywords: string,
+}
+
+Used in app/page.tsx for SEO optimization
+      </signature>
+      <path>next</path>
+    </interface>
+    <interface name="shadcn/ui Button Component" kind="React Component">
+      <signature>
+import { Button } from '@/components/ui/button'
+
+&lt;Button variant="default" | "destructive" | "outline" | "secondary" | "ghost" | "link"&gt;
+  ...
+&lt;/Button&gt;
+
+Available for CTA button (optional - can use custom styled button instead)
+      </signature>
+      <path>components/ui/button.tsx</path>
+    </interface>
+  </interfaces>
+
+  <tests>
+    <standards>
+No automated tests required for this story. Landing page is UI-focused with manual verification sufficient for MVP. Testing strategy: 1) Visual verification against UX mockup (docs/ux-design-directions.html lines 574-630), 2) Responsive testing via Chrome DevTools (mobile/tablet/desktop), 3) Navigation testing ("Entrar" and "Começar Grátis" buttons redirect to /login), 4) Lighthouse audit (Performance &gt; 90, Accessibility &gt; 90, Best Practices &gt; 90, SEO &gt; 90), 5) Production deployment verification (https://sorte-grande-ten.vercel.app accessible, all sections render correctly).
+    </standards>
+    <locations>
+      <location>No test files required for this story</location>
+    </locations>
+    <ideas>
+      <idea ac="AC1">Verify route / renders landing page (not placeholder). Check page loads within 2 seconds via Chrome DevTools Network tab. Verify no console errors. View-source should show full HTML (SSR confirmation). Meta tags present in &lt;head&gt;.</idea>
+      <idea ac="AC2">Verify AppHeader component created at components/layout/AppHeader.tsx. Logo "Sorte Grande" has gradient text (#10b981→#34d399). "Entrar" button links to /login. Responsive: logo font-size adapts on mobile/desktop. Gradient uses inline style (WebkitBackgroundClip).</idea>
+      <idea ac="AC3">Verify HeroSection component created at components/landing/HeroSection.tsx. Title "Apostas inteligentes baseadas em matemática" with responsive font-size (2.5rem mobile, 3.5rem desktop). CTA button "Começar Grátis" with gradient background and shadow. Button links to /login.</idea>
+      <idea ac="AC4">Verify HowItWorksSection component created at components/landing/HowItWorksSection.tsx. Title "Como funciona" (h2, text-primary). 4 steps with numbered circles (32x32px, gradient, black text). Step content matches: "Informe o valor", "Receba jogos otimizados", "Copie e realize", "Verificação automática". Responsive: single column mobile, 4-column desktop.</idea>
+      <idea ac="AC5">Verify DisclaimerSection component created at components/landing/DisclaimerSection.tsx. Warning icon ⚠️ at start. Text about Wheeling Systems limitations. Red semi-transparent background (rgba(239,68,68,0.1)). Red border (#ef4444). Rounded corners (8px or 12px).</idea>
+      <idea ac="AC6">Verify Footer component created at components/layout/Footer.tsx. Links: "Termos de Uso", "Política de Privacidade", "Como Funciona". Copyright text "© 2025 Sorte Grande. Todos os direitos reservados." Border-top or background-surface. Text color muted. Responsive: row on desktop, column on mobile.</idea>
+      <idea ac="AC7">Verify responsive design via Chrome DevTools device toolbar. Mobile (&lt;768px): single column, CTA full-width, logo smaller, steps vertical, footer vertical. Tablet (768-1024px): 2-column steps (optional), CTA not full-width. Desktop (&gt;1024px): max-width container (1200px), 4-column steps, hero title 3.5rem.</idea>
+      <idea ac="AC8">Verify accessibility: Semantic HTML (&lt;header&gt;, &lt;main&gt;, &lt;section&gt;, &lt;footer&gt;), heading hierarchy (h1, h2, h3/h4), keyboard navigation (Tab to links/buttons), color contrast WCAG 2.1 AA. Run Lighthouse: Performance &gt; 90, Accessibility &gt; 90, Best Practices &gt; 90, SEO &gt; 90. Run npx tsc --noEmit (no TypeScript errors). Run npm run lint (no ESLint errors).</idea>
+    </ideas>
+  </tests>
+</story-context>

@@ -45,7 +45,7 @@ development_status:
   1-5-install-shadcn-ui-components: done  # shadcn/ui + Emerald Trust dark mode + 6 components verified
   1-6-create-custom-lottery-components: done  # 3 custom components created, code review approved (36px balls corrected)
   1-7-setup-vercel-deploy: done  # Vercel deployment complete, code review approved
-  1-8-create-landing-page-layout: drafted  # Story file created, ready for story-ready-for-dev workflow
+  1-8-create-landing-page-layout: ready-for-dev  # Story context XML generated, ready for implementation
   epic-1-retrospective: optional
 
   # Epic 2: User Authentication (7 stories)
