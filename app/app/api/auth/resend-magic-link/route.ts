@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     
     if (existingUsers.length === 0) {
       const newUsers = await sql`
-        INSERT INTO users (id, email, "emailVerified") 
+        INSERT INTO users (id, email, email_verified) 
         VALUES (${crypto.randomUUID()}, ${email}, NULL) 
         RETURNING id
       `
