@@ -187,7 +187,7 @@ app/                                 # Next.js application
 ### AC1: Login Route Renders
 - [x] Route `/login` accessible and renders LoginPage component
 - [x] Page loads without console errors (F12 DevTools)
-- [ ] Page title set to "Login - Sorte Grande" (document.title or Next.js metadata)
+- [x] Page title set to "Login - Sorte Grande" (document.title or Next.js metadata)
 - [ ] AppHeader visible at top (or custom header if different)
 - [x] Form centered on page with max-width 448px (max-w-md)
 - [x] Background uses theme colors (#050505 or similar dark)
@@ -209,7 +209,7 @@ app/                                 # Next.js application
 - [x] Button height h-12 (48px)
 - [x] Button gradient background (#10b981→#34d399) using inline styles
 - [x] Button text color black (#000) for contrast on gradient
-- [ ] Button hover state (opacity or brightness change)
+- [x] Button hover state (opacity or brightness change)
 - [x] Button disabled during form submission (disabled attribute)
 - [x] Loading spinner or text "Enviando..." during submission
 
@@ -260,7 +260,7 @@ app/                                 # Next.js application
   - [x] Enter key submits form (native form behavior)
 - [x] Label for email input (visible or aria-label)
 - [x] Button has descriptive text (not just icon)
-- [ ] Error messages associated with input (aria-describedby)
+- [x] Error messages associated with input (aria-describedby)
 - [x] Form has proper HTML semantics (<form>, <label>, <input>, <button>)
 - [x] Color contrast meets WCAG 2.1 AA:
   - [x] Text on background (white on #050505)
@@ -565,6 +565,18 @@ git push origin main
 
 ---
 
+### Task 7: Review Follow-ups (AI)
+**Owner:** Developer  
+**Estimated Effort:** 10 min
+
+#### Subtasks (from Code Review 2025-12-02):
+1. [x] [AI-Review][Med] Add aria-describedby to email input linking to error message id (AC8)
+2. [x] [AI-Review][Med] Add id="email-error" and role="alert" to error paragraph (AC8)
+3. [x] [AI-Review][Low] Add hover:opacity-90 transition to submit button (AC3)
+4. [x] [AI-Review][Low] Add page title metadata via layout.tsx (Client Component limitation) (AC1)
+
+---
+
 ## Dev Notes
 
 ### Architecture Decisions
@@ -685,10 +697,15 @@ git push origin main
 
 ### File List
 - **NEW:** `app/login/page.tsx` - LoginPage Client Component (119 lines)
+- **NEW:** `app/login/layout.tsx` - Login page metadata layout (14 lines)
 - **NEW:** `lib/validations/auth.ts` - Zod validation schemas (12 lines)
 - **NEW:** `components/ui/label.tsx` - shadcn/ui Label component (26 lines)
 - **MODIFIED:** `package.json` - Added react-hook-form, @hookform/resolvers, zod, @radix-ui/react-label
 - **MODIFIED:** `package-lock.json` - Dependency lockfile updated
+
+**Review Follow-up Changes (2025-12-02):**
+- **MODIFIED:** `app/login/page.tsx` - Added aria-describedby, role="alert", hover state (lines 86-109)
+- **NEW:** `app/login/layout.tsx` - Added page title metadata
 
 ---
 
@@ -858,10 +875,10 @@ Story 2.1 demonstrates strong technical execution with proper React Hook Form + 
 ### Action Items
 
 #### Code Changes Required:
-- [ ] [Med] Add aria-describedby to email input linking to error message id (AC8) [file: app/login/page.tsx:86]
-- [ ] [Med] Add id="email-error" and role="alert" to error paragraph (AC8) [file: app/login/page.tsx:92]
-- [ ] [Low] Add hover:opacity-90 transition to submit button (AC3) [file: app/login/page.tsx:98]
-- [ ] [Low] Add page title metadata via layout.tsx (Client Component limitation) (AC1) [file: app/layout.tsx]
+- [x] [Med] Add aria-describedby to email input linking to error message id (AC8) [file: app/login/page.tsx:86] ✅ RESOLVED 2025-12-02
+- [x] [Med] Add id="email-error" and role="alert" to error paragraph (AC8) [file: app/login/page.tsx:92] ✅ RESOLVED 2025-12-02
+- [x] [Low] Add hover:opacity-90 transition to submit button (AC3) [file: app/login/page.tsx:98] ✅ RESOLVED 2025-12-02
+- [x] [Low] Add page title metadata via layout.tsx (Client Component limitation) (AC1) [file: app/login/layout.tsx] ✅ RESOLVED 2025-12-02
 
 #### Advisory Notes:
 - Note: Consider adding automated tests in future story (unit, integration, E2E)
@@ -878,4 +895,5 @@ Story 2.1 demonstrates strong technical execution with proper React Hook Form + 
 | 2025-12-01 | Carlos (via SM Agent Bob) | Initial story creation |
 | 2025-12-02 | Carlos (via Dev Agent Amelia) | Story implementation complete - All tasks done, code pushed to master |
 | 2025-12-02 | Carlos (via Dev Agent Amelia) | Senior Developer Review completed - Changes requested (aria-describedby missing) |
+| 2025-12-02 | Carlos (via Dev Agent Amelia) | Review follow-ups resolved - All 4 action items fixed (accessibility + UX improvements) |
 

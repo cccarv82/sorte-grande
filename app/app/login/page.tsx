@@ -86,10 +86,11 @@ export default function LoginPage() {
               placeholder="seu@email.com"
               autoComplete="email"
               className="h-12 text-lg mt-2"
+              aria-describedby={errors.email ? "email-error" : undefined}
               {...register('email')}
             />
             {errors.email && (
-              <p className="text-sm text-destructive mt-1">
+              <p id="email-error" className="text-sm text-destructive mt-1" role="alert">
                 {errors.email.message}
               </p>
             )}
@@ -98,7 +99,7 @@ export default function LoginPage() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full h-12 text-lg font-semibold"
+            className="w-full h-12 text-lg font-semibold hover:opacity-90 transition-opacity"
             style={{
               background: 'linear-gradient(135deg, #10b981 0%, #34d399 100%)',
               color: '#000',
