@@ -36,17 +36,7 @@ export const authConfig: NextAuthConfig = {
     EmailProvider({
       from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
       maxAge: 15 * 60, // Magic link expires in 15 minutes
-      
-      // Dummy server config to satisfy NextAuth (not actually used)
-      // We override sendVerificationRequest to use Resend API directly
-      server: {
-        host: 'localhost',
-        port: 25,
-        auth: {
-          user: '',
-          pass: '',
-        },
-      },
+      server: 'smtp://none:none@localhost:25',
       
       /**
        * Send magic link email via Resend
@@ -54,7 +44,7 @@ export const authConfig: NextAuthConfig = {
        * @param identifier - User's email address
        * @param url - Magic link URL with token
        */
-      async sendVerificationRequest({ identifier: email, url }) {
+      async sendVerificationRequest({ identifier: email, url, provider }) {
         // Validate required environment variables
         const apiKey = process.env.RESEND_API_KEY;
         const from = process.env.EMAIL_FROM || 'onboarding@resend.dev';
