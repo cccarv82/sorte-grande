@@ -1,116 +1,115 @@
 'use client'
 
-import { signIn } from 'next-auth/react'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { toast } from 'sonner'
+import { loginSchema, type LoginInput } from '@/lib/validations/auth'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [submitted, setSubmitted] = useState(false)
-  const [loading, setLoading] = useState(false)
-  
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginInput>({
+    resolver: zodResolver(loginSchema),
+  })
+
+  const onSubmit = async (data: LoginInput) => {
     try {
-      await signIn('email', { 
-        email,
+      setIsLoading(true)
+      
+      const result = await signIn('email', {
+        email: data.email,
         callbackUrl: '/dashboard',
+        redirect: false,
       })
-      setSubmitted(true)
+
+      if (result?.error) {
+        // Handle MVP limit or other errors
+        if (result.error.includes('MVP') || result.error.includes('limit')) {
+          toast.error('MVP lotado - lista de espera aberta', {
+            description: 'Estamos em fase de testes. Entre na lista de espera!',
+          })
+        } else {
+          toast.error(result.error)
+        }
+        return
+      }
+
+      toast.success('Email enviado!', {
+        description: 'Verifique sua caixa de entrada para o link mágico.',
+      })
+      router.push(`/verify?email=${encodeURIComponent(data.email)}`)
     } catch (error) {
       console.error('Login error:', error)
+      toast.error('Erro ao enviar email. Tente novamente.')
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
-  
-  if (submitted) {
-    return (
-      <div style={{ padding: '40px', fontFamily: 'Arial', maxWidth: '500px', margin: '0 auto' }}>
-        <h1>📧 Verifique seu email</h1>
-        <div style={{ 
-          padding: '20px', 
-          background: '#f0fdf4',
-          borderRadius: '8px',
-          border: '1px solid #10b981',
-          marginTop: '20px'
-        }}>
-          <p>✅ Um link mágico foi enviado para <strong>{email}</strong></p>
-          <p>Clique no link para acessar sua conta.</p>
-          <p style={{ color: '#666', fontSize: '14px', marginTop: '10px' }}>
-            ⏱️ O link expira em 15 minutos.
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
+          <h1 
+            className="text-3xl font-bold mb-2"
+            style={{
+              background: 'linear-gradient(135deg, #10b981 0%, #34d399 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}
+          >
+            Sorte Grande
+          </h1>
+          <p className="text-muted-foreground">
+            Entre com seu email
           </p>
         </div>
-        
-        <button 
-          onClick={() => setSubmitted(false)}
-          style={{
-            marginTop: '20px',
-            background: '#6b7280',
-            color: '#fff',
-            padding: '12px 24px',
-            border: 'none',
-            borderRadius: '8px',
-            fontWeight: 'bold',
-            cursor: 'pointer'
-          }}
-        >
-          Tentar outro email
-        </button>
-      </div>
-    )
-  }
-  
-  return (
-    <div style={{ padding: '40px', fontFamily: 'Arial', maxWidth: '500px', margin: '0 auto' }}>
-      <h1>🔐 Login</h1>
-      <p>Entre com seu email para receber um link mágico</p>
-      
-      <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
-        <div>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-            Email
-          </label>
-          <input 
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="seu@email.com"
-            required
-            data-testid="email-input"
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="seu@email.com"
+              autoComplete="email"
+              className="h-12 text-lg mt-2"
+              {...register('email')}
+            />
+            {errors.email && (
+              <p className="text-sm text-destructive mt-1">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
+
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="w-full h-12 text-lg font-semibold"
             style={{
-              width: '100%',
-              padding: '12px',
-              border: '1px solid #d1d5db',
-              borderRadius: '8px',
-              fontSize: '16px'
+              background: 'linear-gradient(135deg, #10b981 0%, #34d399 100%)',
+              color: '#000',
             }}
-          />
-        </div>
-        
-        <button 
-          type="submit"
-          disabled={loading || !email}
-          style={{
-            marginTop: '20px',
-            width: '100%',
-            background: loading ? '#9ca3af' : 'linear-gradient(135deg, #10b981, #34d399)',
-            color: '#000',
-            padding: '12px 24px',
-            border: 'none',
-            borderRadius: '8px',
-            fontWeight: 'bold',
-            cursor: loading ? 'not-allowed' : 'pointer'
-          }}
-        >
-          {loading ? 'Enviando...' : 'Enviar link mágico'}
-        </button>
-      </form>
-      
-      <div style={{ marginTop: '30px', padding: '20px', background: '#fef3c7', borderRadius: '8px' }}>
-        <p style={{ margin: 0, fontSize: '14px' }}>
-          💡 <strong>Dica:</strong> Verifique sua pasta de spam se não receber o email
+          >
+            {isLoading ? 'Enviando...' : 'Enviar magic link'}
+          </Button>
+        </form>
+
+        <p className="text-center text-sm text-muted-foreground">
+          Primeiro acesso? Basta digitar seu email para criar conta.
         </p>
       </div>
     </div>
