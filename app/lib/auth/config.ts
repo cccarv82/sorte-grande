@@ -34,7 +34,7 @@ export const authConfig: NextAuthConfig = {
   
   providers: [
     EmailProvider({
-      from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
+      from: (process.env.EMAIL_FROM || 'Sorte Grande <onboarding@resend.dev>').trim(),
       maxAge: 15 * 60, // Magic link expires in 15 minutes
       server: 'smtp://none:none@localhost:25',
       
@@ -46,8 +46,8 @@ export const authConfig: NextAuthConfig = {
        */
       async sendVerificationRequest({ identifier: email, url, provider }) {
         // Validate required environment variables
-        const apiKey = process.env.RESEND_API_KEY;
-        const from = process.env.EMAIL_FROM || 'onboarding@resend.dev';
+        const apiKey = (process.env.RESEND_API_KEY || '').trim();
+        const from = (process.env.EMAIL_FROM || 'Sorte Grande <onboarding@resend.dev>').trim();
         
         if (!apiKey) {
           console.error('❌ RESEND_API_KEY is not defined');
