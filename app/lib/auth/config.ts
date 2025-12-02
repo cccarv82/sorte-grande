@@ -34,15 +34,6 @@ export const authConfig: NextAuthConfig = {
   
   providers: [
     EmailProvider({
-      server: {
-        host: 'smtp.resend.com',
-        port: 465,
-        secure: true,
-        auth: {
-          user: 'resend',
-          pass: process.env.RESEND_API_KEY!,
-        },
-      },
       from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
       maxAge: 15 * 60, // Magic link expires in 15 minutes
       
@@ -53,9 +44,22 @@ export const authConfig: NextAuthConfig = {
        * @param url - Magic link URL with token
        */
       async sendVerificationRequest({ identifier: email, url }) {
+        // Validate required environment variables
+        const apiKey = process.env.RESEND_API_KEY;
+        const from = process.env.EMAIL_FROM || 'onboarding@resend.dev';
+        
+        if (!apiKey) {
+          console.error('❌ RESEND_API_KEY is not defined');
+          throw new Error('RESEND_API_KEY is not defined');
+        }
+
+        console.log('📧 Sending magic link to:', email);
+        console.log('📧 From:', from);
+        console.log('📧 URL:', url.substring(0, 50) + '...');
+
         try {
-          await resend.emails.send({
-            from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
+          const result = await resend.emails.send({
+            from,
             to: email,
             subject: 'Login no Sorte Grande',
             html: `
@@ -83,10 +87,12 @@ export const authConfig: NextAuthConfig = {
                 </p>
               </div>
             `,
-          })
+          });
+          
+          console.log('✅ Email sent successfully:', result);
         } catch (error) {
-          console.error('❌ Failed to send magic link email:', error)
-          throw error
+          console.error('❌ Failed to send magic link email:', error);
+          throw error;
         }
       },
     }),
