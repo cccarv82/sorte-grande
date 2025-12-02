@@ -37,6 +37,17 @@ export const authConfig: NextAuthConfig = {
       from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
       maxAge: 15 * 60, // Magic link expires in 15 minutes
       
+      // Dummy server config to satisfy NextAuth (not actually used)
+      // We override sendVerificationRequest to use Resend API directly
+      server: {
+        host: 'localhost',
+        port: 25,
+        auth: {
+          user: '',
+          pass: '',
+        },
+      },
+      
       /**
        * Send magic link email via Resend
        * 
