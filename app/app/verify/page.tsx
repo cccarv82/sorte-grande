@@ -1,51 +1,51 @@
-export default function VerifyRequestPage() {
+import { ResendButton } from '@/components/auth/ResendButton'
+
+interface VerifyPageProps {
+  searchParams: {
+    email?: string
+  }
+}
+
+export default function VerifyPage({ searchParams }: VerifyPageProps) {
+  const email = searchParams.email || 'seu email'
+
   return (
-    <div style={{ padding: '40px', fontFamily: 'Arial', maxWidth: '500px', margin: '0 auto' }}>
-      <h1>📧 Verifique seu email</h1>
-      
-      <div style={{ 
-        padding: '20px', 
-        background: '#f0fdf4',
-        borderRadius: '8px',
-        border: '1px solid #10b981',
-        marginTop: '20px'
-      }}>
-        <p>✅ <strong>Um link mágico foi enviado para o seu email!</strong></p>
-        <p>Clique no link para acessar sua conta.</p>
-        
-        <div style={{ 
-          marginTop: '20px',
-          padding: '15px',
-          background: '#fff',
-          borderRadius: '6px',
-          border: '1px solid #d1d5db'
-        }}>
-          <p style={{ margin: 0, fontSize: '14px', color: '#666' }}>
-            ⏱️ O link expira em <strong>15 minutos</strong>
+    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12">
+      <div className="max-w-md w-full space-y-6">
+        {/* Icon */}
+        <div className="text-center">
+          <div className="text-6xl mb-4">📧</div>
+        </div>
+
+        {/* Heading */}
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-bold text-primary">
+            Email enviado!
+          </h1>
+          <p className="text-lg text-muted-foreground">
+            Clique no link enviado para <strong className="text-white font-medium">{email}</strong>
           </p>
         </div>
-      </div>
-      
-      <div style={{ marginTop: '30px', padding: '20px', background: '#fef3c7', borderRadius: '8px' }}>
-        <p style={{ margin: '0 0 10px 0', fontSize: '14px', fontWeight: 'bold' }}>
-          💡 Não recebeu o email?
-        </p>
-        <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '14px' }}>
-          <li>Verifique sua pasta de <strong>spam/lixo eletrônico</strong></li>
-          <li>Aguarde alguns minutos (pode demorar até 2 minutos)</li>
-          <li>O email vem de: <strong>onboarding@resend.dev</strong></li>
-        </ul>
-      </div>
-      
-      <div style={{ marginTop: '20px', textAlign: 'center' }}>
-        <a href="/login" style={{
-          display: 'inline-block',
-          color: '#6b7280',
-          textDecoration: 'underline',
-          fontSize: '14px'
-        }}>
-          ← Voltar para login
-        </a>
+
+        {/* Info boxes */}
+        <div className="space-y-4 mt-6">
+          <div className="text-center">
+            <p className="text-sm text-gray-400">
+              ⏱️ Link expira em <strong>15 minutos</strong>
+            </p>
+          </div>
+          
+          <div className="text-center">
+            <p className="text-xs text-gray-500">
+              Se não receber, verifique spam
+            </p>
+          </div>
+        </div>
+
+        {/* Resend Button */}
+        <div className="mt-8">
+          <ResendButton email={email} />
+        </div>
       </div>
     </div>
   )

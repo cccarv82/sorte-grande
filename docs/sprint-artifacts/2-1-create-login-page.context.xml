@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<story-context>
+  <metadata>
+    <story-key>2-1-create-login-page</story-key>
+    <story-id>2.1</story-id>
+    <epic-id>2</epic-id>
+    <title>Create Login Page</title>
+    <status>ready-for-dev</status>
+    <created>2025-12-01</created>
+  </metadata>
+
+  <user-story>
+    <as-a>visitante</as-a>
+    <i-want>página /login com form de email</i-want>
+    <so-that>possa solicitar magic link e fazer login no sistema</so-that>
+  </user-story>
+
+  <acceptance-criteria>
+    <criterion id="AC1">
+      <title>Login Route Renders</title>
+      <description>Route `/login` accessible and renders LoginPage component with proper styling and AppHeader</description>
+    </criterion>
+    <criterion id="AC2">
+      <title>Email Input Field</title>
+      <description>Input field with email type, proper styling (h-12, text-lg, border #333, focus ring #10b981), autocomplete, validation</description>
+    </criterion>
+    <criterion id="AC3">
+      <title>Submit Button</title>
+      <description>Full-width button (h-12) with gradient background (#10b981→#34d399), loading state, disabled during submission</description>
+    </criterion>
+    <criterion id="AC4">
+      <title>Form Validation (Zod)</title>
+      <description>Zod schema `loginSchema` validates email format (RFC 5322), min/max length, shows error messages</description>
+    </criterion>
+    <criterion id="AC5">
+      <title>NextAuth Integration</title>
+      <description>Form submit calls NextAuth `signIn('email')`, handles success/error responses</description>
+    </criterion>
+    <criterion id="AC6">
+      <title>Success Flow</title>
+      <description>On success: redirect to `/verify?email=xxx`, show toast "Email enviado!", encode email in URL</description>
+    </criterion>
+    <criterion id="AC7">
+      <title>Error Handling</title>
+      <description>Handle MVP limit (50 users), network errors, invalid email. Show error toasts with appropriate messages</description>
+    </criterion>
+    <criterion id="AC8">
+      <title>Accessibility</title>
+      <description>Keyboard navigation (Tab + Enter), proper labels, semantic HTML, WCAG 2.1 AA contrast</description>
+    </criterion>
+    <criterion id="AC9">
+      <title>Responsive Design</title>
+      <description>Mobile-first: single column, full-width button on mobile. Desktop: max-width 448px centered</description>
+    </criterion>
+    <criterion id="AC10">
+      <title>TypeScript & Code Quality</title>
+      <description>No TS/ESLint errors, proper typing (Zod infer), organized imports</description>
+    </criterion>
+  </acceptance-criteria>
+
+  <story-tasks>
+    <task id="Task1">
+      <title>Create Zod Validation Schema</title>
+      <description>Create `lib/validations/auth.ts` with loginSchema validating email format, min/max length, toLowerCase, trim</description>
+      <estimated-effort>10 min</estimated-effort>
+      <acceptance-criteria>AC4</acceptance-criteria>
+    </task>
+    <task id="Task2">
+      <title>Create LoginPage Component</title>
+      <description>Create `app/(auth)/login/page.tsx` as Client Component with React Hook Form + Zod + NextAuth signIn() integration</description>
+      <estimated-effort>30 min</estimated-effort>
+      <acceptance-criteria>AC1, AC2, AC3, AC5, AC6, AC7, AC8</acceptance-criteria>
+    </task>
+    <task id="Task3">
+      <title>Test MVP Limit Scenario</title>
+      <description>Optional: Verify MVP limit error handling (Story 2.6 will implement full logic)</description>
+      <estimated-effort>15 min</estimated-effort>
+      <acceptance-criteria>AC7</acceptance-criteria>
+    </task>
+    <task id="Task4">
+      <title>Styling & Responsive Testing</title>
+      <description>Test mobile/tablet/desktop views, focus states, gradient rendering, spacing adjustments</description>
+      <estimated-effort>20 min</estimated-effort>
+      <acceptance-criteria>AC2, AC3, AC9</acceptance-criteria>
+    </task>
+    <task id="Task5">
+      <title>Integration Testing & QA</title>
+      <description>End-to-end flow testing, error scenarios, accessibility checks, linters, browser console validation</description>
+      <estimated-effort>20 min</estimated-effort>
+      <acceptance-criteria>AC5, AC6, AC7, AC8, AC10</acceptance-criteria>
+    </task>
+    <task id="Task6">
+      <title>Documentation & Commit</title>
+      <description>Update story file, Git commit with proper message, push to remote, verify Vercel deployment</description>
+      <estimated-effort>10 min</estimated-effort>
+      <acceptance-criteria>All ACs</acceptance-criteria>
+    </task>
+  </story-tasks>
+
+  <artifacts>
+    <docs>
+      <doc>
+        <path>docs/sprint-artifacts/tech-spec-epic-2.md</path>
+        <title>Epic 2 Technical Specification - User Authentication</title>
+        <section>Detailed Design → LoginPage Component</section>
+        <snippet>LoginPage (`app/(auth)/login/page.tsx`) - UI de login com form de email. Client Component with React Hook Form, Zod validation, NextAuth signIn('email') integration. Styling: Tailwind CSS + shadcn/ui Input e Button components. Theme: Emerald Trust (#10b981 primary, #050505 background).</snippet>
+      </doc>
+      <doc>
+        <path>docs/sprint-artifacts/tech-spec-epic-2.md</path>
+        <title>Epic 2 Technical Specification - Data Models</title>
+        <section>Data Models → Login Form Schema (Zod)</section>
+        <snippet>loginSchema = z.object({ email: z.string().email('Email inválido').min(5).max(255).toLowerCase().trim() }). Export type: LoginInput = z.infer&lt;typeof loginSchema&gt;</snippet>
+      </doc>
+      <doc>
+        <path>docs/sprint-artifacts/tech-spec-epic-2.md</path>
+        <title>Epic 2 Technical Specification - APIs</title>
+        <section>APIs and Interfaces → NextAuth API Routes</section>
+        <snippet>POST /api/auth/signin/email - Body: { email: string, callbackUrl?: string }. Response: { url: string } (redirect to /verify). Magic link generation handled by NextAuth internally.</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>Architecture - Next.js 16 App Router Patterns</title>
+        <section>Implementation Patterns → Server Components vs Client Components</section>
+        <snippet>Use Server Components by default. Client Components only when necessary: useState, useEffect, event handlers, browser APIs, interactivity. LoginPage needs Client Component ('use client' directive) due to form state and NextAuth signIn() call.</snippet>
+      </doc>
+      <doc>
+        <path>docs/sprint-artifacts/1-8-create-landing-page-layout.md</path>
+        <title>Story 1.8 - Landing Page Layout (Previous Story)</title>
+        <section>Learnings from Previous Story → Available Components</section>
+        <snippet>AppHeader Component: `components/layout/AppHeader.tsx` already created with gradient logo (#10b981→#34d399) and "Entrar" button linking to /login. Reusable for login page. shadcn/ui Button, Input components already installed (Story 1.5). Tailwind 4.0 gradient workaround: use inline styles, not className.</snippet>
+      </doc>
+      <doc>
+        <path>docs/sprint-artifacts/1-8-create-landing-page-layout.md</path>
+        <title>Story 1.8 - Infrastructure Ready</title>
+        <section>Learnings → Infrastructure</section>
+        <snippet>Vercel Deployment live at https://sorte-grande-ten.vercel.app. NextAuth v5 configured with EmailProvider (Story 1.4). Resend API email service ready (RESEND_API_KEY configured). Environment Variables: DATABASE_URL, NEXTAUTH_SECRET, NEXTAUTH_URL already set.</snippet>
+      </doc>
+    </docs>
+
+    <code>
+      <artifact>
+        <path>lib/auth/config.ts</path>
+        <kind>authentication-config</kind>
+        <symbol>authConfig</symbol>
+        <lines>1-115</lines>
+        <reason>Existing NextAuth v5 configuration with EmailProvider and Resend. LoginPage will call signIn() function exported from this config. Contains sendVerificationRequest callback that sends magic link email.</reason>
+      </artifact>
+      <artifact>
+        <path>lib/auth/index.ts</path>
+        <kind>authentication-helpers</kind>
+        <symbol>signIn</symbol>
+        <lines>37-40</lines>
+        <reason>Export auth helpers (signIn, signOut, auth) for use in components. LoginPage will import signIn from here: `import { signIn } from 'next-auth/react'`</reason>
+      </artifact>
+      <artifact>
+        <path>components/layout/AppHeader.tsx</path>
+        <kind>layout-component</kind>
+        <symbol>AppHeader</symbol>
+        <lines>1-30</lines>
+        <reason>Existing header component with gradient logo and "Entrar" button. Can be reused in login page or referenced for consistent styling patterns (gradient inline styles, theme colors).</reason>
+      </artifact>
+      <artifact>
+        <path>components/ui/button.tsx</path>
+        <kind>ui-component</kind>
+        <symbol>Button</symbol>
+        <reason>shadcn/ui Button component already installed (Story 1.5). Use for submit button in login form with gradient styling via inline styles.</reason>
+      </artifact>
+      <artifact>
+        <path>components/ui/input.tsx</path>
+        <kind>ui-component</kind>
+        <symbol>Input</symbol>
+        <reason>shadcn/ui Input component already installed (Story 1.5). Use for email input field in login form with proper styling (h-12, text-lg, border, focus ring).</reason>
+      </artifact>
+      <artifact>
+        <path>components/ui/label.tsx</path>
+        <kind>ui-component</kind>
+        <symbol>Label</symbol>
+        <reason>shadcn/ui Label component for accessible form labels. Pair with Input for proper WCAG compliance.</reason>
+      </artifact>
+      <artifact>
+        <path>lib/db/schema.ts</path>
+        <kind>database-schema</kind>
+        <symbol>users</symbol>
+        <lines>15-30</lines>
+        <reason>Users table schema with email field (unique). NextAuth will query/insert into this table when processing magic link authentication. Managed by DrizzleAdapter.</reason>
+      </artifact>
+      <artifact>
+        <path>lib/db/schema.ts</path>
+        <kind>database-schema</kind>
+        <symbol>verificationTokens</symbol>
+        <lines>45-55</lines>
+        <reason>Verification tokens table for magic links. NextAuth creates tokens here when signIn('email') is called, validates and deletes after use.</reason>
+      </artifact>
+    </code>
+
+    <interfaces>
+      <interface>
+        <name>NextAuth signIn Function</name>
+        <kind>client-function</kind>
+        <signature>signIn(provider: 'email', options: { email: string, callbackUrl?: string, redirect?: boolean }): Promise&lt;SignInResponse&gt;</signature>
+        <path>next-auth/react</path>
+        <description>Client-side function to initiate magic link authentication. Call from LoginPage with email and redirect:false for manual redirect handling.</description>
+      </interface>
+      <interface>
+        <name>React Hook Form useForm</name>
+        <kind>hook</kind>
+        <signature>useForm&lt;TFormData&gt;(config: { resolver: zodResolver(schema) }): { register, handleSubmit, formState }</signature>
+        <path>react-hook-form</path>
+        <description>Form state management hook. Use with Zod resolver for type-safe validation. Returns register function for input binding and handleSubmit for form submission.</description>
+      </interface>
+      <interface>
+        <name>Next.js useRouter</name>
+        <kind>hook</kind>
+        <signature>useRouter(): { push: (url: string) =&gt; void, ... }</signature>
+        <path>next/navigation</path>
+        <description>Client-side navigation hook. Use router.push() to redirect to /verify after successful signIn call.</description>
+      </interface>
+      <interface>
+        <name>Sonner toast</name>
+        <kind>function</kind>
+        <signature>toast.success(message: string), toast.error(message: string)</signature>
+        <path>sonner</path>
+        <description>Toast notification library. Use for success ("Email enviado!") and error messages. Auto-dismisses after 3-5 seconds.</description>
+      </interface>
+    </interfaces>
+
+    <dependencies>
+      <npm>
+        <package name="next" version="16.0.6" />
+        <package name="react" version="19.2.0" />
+        <package name="next-auth" version="5.0.0-beta.30" />
+        <package name="react-hook-form" version="^7.54.2" note="Not installed yet - needs npm install" />
+        <package name="@hookform/resolvers" version="^3.9.1" note="Not installed yet - needs npm install" />
+        <package name="zod" version="^3.23.8" note="Not installed yet - needs npm install" />
+        <package name="sonner" version="2.0.7" />
+        <package name="@radix-ui/react-toast" version="1.2.15" />
+        <package name="tailwindcss" version="4" />
+        <package name="@radix-ui/react-slot" version="1.2.4" />
+        <package name="lucide-react" version="0.555.0" />
+      </npm>
+      <note>Install missing packages: npm install --legacy-peer-deps react-hook-form @hookform/resolvers zod</note>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint type="architecture">
+      <title>Client Component Required</title>
+      <description>LoginPage MUST be a Client Component ('use client' directive at top of file) because it uses form state (useState), event handlers, and NextAuth signIn() function which requires client-side execution.</description>
+    </constraint>
+    <constraint type="architecture">
+      <title>Route Group Structure</title>
+      <description>Login page belongs to (auth) route group for public authentication pages. File path: app/(auth)/login/page.tsx. Route group does not affect URL - accessible at /login.</description>
+    </constraint>
+    <constraint type="styling">
+      <title>Tailwind 4.0 Gradient Workaround</title>
+      <description>CSS variables do not work in className for gradients in Tailwind 4.0. MUST use inline styles: style={{ background: 'linear-gradient(135deg, #10b981 0%, #34d399 100%)' }}. Apply to gradient logo and submit button.</description>
+    </constraint>
+    <constraint type="styling">
+      <title>Emerald Trust Theme Colors</title>
+      <description>Primary: #10b981 (emerald-500). Secondary: #34d399 (emerald-400). Background: #050505 (near-black). Use these colors for gradient, focus rings, and button styling.</description>
+    </constraint>
+    <constraint type="validation">
+      <title>Zod Schema Single Source of Truth</title>
+      <description>All email validation logic in Zod schema. Do not duplicate validation in component. Use Zod's .email(), .min(), .max(), .toLowerCase(), .trim() methods. Error messages in Portuguese.</description>
+    </constraint>
+    <constraint type="authentication">
+      <title>NextAuth signIn Parameters</title>
+      <description>Call signIn('email', { email: validatedEmail, callbackUrl: '/dashboard', redirect: false }). redirect:false is CRITICAL to handle redirect manually and show toast before navigating to /verify.</description>
+    </constraint>
+    <constraint type="testing">
+      <title>Manual Testing Required</title>
+      <description>Email delivery cannot be fully tested in automated tests. Manual testing required: Submit form with real email, check inbox for magic link (Story 2.3 email template must be complete for emails to actually send).</description>
+    </constraint>
+    <constraint type="performance">
+      <title>React Hook Form Uncontrolled Forms</title>
+      <description>Use React Hook Form for performance (uncontrolled inputs minimize re-renders). Register inputs with {...register('fieldName')} syntax, not controlled state.</description>
+    </constraint>
+    <constraint type="accessibility">
+      <title>WCAG 2.1 Level AA Compliance</title>
+      <description>Must meet WCAG 2.1 AA color contrast: white text on #050505 background (21:1 ratio ✓), black text on #10b981 gradient (4.5:1 ratio ✓). Use proper semantic HTML: &lt;form&gt;, &lt;label&gt;, &lt;input&gt;, &lt;button&gt;.</description>
+    </constraint>
+    <constraint type="responsive">
+      <title>Mobile-First Design</title>
+      <description>Design for mobile (&lt;768px) first: single column, full-width button, centered form with max-w-md (448px). Desktop (>768px): same layout (mobile design already optimal). No major changes needed for larger screens.</description>
+    </constraint>
+  </constraints>
+
+  <tests>
+    <standards>
+      <p>Testing follows project standards: Unit tests with Vitest for validation schemas, Integration tests with Playwright for full authentication flows, Component tests with Cypress for isolated form behavior.</p>
+      <p>Story 1.4 established NextAuth testing patterns: API endpoint validation, DrizzleAdapter integration, JWT session validation. Reuse these patterns for login flow testing.</p>
+    </standards>
+    
+    <locations>
+      <location>tests/unit/lib/validations/auth.spec.ts</location>
+      <location>tests/integration/2-1-login-flow.spec.ts</location>
+      <location>tests/e2e/2-1-login-e2e.spec.ts</location>
+      <location>tests/component/2-1-login-page.spec.tsx</location>
+    </locations>
+
+    <ideas>
+      <idea ac="AC1">
+        <description>Playwright: Navigate to /login, verify page loads without console errors, check page title "Login - Sorte Grande", verify AppHeader visible</description>
+      </idea>
+      <idea ac="AC2,AC3">
+        <description>Cypress Component: Render LoginPage in isolation, verify email input has correct attributes (type="email", h-12, autocomplete), verify button gradient visible</description>
+      </idea>
+      <idea ac="AC4">
+        <description>Vitest Unit: Test loginSchema.parse() with valid emails (should pass), invalid emails (should throw ZodError with message "Email inválido"), min/max length validation, toLowerCase/trim transformations</description>
+      </idea>
+      <idea ac="AC5,AC6">
+        <description>Playwright Integration: Mock NextAuth signIn() function, submit form with valid email, verify signIn called with correct parameters, verify redirect to /verify?email=xxx, verify toast "Email enviado!" appears</description>
+      </idea>
+      <idea ac="AC7">
+        <description>Playwright Integration: Mock NextAuth signIn() to return error, submit form, verify error toast displays "Erro ao enviar email. Tente novamente.", verify form re-submittable after error</description>
+      </idea>
+      <idea ac="AC8">
+        <description>Playwright E2E: Use keyboard only (Tab + Enter), verify focus moves from input to button, verify form submission works without mouse, verify labels announced by screen reader (aria-label check)</description>
+      </idea>
+      <idea ac="AC9">
+        <description>Playwright: Test responsive breakpoints - resize viewport to 375px (mobile), 768px (tablet), 1440px (desktop), verify form max-width 448px, verify button full-width on mobile</description>
+      </idea>
+      <idea ac="AC10">
+        <description>CI Check: Run `npx tsc --noEmit` and `npm run lint` in GitHub Actions, fail build if any errors. Verify LoginInput type exported correctly with Zod infer.</description>
+      </idea>
+    </ideas>
+  </tests>
+
+  <implementation-notes>
+    <note type="security">
+      <title>CSRF Protection</title>
+      <description>NextAuth handles CSRF protection automatically. No additional CSRF token needed in login form. signIn() function includes CSRF validation internally.</description>
+    </note>
+    <note type="ux">
+      <title>First-Time User Flow</title>
+      <description>Display message "Primeiro acesso? Basta digitar seu email para criar conta." below form to clarify that login and signup are the same flow (magic link creates account if email doesn't exist).</description>
+    </note>
+    <note type="infrastructure">
+      <title>Email Delivery Dependency</title>
+      <description>Full end-to-end testing blocked until Story 2.3 (Magic Link Email Template) is complete. Current NextAuth config uses basic HTML template. Production-ready React Email template comes in Story 2.3.</description>
+    </note>
+    <note type="mvp-scope">
+      <title>MVP Limit Check</title>
+      <description>Story 2.6 will implement full MVP limit logic (50 users hard cap). For now, LoginPage displays error message if signIn() returns MVP limit error, but actual check logic is future work.</description>
+    </note>
+    <note type="performance">
+      <title>Gradient Rendering Performance</title>
+      <description>Inline gradient styles avoid extra CSS parsing. Browser can optimize gradient rendering without Tailwind CSS variable lookups. Minimal performance impact (&lt;1ms).</description>
+    </note>
+    <note type="git-workflow">
+      <title>Incremental Commits</title>
+      <description>Recommended commit strategy: (1) Zod schema, (2) LoginPage basic structure, (3) NextAuth integration, (4) Styling + responsive, (5) Accessibility fixes. Allows easier code review and rollback if needed.</description>
+    </note>
+  </implementation-notes>
+</story-context>

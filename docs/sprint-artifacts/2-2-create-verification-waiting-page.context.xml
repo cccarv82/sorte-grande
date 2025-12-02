@@ -1,0 +1,468 @@
+<story-context id=".bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>2</epicId>
+    <storyId>2.2</storyId>
+    <title>Create Verification Waiting Page</title>
+    <status>drafted</status>
+    <generatedAt>2025-12-02</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/sprint-artifacts/2-2-create-verification-waiting-page.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>usuário que solicitou magic link</asA>
+    <iWant>página /verify confirmando envio de email</iWant>
+    <soThat>saiba que preciso verificar minha caixa de entrada e clicar no link recebido</soThat>
+    <tasks>
+      <task id="1" status="pending">
+        <title>Create VerifyPage Server Component (AC1, AC2, AC3)</title>
+        <subtasks>
+          <subtask id="1.1">Create app/verify/page.tsx file</subtask>
+          <subtask id="1.2">Define VerifyPage as Server Component (no 'use client')</subtask>
+          <subtask id="1.3">Add searchParams prop with TypeScript type: { searchParams: { email?: string } }</subtask>
+          <subtask id="1.4">Extract email from searchParams with fallback: const email = searchParams.email || 'seu email'</subtask>
+          <subtask id="1.5">Create page layout structure with icon, heading, subheading, info text, helper text</subtask>
+          <subtask id="1.6">Add ResendButton client component (placeholder for now)</subtask>
+          <subtask id="1.7">Test route loads without errors</subtask>
+        </subtasks>
+      </task>
+      <task id="2" status="pending">
+        <title>Create ResendButton Client Component (AC4, AC5, AC6)</title>
+        <subtasks>
+          <subtask id="2.1">Create components/auth/ResendButton.tsx file</subtask>
+          <subtask id="2.2">Add 'use client' directive at top of file</subtask>
+          <subtask id="2.3">Import dependencies: useState, useEffect, signIn, toast, Button</subtask>
+          <subtask id="2.4">Define component with email prop</subtask>
+          <subtask id="2.5">Add state: countdown (30), isResending (false)</subtask>
+          <subtask id="2.6">Implement countdown timer useEffect with cleanup</subtask>
+          <subtask id="2.7">Implement handleResend function with try/catch</subtask>
+          <subtask id="2.8">Render Button component with dynamic label and disabled state</subtask>
+        </subtasks>
+      </task>
+      <task id="3" status="pending">
+        <title>Add Countdown Accessibility (AC8)</title>
+        <subtasks>
+          <subtask id="3.1">Add aria-live="polite" to countdown display element</subtask>
+          <subtask id="3.2">Add aria-label="Reenviar email de verificação" to ResendButton</subtask>
+          <subtask id="3.3">Ensure Button has proper role="button"</subtask>
+          <subtask id="3.4">Test keyboard navigation (Tab + Enter)</subtask>
+          <subtask id="3.5">Test screen reader announces countdown updates</subtask>
+          <subtask id="3.6">Verify contrast ratio using Lighthouse</subtask>
+        </subtasks>
+      </task>
+      <task id="4" status="pending">
+        <title>Error Handling & Edge Cases (AC7)</title>
+        <subtasks>
+          <subtask id="4.1">Add try/catch block in handleResend</subtask>
+          <subtask id="4.2">Handle MVP limit error (show specific toast)</subtask>
+          <subtask id="4.3">Handle network errors (generic toast)</subtask>
+          <subtask id="4.4">Test error scenarios</subtask>
+          <subtask id="4.5">Ensure button re-enables after error</subtask>
+        </subtasks>
+      </task>
+      <task id="5" status="pending">
+        <title>Styling & Responsive Testing (AC3, AC9)</title>
+        <subtasks>
+          <subtask id="5.1">Apply Tailwind classes for mobile-first design</subtask>
+          <subtask id="5.2">Test on mobile viewport (320px)</subtask>
+          <subtask id="5.3">Test on tablet viewport (768px)</subtask>
+          <subtask id="5.4">Test on desktop viewport (1440px)</subtask>
+          <subtask id="5.5">Verify gradient or primary color used</subtask>
+          <subtask id="5.6">Verify spacing between elements</subtask>
+        </subtasks>
+      </task>
+      <task id="6" status="pending">
+        <title>Integration Testing & QA (AC10)</title>
+        <subtasks>
+          <subtask id="6.1">Manual E2E flow test (login → verify → resend)</subtask>
+          <subtask id="6.2">Direct access test (verify without email param)</subtask>
+          <subtask id="6.3">Refresh test (countdown resets)</subtask>
+          <subtask id="6.4">Multiple resend test</subtask>
+          <subtask id="6.5">Browser compatibility (Chrome, Firefox, Safari)</subtask>
+          <subtask id="6.6">Check console for errors/warnings</subtask>
+        </subtasks>
+      </task>
+      <task id="7" status="pending">
+        <title>Documentation & Commit</title>
+        <subtasks>
+          <subtask id="7.1">Update story file with implementation notes</subtask>
+          <subtask id="7.2">Document deviations from original plan</subtask>
+          <subtask id="7.3">Add Dev Notes about ResendButton reusability</subtask>
+          <subtask id="7.4">Git commit: "feat: Story 2.2 - Create Verification Waiting Page"</subtask>
+          <subtask id="7.5">Git push to master (trigger Vercel auto-deploy)</subtask>
+          <subtask id="7.6">Verify production deployment</subtask>
+        </subtasks>
+      </task>
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    <criterion id="AC1">
+      <title>Verify Route Renders</title>
+      <description>Route /verify accessible and renders VerifyPage without console errors, displays correctly with/without email param, uses theme colors</description>
+      <tests>
+        <test>Page loads without console errors</test>
+        <test>Page displays correctly with email param: /verify?email=test@example.com</test>
+        <test>Page displays correctly WITHOUT email param (fallback to "seu email")</test>
+        <test>Background uses theme colors (#050505 dark background)</test>
+      </tests>
+    </criterion>
+    <criterion id="AC2">
+      <title>Email Confirmation Display</title>
+      <description>Heading "📧 Email enviado!" visible with primary color, subheading displays correct email, info text with expiration, helper text about spam</description>
+      <tests>
+        <test>Heading "📧 Email enviado!" visible (icon + text)</test>
+        <test>Heading uses primary color (#10b981) or gradient</test>
+        <test>Subheading "Clique no link enviado para {email}" displays correct email</test>
+        <test>Email address highlighted (bold or different color)</test>
+        <test>Info text "Link expira em 15 minutos" visible with ⏱️ icon</test>
+        <test>Helper text "Se não receber, verifique spam" visible</test>
+      </tests>
+    </criterion>
+    <criterion id="AC3">
+      <title>Content Layout and Spacing</title>
+      <description>Content centered with max-width 448px, proper icon/heading/text sizes, consistent vertical spacing, readable on dark background</description>
+      <tests>
+        <test>Content centered on page (max-width 448px / max-w-md)</test>
+        <test>Icon (📧) size 4rem (64px), margin-bottom 1rem</test>
+        <test>Heading size text-3xl (30px)</test>
+        <test>Subheading size text-lg (18px), color text-muted-foreground</test>
+        <test>Vertical spacing between elements consistent (1.5rem / 24px)</test>
+        <test>All text readable on dark background (#050505)</test>
+      </tests>
+    </criterion>
+    <criterion id="AC4">
+      <title>Resend Button - Initial State</title>
+      <description>Button labeled "Reenviar (30s)" when countdown active, disabled during countdown, countdown updates every second, has aria-label, proper height/width</description>
+      <tests>
+        <test>Button labeled "Reenviar (30s)" when countdown active</test>
+        <test>Button disabled during countdown (not clickable, opacity reduced)</test>
+        <test>Countdown number updates every second (30 → 29 → ... → 0)</test>
+        <test>Button has aria-label="Reenviar email de verificação"</test>
+        <test>Button height h-12 (48px) for touch targets</test>
+        <test>Button width full on mobile, auto on desktop</test>
+      </tests>
+    </criterion>
+    <criterion id="AC5">
+      <title>Resend Button - Enabled State</title>
+      <description>After 30 seconds countdown reaches 0, button label changes, becomes enabled, hover state works, focus ring visible</description>
+      <tests>
+        <test>After 30 seconds, countdown reaches 0</test>
+        <test>Button label changes to "Reenviar email" (no countdown)</test>
+        <test>Button becomes enabled (clickable, full opacity)</test>
+        <test>Button hover state works (opacity 90% or color shift)</test>
+        <test>Button focus ring visible (#10b981) when tabbed</test>
+      </tests>
+    </criterion>
+    <criterion id="AC6">
+      <title>Resend Functionality</title>
+      <description>Clicking button triggers NextAuth signIn, shows loading state, displays success toast, resets countdown, supports multiple resends</description>
+      <tests>
+        <test>Clicking "Reenviar email" triggers NextAuth signIn('email')</test>
+        <test>Button disabled + loading state during resend</test>
+        <test>On success: Toast "Email reenviado!" appears</test>
+        <test>On success: Countdown resets to 30 seconds</test>
+        <test>Button re-enables after new countdown</test>
+        <test>Multiple resends work correctly</test>
+      </tests>
+    </criterion>
+    <criterion id="AC7">
+      <title>Error Handling</title>
+      <description>Handles MVP limit error (50 users), network errors, button re-enables after error, no unhandled promise rejections, error boundary catches errors</description>
+      <tests>
+        <test>If MVP limit reached, show error toast "MVP lotado - lista de espera aberta"</test>
+        <test>If network error, show toast "Erro ao reenviar, tente novamente"</test>
+        <test>Button re-enables after error (does NOT stay in loading state)</test>
+        <test>Console shows no unhandled promise rejections</test>
+        <test>Error boundary catches React errors</test>
+      </tests>
+    </criterion>
+    <criterion id="AC8">
+      <title>Accessibility (WCAG 2.1 Level AA)</title>
+      <description>Countdown has aria-live, button has aria-label, semantic HTML tags, sufficient contrast, keyboard navigation works, focus ring visible</description>
+      <tests>
+        <test>Countdown has aria-live="polite" (announces updates to screen readers)</test>
+        <test>Button has aria-label="Reenviar email de verificação"</test>
+        <test>Heading uses semantic h1 tag</test>
+        <test>Content paragraphs use p tags</test>
+        <test>All text has sufficient contrast ratio (4.5:1 for body, 3:1 for large text)</test>
+        <test>Keyboard navigation works (Tab to button, Enter to activate)</test>
+        <test>Focus ring visible on button when focused</test>
+      </tests>
+    </criterion>
+    <criterion id="AC9">
+      <title>Responsive Design</title>
+      <description>Mobile (320px-768px): single column, full-width button; Tablet/Desktop (768px+): centered content max-width 448px, icon scales, touch targets 44x44px+, no horizontal scroll</description>
+      <tests>
+        <test>Mobile (320px-768px): Single column, full-width button</test>
+        <test>Tablet (768px-1024px): Centered content, max-width 448px</test>
+        <test>Desktop (1024px+): Centered content, max-width 448px</test>
+        <test>Icon (📧) scales appropriately on all screen sizes</test>
+        <test>Touch targets minimum 44x44px (button height 48px meets this)</test>
+        <test>No horizontal scrolling on any screen size</test>
+      </tests>
+    </criterion>
+    <criterion id="AC10">
+      <title>Integration with Login Flow</title>
+      <description>Navigating from /login lands on /verify with correct email param, page works when accessed directly or refreshed, after clicking magic link user lands on /dashboard</description>
+      <tests>
+        <test>Navigating from /login after submitting email lands on /verify with correct email param</test>
+        <test>Email param in URL matches email entered on login page</test>
+        <test>Page works correctly when accessed directly (not just via redirect)</test>
+        <test>Page works correctly when refreshed (state persists via countdown logic)</test>
+        <test>After clicking magic link in email, user lands on /dashboard (Story 2.4 dependency)</test>
+      </tests>
+    </criterion>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc>
+        <path>docs/sprint-artifacts/tech-spec-epic-2.md</path>
+        <title>Epic Technical Specification: User Authentication</title>
+        <section>Detailed Design → VerifyPage</section>
+        <snippet>Server Component for page (static content), Client Component island for ResendButton (countdown timer). URL param searchParams.email from login redirect. AC9: Página de verificação tem countdown para reenvio - Countdown visual mostra tempo restante, Botão "Reenviar" habilitado após countdown termina.</snippet>
+      </doc>
+      <doc>
+        <path>docs/epics-detailed.md</path>
+        <title>Sorte Grande - Detailed Epics & User Stories</title>
+        <section>Epic 2, Story 2.2 - Create Verification Waiting Page</section>
+        <snippet>BDD: Given solicitei magic link, When redirecionado para /verify?email=xxx, Then vejo "📧 Email enviado!", And vejo "Link expira em 15 minutos", And vejo botão "Reenviar email" (após 30s countdown). Tech: Server Component, email via searchParams, ResendButton (Client island). UX: Icon 4rem (64px), Title text-3xl color #10b981, Email highlight white font-medium, Countdown disabled 30s com progress visual.</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>Sorte Grande - Architecture Document</title>
+        <section>Next.js 16 App Router - Server/Client Component patterns</section>
+        <snippet>Framework decision: Next.js 16.0+ with App Router. Server Components for content (SSR), Client Components for interactivity (CSR). Patterns: Default to Server Component, use 'use client' only when needed (forms, state, event handlers). searchParams prop for URL params in Server Components. Component organization: pages in app/, reusable components in components/.</snippet>
+      </doc>
+      <doc>
+        <path>docs/ux-design-specification.md</path>
+        <title>UX Design Specification - Sorte Grande</title>
+        <section>Emerald Trust Theme</section>
+        <snippet>Primary color: #10b981 (emerald-500), Secondary: #34d399 (emerald-300), Background: #050505 (near-black), Text: #ffffff (white) and #a3a3a3 (gray-400). Gradient pattern: linear-gradient(135deg, #10b981 0%, #34d399 100%). Typography: Heading text-3xl (30px), Body text-base (16px), Text-muted-foreground for secondary text. Spacing: 1.5rem (24px) vertical spacing between sections.</snippet>
+      </doc>
+      <doc>
+        <path>docs/prd.md</path>
+        <title>Product Requirements Document - Sorte Grande</title>
+        <section>FR2: Email verification flow, FR3: User feedback on auth status</section>
+        <snippet>FR2: Sistema deve enviar email de verificação com link mágico expirado em 15 minutos. FR3: Sistema deve fornecer feedback claro ao usuário sobre status de autenticação (email enviado, aguardando verificação). Meta: Taxa de conversão (link clicado / email enviado) > 80%.</snippet>
+      </doc>
+      <doc>
+        <path>docs/sprint-artifacts/2-1-create-login-page.md</path>
+        <title>Story 2.1: Create Login Page</title>
+        <section>AC6: Success Flow, Dev Agent Record</section>
+        <snippet>AC6: On successful signIn call, user redirected to /verify?email=xxx using router.push, email encoded in URL with encodeURIComponent. Toast notification "Email enviado!" appears. Dev Notes: NextAuth signIn('email', { redirect: false }) pattern established, Manual redirect handling to /verify, shadcn/ui Button and Toast components ready, WCAG 2.1 compliance requires aria-live for dynamic content, Inline gradient styles for Tailwind 4.0 compatibility.</snippet>
+      </doc>
+    </docs>
+    <code>
+      <artifact>
+        <path>app/login/page.tsx</path>
+        <kind>component</kind>
+        <symbol>LoginPage</symbol>
+        <lines>1-119</lines>
+        <reason>Upstream dependency - LoginPage redirects to /verify?email=xxx after successful signIn. Establishes pattern: router.push(`/verify?email=${encodeURIComponent(data.email)}`), toast.success('Email enviado!'), NextAuth signIn('email', { redirect: false }). ResendButton will reuse similar pattern.</reason>
+      </artifact>
+      <artifact>
+        <path>app/verify/page.tsx</path>
+        <kind>component</kind>
+        <symbol>VerifyRequestPage</symbol>
+        <lines>1-70</lines>
+        <reason>EXISTING verify page from Story 1.4 (temporary placeholder). Story 2.2 will REPLACE this file. Current version is simple Server Component with static content, no searchParams, no ResendButton. Provides structure template: centered layout, icon, heading, info boxes, link back to login.</reason>
+      </artifact>
+      <artifact>
+        <path>app/api/auth/[...nextauth]/route.ts</path>
+        <kind>api-route</kind>
+        <symbol>GET, POST handlers</symbol>
+        <lines>1-38</lines>
+        <reason>NextAuth v5 API endpoints. ResendButton will call signIn('email') which sends POST /api/auth/signin/email. Understand flow: signIn → POST request → sendVerificationRequest (in config.ts) → email sent via Resend → success response.</reason>
+      </artifact>
+      <artifact>
+        <path>lib/auth/config.ts</path>
+        <kind>config</kind>
+        <symbol>authConfig, sendVerificationRequest</symbol>
+        <lines>29-105</lines>
+        <reason>NextAuth configuration with EmailProvider. sendVerificationRequest function sends magic link email via Resend (subject: "Login no Sorte Grande", 15 min expiration, gradient button). ResendButton will trigger this flow. maxAge: 15 * 60 (15 minutes) is the token expiration referenced in AC2.</reason>
+      </artifact>
+      <artifact>
+        <path>lib/auth/index.ts</path>
+        <kind>helper</kind>
+        <symbol>signIn</symbol>
+        <lines>1-67</lines>
+        <reason>Auth helpers export. ResendButton imports signIn from 'next-auth/react' (Client Component pattern). Usage: signIn('email', { email, redirect: false }). Story uses same pattern as LoginPage (established in Story 2.1).</reason>
+      </artifact>
+      <artifact>
+        <path>components/ui/button.tsx</path>
+        <kind>component</kind>
+        <symbol>Button</symbol>
+        <lines>unknown</lines>
+        <reason>shadcn/ui Button component (installed in Story 1.5). ResendButton will use this component. Supports: disabled prop, onClick handler, children for label, className for styling. Default variant has primary gradient in LoginPage - ResendButton may use similar or secondary variant.</reason>
+      </artifact>
+      <artifact>
+        <path>lib/validations/auth.ts</path>
+        <kind>schema</kind>
+        <symbol>loginSchema</symbol>
+        <lines>unknown</lines>
+        <reason>Zod validation schema for email (created in Story 2.1). ResendButton could optionally validate email prop with this schema before calling signIn, but not strictly required (email already validated in LoginPage before redirect).</reason>
+      </artifact>
+      <artifact>
+        <path>tests/e2e/1-4-nextauth-magic-link.spec.ts</path>
+        <kind>test</kind>
+        <symbol>NextAuth Magic Link E2E tests</symbol>
+        <lines>108-130</lines>
+        <reason>E2E test for /verify redirect after login. Line 115: await page.waitForURL('/verify', { timeout: 5000 }). ResendButton functionality should be tested similarly - wait for toast, verify countdown, test resend click.</reason>
+      </artifact>
+    </code>
+    <dependencies>
+      <node>
+        <package name="next" version="16.0.6">React framework with App Router</package>
+        <package name="react" version="19.2.0">UI library for components</package>
+        <package name="next-auth" version="5.0.0-beta.30">Authentication with EmailProvider</package>
+        <package name="react-hook-form" version="7.54.2">Form state management (not needed for VerifyPage, but available if needed)</package>
+        <package name="zod" version="3.23.8">Schema validation (not needed for VerifyPage, but available)</package>
+        <package name="sonner" version="unknown">Toast notifications (installed in Story 1.5) - ResendButton uses toast.success() and toast.error()</package>
+        <package name="tailwindcss" version="4.0">Utility-first CSS framework</package>
+        <package name="@radix-ui/react-*" version="various">shadcn/ui dependencies (Button component)</package>
+      </node>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint type="architecture">
+      <rule>Server Component by Default</rule>
+      <description>VerifyPage must be a Server Component (no 'use client' directive). Only extract ResendButton as Client Component for countdown timer interactivity (useState, useEffect). Follows Next.js 16 App Router best practice: default to Server Components for performance, use Client Components sparingly.</description>
+    </constraint>
+    <constraint type="architecture">
+      <rule>Client Island Pattern</rule>
+      <description>ResendButton is a "Client Component island" within Server Component page. Must have 'use client' directive. Can import Server Component (VerifyPage) but not vice versa. Pass email as prop from Server Component to Client Component.</description>
+    </constraint>
+    <constraint type="architecture">
+      <rule>URL Params via searchParams</rule>
+      <description>Email transmission from LoginPage to VerifyPage uses URL query param: /verify?email=xxx. VerifyPage receives via searchParams prop (Next.js App Router convention). Must handle missing param gracefully (fallback to "seu email").</description>
+    </constraint>
+    <constraint type="pattern">
+      <rule>Countdown Timer Pattern</rule>
+      <description>useEffect hook with setTimeout for countdown. Must include cleanup function: return () => clearTimeout(timer) to prevent memory leaks. Pattern: useEffect(() => { if (countdown > 0) { const timer = setTimeout(() => setCountdown(c => c - 1), 1000); return () => clearTimeout(timer); } }, [countdown]);</description>
+    </constraint>
+    <constraint type="pattern">
+      <rule>NextAuth signIn Pattern</rule>
+      <description>ResendButton calls signIn('email', { email, redirect: false }) (established in Story 2.1). Must handle result: check for errors, show toast on success/error, reset countdown on success. Pattern: const result = await signIn('email', { email, redirect: false }); if (result?.error) { toast.error(...) } else { toast.success(...) }</description>
+    </constraint>
+    <constraint type="styling">
+      <rule>Tailwind 4.0 Gradient Workaround</rule>
+      <description>CSS variables don't work in className for gradients in Tailwind 4.0. Use inline styles for gradients: style={{ background: 'linear-gradient(135deg, #10b981 0%, #34d399 100%)' }}. Alternative: use primary color #10b981 without gradient.</description>
+    </constraint>
+    <constraint type="styling">
+      <rule>Emerald Trust Theme</rule>
+      <description>Primary color: #10b981 (text-primary), Background: #050505, Text: white (#ffffff) and gray (#a3a3a3 for muted). Icon size: text-6xl (4rem/64px), Heading: text-3xl (30px), Body: text-lg (18px), Spacing: 1.5rem (24px) vertical between sections. Button height: h-12 (48px) for touch targets (WCAG AA).</description>
+    </constraint>
+    <constraint type="accessibility">
+      <rule>WCAG 2.1 Level AA Compliance</rule>
+      <description>Countdown must have aria-live="polite" for screen reader announcements (learned from Story 2.1 review). Button must have aria-label="Reenviar email de verificação". Semantic HTML: h1 for heading, p for paragraphs. Contrast ratio: 4.5:1 for body text, 3:1 for large text. Keyboard navigation: Tab to button, Enter to activate. Focus ring: visible with #10b981 color.</description>
+    </constraint>
+    <constraint type="testing">
+      <rule>Manual Testing Required</rule>
+      <description>E2E flow test: login → verify → wait countdown → resend → verify toast. Direct access test: /verify without param. Refresh test: verify countdown resets. Multiple resend test: 3 resends in a row. Browser compatibility: Chrome, Firefox, Safari (latest). Responsive: 320px, 768px, 1440px viewports.</description>
+    </constraint>
+    <constraint type="component-organization">
+      <rule>Auth Components Directory</rule>
+      <description>ResendButton goes in components/auth/ (new directory). Rationale: auth-specific, reusable across email verification scenarios (e.g., email change confirmation in future). Alternative considered: inline in page.tsx → rejected for reusability.</description>
+    </constraint>
+    <constraint type="error-handling">
+      <rule>Error Handling Pattern</rule>
+      <description>ResendButton handleResend must wrap signIn in try/catch. MVP limit error (50 users): detect specific error message, show toast "MVP lotado - lista de espera aberta". Network error: generic toast "Erro ao reenviar, tente novamente". Finally block: setIsResending(false) to re-enable button. No unhandled promise rejections.</constraint>
+    </constraint>
+    <constraint type="integration">
+      <rule>No Modifications to Existing Files</rule>
+      <description>Story 2.2 is self-contained. Does NOT modify: LoginPage (already redirects to /verify), NextAuth config (already sends emails), shadcn/ui components (use as-is). ONLY creates: app/verify/page.tsx (replaces existing), components/auth/ResendButton.tsx (new).</description>
+    </constraint>
+  </constraints>
+
+  <interfaces>
+    <interface>
+      <name>NextAuth signIn Function</name>
+      <kind>function</kind>
+      <signature>signIn(provider: string, options?: { email?: string, redirect?: boolean, callbackUrl?: string }): Promise&lt;SignInResponse | undefined&gt;</signature>
+      <path>next-auth/react</path>
+      <description>Client-side authentication trigger. ResendButton calls signIn('email', { email, redirect: false }). Returns promise with result object: { error?: string, status?: number, ok?: boolean, url?: string }. Check result?.error for error handling.</description>
+    </interface>
+    <interface>
+      <name>Next.js searchParams Prop</name>
+      <kind>server-component-prop</kind>
+      <signature>{ searchParams: { [key: string]: string | string[] | undefined } }</signature>
+      <path>Next.js App Router</path>
+      <description>Server Component receives URL query params via searchParams prop. VerifyPage: { searchParams: { email?: string } }. Access: const email = searchParams.email || 'fallback'. Type-safe with TypeScript. Read-only (cannot modify).</description>
+    </interface>
+    <interface>
+      <name>shadcn/ui Button Component</name>
+      <kind>react-component</kind>
+      <signature>&lt;Button type?: "button" | "submit", variant?: "default" | "secondary" | "outline" | "ghost", disabled?: boolean, onClick?: () =&gt; void, className?: string, style?: CSSProperties, children: ReactNode /&gt;</signature>
+      <path>components/ui/button.tsx</path>
+      <description>Styled button component with variants. ResendButton uses: disabled={countdown > 0 || isResending}, onClick={handleResend}, className for sizing (w-full, h-12), children for dynamic label. Supports aria-label for accessibility.</description>
+    </interface>
+    <interface>
+      <name>Sonner Toast API</name>
+      <kind>function</kind>
+      <signature>toast.success(message: string, options?: ToastOptions), toast.error(message: string, options?: ToastOptions)</signature>
+      <path>sonner (imported from 'sonner' or via hook)</path>
+      <description>Toast notifications for user feedback. ResendButton uses: toast.success('Email reenviado!') on successful resend, toast.error('Erro ao reenviar, tente novamente') on network error, toast.error('MVP lotado - lista de espera aberta') on MVP limit. Auto-dismisses after 3-5 seconds.</description>
+    </interface>
+    <interface>
+      <name>React useState Hook</name>
+      <kind>hook</kind>
+      <signature>const [state, setState] = useState&lt;T&gt;(initialValue: T)</signature>
+      <path>react</path>
+      <description>State management in Client Components. ResendButton uses: [countdown, setCountdown] = useState(30) for countdown timer, [isResending, setIsResending] = useState(false) for loading state. setState triggers re-render.</description>
+    </interface>
+    <interface>
+      <name>React useEffect Hook</name>
+      <kind>hook</kind>
+      <signature>useEffect(() =&gt; { /* effect */; return () =&gt; { /* cleanup */ }; }, [dependencies])</signature>
+      <path>react</path>
+      <description>Side effects in Client Components. ResendButton uses for countdown timer: useEffect(() => { if (countdown > 0) { const timer = setTimeout(() => setCountdown(c => c - 1), 1000); return () => clearTimeout(timer); } }, [countdown]). Cleanup function critical to prevent memory leaks.</description>
+    </interface>
+  </interfaces>
+
+  <tests>
+    <standards>
+      <paragraph>Testing approach follows Story 1.4 patterns: Manual E2E testing for authentication flows (magic link inherently requires email service), integration testing for component behavior, accessibility testing with Lighthouse/WCAG tools. No automated E2E for email verification (requires Mailosaur or similar service, out of MVP scope). Focus areas: (1) Countdown timer accuracy (visual test 30s → 0), (2) Resend functionality (multiple resends), (3) Error handling (network failure, MVP limit), (4) Accessibility (screen reader, keyboard nav), (5) Responsive design (320px, 768px, 1440px), (6) Integration with login flow (URL param passing). Browser compatibility: Chrome, Firefox, Safari (latest versions). No automated tests in tests/ directory for this story (manual QA sufficient for UI-heavy story).</paragraph>
+    </standards>
+    <locations>
+      <location>tests/e2e/ (manual E2E checklist, not automated for Story 2.2)</location>
+      <location>tests/integration/ (not needed for this story)</location>
+      <location>tests/acceptance/ (not needed for this story)</location>
+      <location>Manual QA checklist in story file Task 6</location>
+    </locations>
+    <ideas>
+      <idea criterionId="AC1">
+        <description>Manual test: Navigate to /verify, /verify?email=test@test.com, check console for errors, verify theme colors (#050505 background)</description>
+      </idea>
+      <idea criterionId="AC2">
+        <description>Visual test: Verify heading "📧 Email enviado!" uses #10b981 color, email address displays correctly and is highlighted, info text "Link expira em 15 minutos" visible, helper text about spam visible</description>
+      </idea>
+      <idea criterionId="AC3">
+        <description>Responsive test: Check layout on 320px, 768px, 1440px viewports. Measure: content max-width 448px, icon 64px, heading 30px, subheading 18px, vertical spacing 24px. Use DevTools ruler.</description>
+      </idea>
+      <idea criterionId="AC4">
+        <description>Countdown test: Load page, verify button shows "Reenviar (30s)", disabled state (opacity reduced, not clickable), countdown updates every second (30 → 29 → ... → 0). Use stopwatch for timing accuracy.</description>
+      </idea>
+      <idea criterionId="AC5">
+        <description>Enabled state test: Wait 30 seconds, verify button label changes to "Reenviar email", becomes clickable (full opacity), hover state works (opacity 90%), focus ring visible (#10b981) when tabbed.</description>
+      </idea>
+      <idea criterionId="AC6">
+        <description>Resend test: Click button after countdown, verify loading state (button disabled, label "Enviando..."), toast "Email reenviado!" appears, countdown resets to 30s. Repeat 3 times to test multiple resends. Check Resend dashboard for email delivery.</description>
+      </idea>
+      <idea criterionId="AC7">
+        <description>Error test: (1) Disconnect network, click resend, verify toast "Erro ao reenviar, tente novamente", button re-enables after error. (2) Mock 50 users in DB, verify toast "MVP lotado - lista de espera aberta". Check console for unhandled promise rejections.</description>
+      </idea>
+      <idea criterionId="AC8">
+        <description>Accessibility test: (1) Use NVDA/VoiceOver, verify countdown updates announced, button has aria-label. (2) Tab to button, press Enter, verify activation. (3) Lighthouse audit: verify contrast ratio 4.5:1, semantic HTML (h1, p tags). (4) Inspect element: verify aria-live="polite" on countdown, aria-label on button.</description>
+      </idea>
+      <idea criterionId="AC9">
+        <description>Responsive test: DevTools device emulation - iPhone SE (375px), iPad (768px), Desktop (1440px). Verify: (1) Mobile: full-width button, single column, no horizontal scroll. (2) Tablet/Desktop: centered content 448px max-width, icon scales, touch targets 48px+ height.</description>
+      </idea>
+      <idea criterionId="AC10">
+        <description>Integration test: (1) E2E flow: /login → enter email → submit → verify redirect /verify?email=xxx → verify email param matches. (2) Direct access: /verify (no param) → verify fallback "seu email". (3) Refresh: /verify?email=xxx → F5 → verify countdown resets to 30s. (4) Magic link click (Story 2.4 dependency): verify redirect to /dashboard after authentication.</description>
+      </idea>
+    </ideas>
+  </tests>
+</story-context>
