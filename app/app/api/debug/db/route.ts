@@ -3,15 +3,30 @@ import { Pool } from 'pg';
 
 export async function GET() {
   try {
-    const dbUrl = process.env.DATABASE_URL;
-    
-    if (!dbUrl) {
+    // Check all required environment variables
+    const envCheck = {
+      DATABASE_URL: !!process.env.DATABASE_URL,
+      NEXTAUTH_URL: !!process.env.NEXTAUTH_URL,
+      NEXTAUTH_SECRET: !!process.env.NEXTAUTH_SECRET,
+      RESEND_API_KEY: !!process.env.RESEND_API_KEY,
+      EMAIL_FROM: !!process.env.EMAIL_FROM,
+      CRON_SECRET: !!process.env.CRON_SECRET,
+    };
+
+    const missing = Object.entries(envCheck)
+      .filter(([_, exists]) => !exists)
+      .map(([key]) => key);
+
+    if (missing.length > 0) {
       return NextResponse.json({ 
-        error: 'DATABASE_URL not configured',
-        env: Object.keys(process.env).filter(k => k.includes('DATA'))
+        error: 'Missing environment variables',
+        missing,
+        env_check: envCheck
       }, { status: 500 });
     }
 
+    const dbUrl = process.env.DATABASE_URL!;
+    
     const pool = new Pool({ 
       connectionString: dbUrl,
       ssl: { rejectUnauthorized: false }
@@ -33,8 +48,10 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       timestamp: result.rows[0].now,
-      database_url_exists: true,
+      env_check: envCheck,
       database_url_preview: dbUrl.substring(0, 50) + '...',
+      nextauth_url: process.env.NEXTAUTH_URL,
+      email_from: process.env.EMAIL_FROM,
       tables: tablesResult.rows.map(r => r.table_name)
     });
 
@@ -43,7 +60,13 @@ export async function GET() {
       error: error.message,
       code: error.code,
       detail: error.detail,
-      database_url_exists: !!process.env.DATABASE_URL
+      env_check: {
+        DATABASE_URL: !!process.env.DATABASE_URL,
+        NEXTAUTH_URL: !!process.env.NEXTAUTH_URL,
+        NEXTAUTH_SECRET: !!process.env.NEXTAUTH_SECRET,
+        RESEND_API_KEY: !!process.env.RESEND_API_KEY,
+        EMAIL_FROM: !!process.env.EMAIL_FROM,
+      }
     }, { status: 500 });
   }
 }
