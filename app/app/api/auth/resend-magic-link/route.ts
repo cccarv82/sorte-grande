@@ -13,11 +13,30 @@ const resend = new Resend(process.env.RESEND_API_KEY?.trim())
  */
 export async function POST(request: NextRequest) {
   try {
-    const { email } = await request.json()
+    console.log('📧 Resend magic link API called')
+    console.log('📧 Content-Type:', request.headers.get('content-type'))
+    
+    const body = await request.json().catch((e) => {
+      console.error('❌ Failed to parse JSON body:', e)
+      return null
+    })
 
-    if (!email || typeof email !== 'string') {
+    console.log('📧 Request body:', body)
+
+    if (!body || !body.email) {
+      console.error('❌ Email is missing from request body')
       return NextResponse.json(
         { error: 'Email is required' },
+        { status: 400 }
+      )
+    }
+
+    const { email } = body
+
+    if (typeof email !== 'string') {
+      console.error('❌ Email is not a string:', typeof email)
+      return NextResponse.json(
+        { error: 'Email must be a string' },
         { status: 400 }
       )
     }
@@ -25,6 +44,7 @@ export async function POST(request: NextRequest) {
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
+      console.error('❌ Invalid email format:', email)
       return NextResponse.json(
         { error: 'Invalid email format' },
         { status: 400 }
