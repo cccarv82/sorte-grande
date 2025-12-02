@@ -27,20 +27,25 @@ export default function LoginPage() {
     try {
       setIsLoading(true)
       
-      const result = await signIn('email', {
-        email: data.email,
-        callbackUrl: '/dashboard',
-        redirect: false,
+      // Use custom API route instead of NextAuth signIn to avoid SMTP split error
+      const response = await fetch('/api/auth/resend-magic-link', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: data.email }),
       })
 
-      if (result?.error) {
+      const result = await response.json()
+
+      if (!response.ok) {
         // Handle MVP limit or other errors
-        if (result.error.includes('MVP') || result.error.includes('limit')) {
+        if (result.error?.includes('MVP') || result.error?.includes('limit')) {
           toast.error('MVP lotado - lista de espera aberta', {
             description: 'Estamos em fase de testes. Entre na lista de espera!',
           })
         } else {
-          toast.error(result.error)
+          toast.error(result.error || 'Erro ao enviar email')
         }
         return
       }

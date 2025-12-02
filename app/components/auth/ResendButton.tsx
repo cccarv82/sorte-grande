@@ -25,17 +25,23 @@ export function ResendButton({ email }: ResendButtonProps) {
     setIsResending(true)
     
     try {
-      const result = await signIn('email', { 
-        email, 
-        redirect: false 
+      // Use custom API route instead of NextAuth signIn to avoid SMTP split error
+      const response = await fetch('/api/auth/resend-magic-link', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
       })
-      
-      if (result?.error) {
+
+      const data = await response.json()
+
+      if (!response.ok) {
         // Check for MVP limit error
-        if (result.error.includes('MVP') || result.error.includes('limit')) {
+        if (data.error?.includes('MVP') || data.error?.includes('limit')) {
           toast.error('MVP lotado - lista de espera aberta')
         } else {
-          toast.error('Erro ao reenviar, tente novamente')
+          toast.error(data.error || 'Erro ao reenviar, tente novamente')
         }
       } else {
         toast.success('Email reenviado!')
