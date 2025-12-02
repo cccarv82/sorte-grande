@@ -694,12 +694,180 @@ git push origin main
 
 ## Senior Developer Review (AI)
 
-*This section will be populated by SM agent during code review workflow.*
+**Reviewer:** Carlos (via Dev Agent Amelia)  
+**Date:** 2025-12-02  
+**Outcome:** **CHANGES REQUESTED** ⚠️
 
-### Outcome: [PENDING]
+**Justification:** Implementation is 95% complete with excellent code quality. One MEDIUM severity issue prevents approval: missing aria-describedby accessibility attribute required for WCAG 2.1 AA compliance per AC8.
 
-### Action Items:
-- [ ] *Review action items will appear here*
+### Summary
+
+Story 2.1 demonstrates strong technical execution with proper React Hook Form + Zod integration, NextAuth implementation, and mobile-first responsive design. The code is well-structured, type-safe, and follows project patterns established in Epic 1.
+
+**Key Strengths:**
+- Clean Client Component architecture with proper state management
+- Robust form validation with Zod (email format, min/max, sanitization)
+- Excellent error handling (MVP limit, network errors, validation)
+- Mobile-first responsive design with Emerald Trust theme
+- Zero TypeScript errors, proper typing throughout
+
+**Key Concern:**
+- Missing aria-describedby attribute creates WCAG 2.1 accessibility gap
+
+### Key Findings
+
+#### MEDIUM Severity
+
+**1. Missing aria-describedby for error messages (AC8) - WCAG Violation**
+- **Location:** `app/login/page.tsx:86-95`
+- **Issue:** Error message at line 92-95 is not associated with the input field using `aria-describedby`. Screen readers cannot announce validation errors to users.
+- **WCAG Violation:** WCAG 2.1 Success Criterion 1.3.1 (Info and Relationships) - Level A
+- **Impact:** Users with screen readers won't hear validation errors when they occur
+- **Evidence:** Input has id="email" but no aria-describedby; error paragraph has no id
+- **Suggested Fix:**
+  ```tsx
+  <Input
+    id="email"
+    type="email"
+    placeholder="seu@email.com"
+    autoComplete="email"
+    className="h-12 text-lg mt-2"
+    aria-describedby={errors.email ? "email-error" : undefined}
+    {...register('email')}
+  />
+  {errors.email && (
+    <p id="email-error" className="text-sm text-destructive mt-1" role="alert">
+      {errors.email.message}
+    </p>
+  )}
+  ```
+
+#### LOW Severity
+
+**2. Missing page title metadata (AC1)**
+- **Location:** `app/login/page.tsx` - no metadata export
+- **Issue:** Page title shows default "Create Next App" instead of "Login - Sorte Grande"
+- **Impact:** Poor SEO and browser tab UX
+- **Note:** Since this is a Client Component ('use client'), metadata export won't work. Handle via root layout.tsx or create a login-specific layout.tsx
+
+**3. Missing hover state on button (AC3)**
+- **Location:** `app/login/page.tsx:98-109`
+- **Issue:** Button has no visual hover feedback (opacity or brightness change)
+- **Impact:** Minor UX - users don't get immediate visual feedback on hover
+- **Suggested Fix:** Add `hover:opacity-90 transition-opacity` to className
+
+**4. Focus ring color verification needed (AC2)**
+- **Location:** `app/login/page.tsx:86`
+- **Issue:** AC specifies focus ring should be #10b981, but this relies on shadcn/ui Input theme
+- **Impact:** Minor visual consistency concern
+- **Action:** Verify in browser DevTools that focus ring shows emerald color
+
+### Acceptance Criteria Coverage
+
+| AC# | Description | Status | Evidence |
+|-----|-------------|--------|----------|
+| AC1 | Login Route Renders | ✅ IMPLEMENTED | `app/login/page.tsx:1-119` - Route accessible, renders LoginPage, form centered max-w-md, bg-background |
+| AC2 | Email Input Field | ✅ IMPLEMENTED | `app/login/page.tsx:86-95` - Label, type="email", placeholder, h-12, text-lg, autoComplete present |
+| AC3 | Submit Button | ✅ IMPLEMENTED | `app/login/page.tsx:98-109` - Full-width, h-12, gradient inline, disabled state, loading text |
+| AC4 | Form Validation (Zod) | ✅ IMPLEMENTED | `lib/validations/auth.ts:4-11` - loginSchema with all validations (email, min, max, toLowerCase, trim) |
+| AC5 | NextAuth Integration | ✅ IMPLEMENTED | `app/login/page.tsx:27-45` - signIn('email', {redirect: false}), proper response handling |
+| AC6 | Success Flow | ✅ IMPLEMENTED | `app/login/page.tsx:47-51` - toast.success(), router.push(/verify), encodeURIComponent |
+| AC7 | Error Handling | ✅ IMPLEMENTED | `app/login/page.tsx:36-44, 52-54` - MVP limit check, network error, console.error, toast.error |
+| AC8 | Accessibility | ⚠️ PARTIAL | `app/login/page.tsx:84-95` - Label ✅, keyboard nav ✅, semantic HTML ✅, **aria-describedby ❌** |
+| AC9 | Responsive Design | ✅ IMPLEMENTED | `app/login/page.tsx:61-62` - px-4 mobile, max-w-md desktop, flex center |
+| AC10 | TypeScript & Code Quality | ✅ IMPLEMENTED | Zero TS errors, ESLint clean, proper typing with Zod infer |
+
+**Summary:** 9.5 of 10 acceptance criteria fully implemented (AC8 partial - missing aria-describedby)
+
+### Task Completion Validation
+
+| Task | Marked | Verified | Evidence |
+|------|--------|----------|----------|
+| Task 1.1-1.5: Zod validation schema | ✅ | ✅ VERIFIED | `lib/validations/auth.ts` created with all validations |
+| Task 2.1: Create directory | ✅ | ⚠️ DEVIATION | Created `app/login` vs `app/(auth)/login` - functionally equivalent |
+| Task 2.2-2.7: LoginPage component | ✅ | ✅ VERIFIED | `app/login/page.tsx` complete with all features |
+| Task 3.1-3.4: MVP limit scenario | ✅ | ✅ VERIFIED | Error handling code present, documented for Story 2.6 |
+| Task 4.1-4.6: Styling & responsive | ✅ | ✅ VERIFIED | Mobile-first Tailwind implementation |
+| Task 5.1-5.6: Integration testing | ✅ | ✅ VERIFIED | Manual E2E testing completed |
+| Task 6.1-6.5: Documentation & commit | ✅ | ✅ VERIFIED | Story updated, commits pushed (63341f2, 81f414b) |
+
+**Summary:** 15 of 15 completed tasks verified, 0 questionable, 0 falsely marked complete ✅
+
+**Note:** Task 2.1 deviation acceptable - app/login vs app/(auth)/login has no functional impact, URL is still /login.
+
+### Test Coverage and Gaps
+
+**Current Coverage:**
+- ✅ Form validation logic (Zod schema)
+- ✅ Manual E2E testing (login flow, error handling, responsive)
+
+**Gaps:**
+- ❌ No automated unit tests for LoginPage component
+- ❌ No automated integration tests for NextAuth signIn flow
+- ❌ No E2E tests in test suite (tests/ directory exists but empty for this story)
+
+**Recommendation:** For MVP, manual testing is acceptable. Consider adding automated tests in Story 2.8 or Epic 2 retrospective.
+
+### Architectural Alignment
+
+✅ **Tech Spec Compliance:**
+- Client Component pattern correct (form requires interactivity)
+- React Hook Form + Zod integration matches Epic 2 tech spec
+- NextAuth signIn('email', {redirect: false}) as specified
+- Emerald Trust theme colors used correctly (#10b981 gradient)
+- Tailwind 4.0 gradient workaround (inline styles) correctly applied
+
+✅ **Architecture Violations:** None found
+
+**Best Practices Observed:**
+- Proper error boundaries with try/catch
+- Loading states disable button (prevents double submission)
+- Form validation before API call
+- Proper TypeScript typing with Zod infer
+- Accessible semantic HTML structure (form, label, input, button)
+
+### Security Notes
+
+✅ **Security Assessment: PASSED**
+- ✅ Input sanitization via Zod (toLowerCase, trim prevents injection)
+- ✅ No sensitive data in URL (email is public info)
+- ✅ CSRF protection handled by NextAuth
+- ✅ XSS protection via React automatic escaping
+- ✅ No credentials stored client-side
+
+**Recommendations:**
+- Rate limiting handled by NextAuth on server-side (/api/auth/signin/email)
+- Consider documenting JWT expiration policy for stakeholders
+
+### Best Practices and References
+
+**Stack Detected:**
+- Next.js 16.0.6 (App Router)
+- React 19.2.0
+- NextAuth.js v5.0.0-beta.30
+- React Hook Form 7.54.2
+- Zod 3.23.8
+- Tailwind CSS 4.0
+
+**References:**
+- [NextAuth.js Email Provider](https://authjs.dev/getting-started/providers/email) - ✅ Correctly implemented
+- [React Hook Form + Zod](https://react-hook-form.com/get-started#SchemaValidation) - ✅ Properly integrated
+- [WCAG 2.1 Level AA](https://www.w3.org/WAI/WCAG21/quickref/) - ⚠️ Missing aria-describedby (SC 1.3.1)
+- [shadcn/ui Form Patterns](https://ui.shadcn.com/docs/components/form) - Consider FormField wrapper for future stories
+
+### Action Items
+
+#### Code Changes Required:
+- [ ] [Med] Add aria-describedby to email input linking to error message id (AC8) [file: app/login/page.tsx:86]
+- [ ] [Med] Add id="email-error" and role="alert" to error paragraph (AC8) [file: app/login/page.tsx:92]
+- [ ] [Low] Add hover:opacity-90 transition to submit button (AC3) [file: app/login/page.tsx:98]
+- [ ] [Low] Add page title metadata via layout.tsx (Client Component limitation) (AC1) [file: app/layout.tsx]
+
+#### Advisory Notes:
+- Note: Consider adding automated tests in future story (unit, integration, E2E)
+- Note: Verify focus ring color #10b981 in browser DevTools
+- Note: Route at `app/login` vs `app/(auth)/login` is acceptable deviation
+- Note: MVP limit logic prepared but will be fully implemented in Story 2.6
 
 ---
 
@@ -709,4 +877,5 @@ git push origin main
 |------|--------|--------|
 | 2025-12-01 | Carlos (via SM Agent Bob) | Initial story creation |
 | 2025-12-02 | Carlos (via Dev Agent Amelia) | Story implementation complete - All tasks done, code pushed to master |
+| 2025-12-02 | Carlos (via Dev Agent Amelia) | Senior Developer Review completed - Changes requested (aria-describedby missing) |
 
